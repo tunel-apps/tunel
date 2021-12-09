@@ -1,0 +1,24 @@
+# The tunel settings file allows a user to configure their tunel install
+
+# Tunnel home - e.g., the directory to write tunel/ to, where we store launcher assets
+tunel_home: "$HOME"
+
+# set a default port to use for ssh
+ssh_port: 22
+
+# remote port to use (this should be randomly generated unless set here)
+remote_port: null
+local_port: 4000
+
+# Default ssh config to read from
+ssh_config: ~/.ssh/config
+
+# If random port selection used (random port is null) allow within this range
+min_port: 90000
+max_port: 99999
+
+# default config editor
+config_editor: vim
+
+# Are the compute nodes isolated from the outside world?
+isolated_nodes: false
