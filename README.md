@@ -168,7 +168,7 @@ Let's say you want to run a Singularity container on your remote server "waffles
 $ tunel run-singularity waffles docker://busybox echo hello
 ```
 ```
-vanessa@dinoserver:~$ singularity exec docker://busybox echo hello
+dinosaur@waffles:~$ singularity exec docker://busybox echo hello
 INFO:    Using cached SIF image
 hello
 ```
@@ -177,7 +177,9 @@ More coming soon!
 
 ## TODO
 
+Should there be an init/check command that sniffs what is available on a cluster? E.g., singularity, sbatch, sinfo, module load, etc.
 Create "tunel" command over
+
 - should be in Python
 - should be able to interact with itself on the cluster (hence the name tunel)
 - should  be installed locally too (and maybe even allow installing itself via the cluster)
