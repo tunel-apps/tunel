@@ -12,6 +12,7 @@ local_port: 4000
 
 # Default ssh config to read from
 ssh_config: ~/.ssh/config
+ssh_pkey: ~/.ssh/id_ed25519
 
 # If random port selection used (random port is null) allow within this range
 min_port: 90000

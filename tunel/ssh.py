@@ -8,8 +8,10 @@ import tunel.defaults as defaults
 from tunel.logger import logger
 import tunel.tunnel
 import tunel.shell
+import getpass
 import random
 import re
+import os
 import paramiko
 
 try:
@@ -86,14 +88,47 @@ class Tunnel:
 
         # rename user to username so the params match
         self.params = self.config.lookup(self.server)
+
         self.ssh = paramiko.SSHClient()
         self.ssh.load_system_host_keys()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        # Basic connection means using the ~/.ssh/config
+        try:
+            self._connect_basic()
+
+        # Otherwise we need the private key file too
+        except:
+            self._connect_password()
+
+    # TODO basic ssh wrapper with subprocess...
+
+    def _connect_basic(self):
+        """
+        Basic connection just using ~/.ssh/config
+        """
         self.ssh.connect(
             self.params["hostname"],
-            port=int(self.params["port"]),
+            port=int(self.params.get("port") or 22),
             username=self.params["user"],
             password=self.params.get("password"),
+            controlpath=self.params.get("controlpath"),
+        )
+
+    def _connect_password(self):
+        """
+        More advanced connection using id_rsa"
+        """
+        password = getpass.getpass(
+            prompt="Enter password for %s: " % self.server, stream=None
+        )
+        self.ssh.connect(
+            self.params["hostname"],
+            port=int(self.params.get("port") or 22),
+            username=self.params["user"],
+            password=password,
+            allow_agent=False,
+            look_for_keys=False,
         )
 
     def shell(self):
@@ -106,7 +141,6 @@ class Tunnel:
             tunel.shell.posix(channel)
         else:
             tunel.shell.windows(channel)
-        # os.system("ssh %s" % self.server)
 
     def _prepare_command(self, cmd):
         """

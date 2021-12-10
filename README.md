@@ -15,7 +15,18 @@ In its simplest form this means:
  
 ## Usage
 
-First, you can clone the repository and install tunel! This can be done with pip.
+Note that it's recommended to install paramiko with support for ControlPath so you
+don't have to enter your password every time.
+
+```bash
+git clone https://github.com/ltalirz/paramiko.git
+cd paramiko
+git fetch
+git checkout mux
+python setup.py install
+``
+
+Then you can clone the repository and install tunel! This can be done with pip.
 
 ```bash
 $ git clone https://github.com/vsoch/tunel
@@ -59,6 +70,8 @@ Host sherlock
 
 The Hostname should be the one that you typically use when you ssh into your cluster,
 and your username as well. By using these options can reduce the number of times you need to authenticate. 
+It's recommended to include the Control* directives, as they will keep a socket so you
+can login/ssh easily without needing to authenticate every time.
 
 As another example, here is a simple setup with a simple Host, Username, and custom port:
 
@@ -215,6 +228,12 @@ Launch interface for slurm and monitoring jobs (probably can attach to login nod
 Ability to launch different workflow managers? E.g., snakemake? Does it make sense to have an organization of running apps 
 akin to containers running to manage things? E.g., $SCRATCH/tunel/$CONTAINER?
 
+More generally (notes from HPC Huddle Slack)
+
+- A workflow management system available on the system
+- Example: https://pegasus.isi.edu/
+- The WfMS is readily available on many systems so I can easily run my work on different machines.
+
 ### Writing Code
 
 "I want to jump in and try stuff without friction. I just want to be able to start writing code and seeing what it does."
@@ -224,3 +243,19 @@ akin to containers running to manage things? E.g., $SCRATCH/tunel/$CONTAINER?
 - Easy / nice interface to launch and monitor jobs
 - (not totally necessary) CI integrated with development environment
 
+### APIs
+
+- A scripting language API for interacting programmatically with the scheduler
+ - submit, query status, and remove jobs
+ - query available resources
+ - parser for job history & logs information
+ - syntax and documentation that are not just for system administrators: PySlurm needs work in this regard
+
+#### Modules / Containers
+
+- Containerized cluster
+ - Enables new users to learn how to interact with a scheduler in a (safer) local environment
+ - Test small workflows locally before porting to a big machine
+ - Can be used for teaching ala Binder
+ - HTCondor provides containers for both individual daemons and full systems
+ - There are examples of PBS and Slurm (& maybe others) out there but none of these others seem project supported.
