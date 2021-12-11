@@ -225,9 +225,7 @@ More coming soon!
 Should there be an init/check command that sniffs what is available on a cluster? E.g., singularity, sbatch, sinfo, module load, etc.
 Create "tunel" command over
 
-- should be in Python
-- should be able to interact with itself on the cluster (hence the name tunel)
-- should  be installed locally too (and maybe even allow installing itself via the cluster)
+- applications - how to define a set we can run? E.g., to launch a container on a node and expose the port TODO NEXT
 - should be able to interact with whatever APIs available on the cluster (and detect what is there?)
 - should have suite of applications you can install (e.g., pull containers)
 - so we need metadata for those containers - can they go in shpc?

@@ -7,6 +7,8 @@ import tunel.utils as utils
 import tunel.ssh
 import os
 
+here = os.path.dirname(os.path.abspath(__file__))
+
 
 class Launcher:
     """
@@ -27,6 +29,10 @@ class Launcher:
         self.settings = {}
         if self.slug in self.ssh.settings.launchers:
             self.settings = self.ssh.settings.launchers[self.slug]
+
+    @property
+    def assets(self):
+        return os.path.join(here, "launchers", self.slug)
 
     @property
     def slug(self):
@@ -59,15 +65,12 @@ class Launcher:
         return envars
 
     @property
-    def remote_assets_dir(self):
-        """
-        Assets directory to store things.
-        """
-        return os.path.join(self.remote_home, "tunel", self.slug)
-
-    @property
     def assets_dir(self):
         return os.path.join(self.home, "tunel", self.slug)
+
+    @property
+    def remote_assets_dir(self):
+        return os.path.join(self.remote_home, "tunel", self.slug)
 
     @property
     def home(self):
@@ -76,10 +79,11 @@ class Launcher:
         """
         if not self._home:
             self._home = self.ssh.settings.tunel_home
-            if not os.path.exists(self._home):
-                os.makedirs(self._home)
+            if not os.path.exists(self.assets_dir):
+                os.makedirs(self.assets_dir)
         return self._home
 
+    @property
     def remote_home(self):
         """
         Get (or create) a remove home
@@ -90,6 +94,32 @@ class Launcher:
             )
             self.ssh.execute_or_fail("mkdir -p %s" % self.remote_assets_dir)
         return self._remote_home
+
+    def scp_get(self, src, dest):
+        """
+        Copy an asset FROM the server to local assets
+        """
+        dirname = os.path.dirname(dest)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+        return self.ssh.scp_from(src, dest)
+
+    def scp_and_run(self, script):
+        """
+        Given a local script, copy to cluster, run, and return the result
+        """
+        # Remote modules file we will read
+        remote_script = os.path.join(self.remote_assets_dir, script)
+
+        # Local script to generate it (doesn't work interactivelt)
+        local_script = os.path.join(self.assets, script)
+
+        # Copy to the remote
+        self.ssh.scp_to(local_script, remote_script)
+
+        return self.ssh.execute(
+            "chmod u+x %s; /bin/bash -l %s" % (remote_script, remote_script)
+        )
 
 
 class Slurm(Launcher):
@@ -109,15 +139,16 @@ class Slurm(Launcher):
 
         # if we don't have modules, write there
         if not os.path.exists(self.modules_file):
-
-            # NOTE this currently doesn't work
-            # We'd want to store these locally
-            # ml -t spider 2> spider.log
-            res = self.ssh.execute("/bin/bash -l ml -t spider > modules.txt")
+            res = self.scp_and_run("list_modules.sh")
             if res["return_code"] == 0:
-                import IPython
+                res = [x for x in res["message"].split("\n") if "RESULT:" in x]
 
-                IPython.embed()
+                # This is the output file with list of modules
+                if res:
+                    res = res[0].split(":")[-1]
+
+                    # scp get is copying FROM the server to assets here
+                    self.scp_get(res, self.modules_file)
 
     def run(self, *args, **kwargs):
         if not self._inventory:
