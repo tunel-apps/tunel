@@ -38,9 +38,9 @@ def get_tmpfile(tmpdir=None, prefix=""):
     """
     Get a temporary file with an optional prefix.
     """
-
     # First priority for the base goes to the user requested.
-    tmpdir = get_tmpdir(tmpdir)
+    if not tmpdir:
+        tmpdir = get_tmpdir(tmpdir)
 
     # If tmpdir is set, add to prefix
     if tmpdir:

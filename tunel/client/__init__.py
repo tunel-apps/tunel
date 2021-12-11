@@ -73,6 +73,11 @@ def get_parser():
         description="launch a singularity container.",
         formatter_class=argparse.RawTextHelpFormatter,
     )
+    run_slurm = subparsers.add_parser(
+        "run-slurm",
+        description="launch a slurm job or session.",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
 
     # Issue a command to a server
     execute = subparsers.add_parser(
@@ -95,11 +100,11 @@ def get_parser():
         action="store_true",
     )
 
-    for command in [tunnel, run_singularity]:
+    for command in [tunnel, run_singularity, run_slurm]:
         command.add_argument("--port", help="remote port to connect to.")
         command.add_argument("--local-port", help="local port to connect to.")
 
-    for command in [shell, execute, tunnel, run_singularity]:
+    for command in [shell, execute, tunnel, run_singularity, run_slurm]:
         command.add_argument(
             "server",
             help="server identity to interact with (e.g., name in ~/.ssh/config)",
@@ -165,14 +170,16 @@ def run_tunel():
         from .tunnel import main
     if args.command == "run-singularity":
         from .launcher import run_singularity as main
+    if args.command == "run-slurm":
+        from .launcher import run_slurm as main
 
     # Pass on to the correct parser
     return_code = 0
-    try:
-        main(args=args, parser=parser, extra=extra, subparser=helper)
-        sys.exit(return_code)
-    except UnboundLocalError:
-        return_code = 1
+    #    try:
+    main(args=args, parser=parser, extra=extra, subparser=helper)
+    sys.exit(return_code)
+    #    except UnboundLocalError:
+    #        return_code = 1
 
     help(return_code)
 

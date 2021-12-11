@@ -16,7 +16,6 @@ LICENSE = "LICENSE"
 # Since we assume wanting Singularity and lmod, we require spython and Jinja2
 
 INSTALL_REQUIRES = (
-    ("paramiko", {"min_version": None}),
     ("jsonschema", {"min_version": None}),
     ("pyaml", {"min_version": None}),
 )

@@ -15,18 +15,7 @@ In its simplest form this means:
  
 ## Usage
 
-Note that it's recommended to install paramiko with support for ControlPath so you
-don't have to enter your password every time.
-
-```bash
-git clone https://github.com/ltalirz/paramiko.git
-cd paramiko
-git fetch
-git checkout mux
-python setup.py install
-``
-
-Then you can clone the repository and install tunel! This can be done with pip.
+First, you can clone the repository and install tunel! This can be done with pip.
 
 ```bash
 $ git clone https://github.com/vsoch/tunel
@@ -45,9 +34,15 @@ For tunel, this means:
 #### SSH config
 
 You will also need to at the minimum configure your ssh to recognize your cluster. Tunel takes a simple
-approach of using a named configuration in your `~/.ssh/config` that can be re-used instead of asking you for a ussername
+approach of using a named configuration in your `~/.ssh/config` that can be re-used instead of asking you for a username
 or password on the fly, and we do this to make it easy - you add the entry once and then forget about it.
+When you have it working correctly, this should work:
 
+```bash
+$ ssh <server>
+```
+
+This can be easily done with some configuration of your ssh config!
 Let's pretend we are logging into a cluster named sherlock (many clusters use this name, surprisingly!)
 as a valid host. We have provided a [hosts folder](scripts/hosts) 
 for helper scripts that will generate recommended ssh configuration snippets to put in your `~/.ssh/config` file. Based
@@ -98,7 +93,6 @@ Tunel has a default settings file at [tunel/settings.yml](tunel/settings.yml]) t
 on your local machine. The defaults should work for most, but we will detail some of the ones
 that might need customization depending on your cluster.
 
-
 ### Isolated Compute Nodes
 
 Depending on your cluster, you will need to identify whether the compute nodes (not the login nodes) are isolated from the outside world or not (i.e can be ssh'd into directly). This is important when we are setting up the ssh command to port forward from the local machine to the compute node. 
@@ -142,6 +136,12 @@ If you want to execute a command to a cluster (e.g., try listing files there, fo
 $ tunel exec waffles ls
 ```
 
+or with an environment variable:
+
+```bash
+$ tunel exec waffles echo `$HOME`
+```
+
 #### tunnel
 
 The simplest thing tunnel can do is if you already have a service running on your cluster or server (e.g., let's say we ssh in and start a web server) in one terminal:
@@ -178,12 +178,44 @@ Our launchers include:
 Let's say you want to run a Singularity container on your remote server "waffles." You might do:
 
 ```bash
-$ tunel run-singularity waffles docker://busybox echo hello
+$ tunel run-singularity waffles exec docker://busybox echo hello
 ```
+The above provides your request to run (or exec, as shown above) to Singularity.
 ```
-dinosaur@waffles:~$ singularity exec docker://busybox echo hello
-INFO:    Using cached SIF image
+$ tunel run-singularity waffles exec docker://busybox echo hello
+INFO:    Converting OCI blobs to SIF format
+INFO:    Starting build...
+Getting image source signatures
+Copying blob sha256:3cb635b06aa273034d7080e0242e4b6628c59347d6ddefff019bfd82f45aa7d5
+Copying config sha256:03781489f3738437ae98f13df5c28cc98bbc582254cfbf04cc7381f1c2ac1cc0
+Writing manifest to image destination
+Storing signatures
+2021/12/10 13:56:01  info unpack layer: sha256:3cb635b06aa273034d7080e0242e4b6628c59347d6ddefff019bfd82f45aa7d5
+2021/12/10 13:56:01  warn xattr{home} ignoring ENOTSUP on setxattr "user.rootlesscontainers"
+2021/12/10 13:56:01  warn xattr{/tmp/build-temp-105506159/rootfs/home} destination filesystem does not support xattrs, further warnings will be suppressed
+INFO:    Creating SIF file...
 hello
+
+```
+
+For this launcher, if your cluster doesn't have defaults for `SINGULARITY_CACHEDIR` (or other environment variables)
+or things on the path, you can customize the settings.yml to add them. Take a look at the `launchers -> singularity` section
+to customize. Finally, you can even start an interactive shell directly into a container!
+
+```bash
+$ tunel run-singularity waffles shell docker://busybox
+INFO:    Using cached SIF image
+Singularity> 
+```
+
+#### slurm
+
+The most basic command for the slurm launcher is to get an interactive node, as follows:
+
+```bash
+$ tunel run-slurm waffles
+No command supplied, will init interactive session!
+(base) bash-4.2$ 
 ```
 
 More coming soon!

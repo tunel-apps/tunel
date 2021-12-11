@@ -8,14 +8,9 @@ from tunel.ssh import Tunnel
 
 
 def main(args, parser, extra, subparser):
-
     tunel = Tunnel(args.server)
-    output = tunel.execute(extra)
-
-    # We will either have output or error
-    if output["out"]:
-        for line in output["out"]:
-            print(line)
-    if output["err"]:
-        for line in output["err"]:
-            logger.error(line)
+    output = tunel.execute_or_fail(extra)
+    for line in output.split("\n"):
+        if not line:
+            continue
+        print(" " + line)

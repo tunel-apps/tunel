@@ -6,25 +6,19 @@ __license__ = "MPL 2.0"
 from .settings import Settings
 import tunel.defaults as defaults
 from tunel.logger import logger
-import tunel.tunnel
-import tunel.shell
+import tunel.utils
 import getpass
 import random
 import re
 import os
-import paramiko
-
-try:
-    import termios
-
-    has_termios = True
-except ImportError:
-    has_termios = False
+import signal
+import shlex
+import subprocess
 
 
 class Tunnel:
     """
-    A tunel tunnel provides a route for the user to interact with an application
+    An ssh tunnel provides a route for the user to interact with an application
     This basically enables local port forwarding (called an ss tunnel) using
     the library Paramiko.
     """
@@ -54,9 +48,11 @@ class Tunnel:
         # Save the name of the server to connect to
         self.server = server
 
-    def __del__(self):
-        if self.ssh:
-            self.ssh.close()
+    def _random_port(self):
+        """
+        Generate a random port for an ssh session
+        """
+        return random.choice(range(self.settings.min_port, self.settings.max_port))
 
     def __repr__(self):
         return str(self)
@@ -64,194 +60,134 @@ class Tunnel:
     def __str__(self):
         return "[tunel-ssh]"
 
-    def _random_port(self):
+    def execute(self, cmd, login_shell=False):
         """
-        Generate a random port for an ssh session
+        Execute a command via ssh and a known, named connection.
         """
-        return random.choice(range(self.settings.min_port, self.settings.max_port))
-
-    def connect(self):
-        """
-        Connect via ssh
-        """
-        # Don't connect again if we already have
-        if self.ssh:
-            return
-
-        self.config = paramiko.SSHConfig()
-        self.config.parse(open(self.settings.ssh_config))
-        if self.server not in self.config.get_hostnames():
-            logger.exit(
-                "%s is not configured in known hostnames of %s"
-                % (self.server, self.settings.ssh_config)
-            )
-
-        # rename user to username so the params match
-        self.params = self.config.lookup(self.server)
-
-        self.ssh = paramiko.SSHClient()
-        self.ssh.load_system_host_keys()
-        self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-
-        # Basic connection means using the ~/.ssh/config
-        try:
-            self._connect_basic()
-
-        # Otherwise we need the private key file too
-        except:
-            self._connect_password()
-
-    # TODO basic ssh wrapper with subprocess...
-
-    def _connect_basic(self):
-        """
-        Basic connection just using ~/.ssh/config
-        """
-        self.ssh.connect(
-            self.params["hostname"],
-            port=int(self.params.get("port") or 22),
-            username=self.params["user"],
-            password=self.params.get("password"),
-            controlpath=self.params.get("controlpath"),
-        )
-
-    def _connect_password(self):
-        """
-        More advanced connection using id_rsa"
-        """
-        password = getpass.getpass(
-            prompt="Enter password for %s: " % self.server, stream=None
-        )
-        self.ssh.connect(
-            self.params["hostname"],
-            port=int(self.params.get("port") or 22),
-            username=self.params["user"],
-            password=password,
-            allow_agent=False,
-            look_for_keys=False,
-        )
-
-    def shell(self):
-        """
-        Connect to a server via standard ssh
-        """
-        self.connect()
-        channel = self.ssh.invoke_shell()
-        if has_termios:
-            tunel.shell.posix(channel)
-        else:
-            tunel.shell.windows(channel)
-
-    def _prepare_command(self, cmd):
-        """
-        Prepare the command to be used by the client
-        """
-        if cmd and isinstance(cmd, list):
-            return " ".join(cmd).strip("\n")
-        elif cmd:
-            return cmd.strip("\n")
-        return cmd
-
-    def tunnel(self):
-        """
-        Given a remote and local port, open a tunnel.
-        """
-        self.connect()
-        logger.info(
-            "Forwarding port %s to %s:%s ..."
-            % (self.local_port, self.server, self.remote_port)
-        )
-
-        try:
-            tunel.tunnel.forward_tunnel(
-                self.local_port, self.server, self.remote_port, self.ssh.get_transport()
-            )
-        except KeyboardInterrupt:
-            logger.info("🛑️ Port forwarding stopped.")
-
-    def _clean_line(self, line):
-        """
-        Clean up an output line of coloring and formatting special characters
-        """
-        regex = re.compile(r"(\x9B|\x1B\[)[0-?]*[ -/]*[@-~]")
-        line = regex.sub("", line)
-        for char in ["\b", "\r", "\n"]:
-            line = line.replace(char, "")
-        return line
-
-    @property
-    def _finish_line(self):
-        return "Done! Finished with exit status"
-
-    @property
-    def _echo_cmd(self):
-        return "echo {} $?".format(self._finish_line)
+        if not isinstance(cmd, list):
+            cmd = shlex.split(cmd)
+        cmd = ["ssh", self.server] + cmd
+        return tunel.utils.run_command(cmd)
 
     def print_output(self, output, success_code=0):
         """
         Given an output dict, print and color appropriately.
         """
-        if output["exit_status"] != success_code:
-            logger.error("\n".join(output["err"]))
+        if output["return_code"] != success_code:
+            logger.error(output["message"].strip())
         else:
-            logger.info("\n".join(output["out"]))
+            print(output["message"].strip())
 
     def execute_or_fail(self, cmd, success_code=0):
         """
         Execute a command, show the command preview, only continue on success.
         """
-        cmd = self._prepare_command(cmd)
-        logger.info(cmd)
         output = self.execute(cmd)
-        if output["exit_status"] != success_code:
-            logger.exit("\n".join(output["err"]))
-        return output["out"]
+        if output["return_code"] != success_code:
+            logger.exit("\n".join(output["message"]))
+        return output["message"].strip()
 
-    def execute(self, cmd):
+    def tunnel(self, machine=None):
         """
-        connect and then execute a command - a more controlled interaction
+        Given a remote and local port, open a tunnel. If an isolated node ssh is
+        done, the name of the machine is required too.
         """
-        if not cmd:
-            logger.warning("You must provide a command to execute.")
-            return
+        logger.info(
+            "Forwarding port %s to %s:%s ..."
+            % (self.local_port, self.server, self.remote_port)
+        )
 
-        self.connect()
-        cmd = self._prepare_command(cmd)
-        channel = self.ssh.invoke_shell()
+        if self.settings.isolated_nodes:
+            if not machine:
+                logger.exit("A machine is required to forward to.")
+            self._tunnel_isolated(machine)
+        else:
+            self._tunnel_login()
 
-        self.stdin = channel.makefile("wb")
-        self.stdout = channel.makefile("r")
-        self.stdin.write(cmd + "\n")
-        self.stdin.write(self._echo_cmd + "\n")
-        self.stdin.flush()
+    def _get_socket_path(self):
+        """
+        Get a path for the socket to control the connection. Should be in ~/.ssh
+        """
+        socket_dir = self.settings.ssh_sockets
+        if not os.path.exists(socket_dir):
+            os.mkdir(socket_dir)
+        return tunel.utils.get_tmpfile(socket_dir, prefix=self.server)
 
-        output = {"out": [], "err": [], "exit_status": 0}
-        for line in self.stdout:
+    def _tunnel_login(self):
+        """
+        Create a simple tunnel to the login node (assumes not isolated nodes)
+        """
+        socket_file = self._get_socket_path()
+        cmd = [
+            "-K",
+            "-f",
+            "-M",
+            "-S",
+            socket_file,
+            "-L",
+            "%s:%s:%s" % (self.local_port, self.server, self.remote_port),
+            "-N",
+        ]
+        res = self.execute(cmd)
+        self._tunnel_wait(socket_file)
 
-            # Ensure line is a string
-            strline = str(line)
+    def _tunnel_wait(self, socket_file):
+        """
+        Wait for a Control+C to exit and remove a tunnel
+        """
 
-            if strline.startswith(cmd) or strline.startswith(self._echo_cmd):
-                output["out"] = []
+        def signal_handler(sig, frame):
+            self._close_socket(socket_file)
+            logger.exit("🛑️ Port forwarding stopped.", return_code=0)
 
-            # Exit status should be on last finish line
-            elif strline.startswith(self._finish_line):
-                output["exit_status"] = int(strline.rsplit(maxsplit=1)[1])
-                if output["exit_status"]:
-                    # stderr is combined with stdout.
-                    # thus, swap sherr with shout in a case of failure.
-                    output["err"] = output["out"]
-                    output["out"] = []
-                break
-            else:
-                # get rid of 'coloring and formatting' special characters
-                output["out"].append(self._clean_line(line))
+        signal.signal(signal.SIGINT, signal_handler)
+        print("Press Ctrl+C")
+        signal.pause()
 
-        # Clean up echo / prompt from output and error
-        for key in ["out", "err"]:
-            if output[key] and self._echo_cmd in output[key][-1]:
-                output[key].pop()
-            if output[key] and cmd in output[key][-1]:
-                output[key].pop(0)
+    def _close_socket(self, socket_file):
+        """
+        Ensure an ssh socket is closed
+        """
+        cmd = ["-S", socket_file, "-O", "exit", self.server]
+        try:
+            self.execute(cmd)
+        except:
+            pass
+        if os.path.exists(socket_file):
+            os.remove(socket_file)
 
-        return output
+    def _tunnel_isolated(self, machine):
+        """
+        Create a tunnel to an isolated node (not tested yet)
+        """
+        socket_file = self._get_socket_path()
+
+        # TODO do we need to close up connections on login node?
+        connection = "%s:localhost:%s" % (self.local_port, self.remote_port)
+        cmd = [
+            "-f",
+            "-S",
+            socket_path,
+            "-L",
+            connection,
+            self.server,
+            "ssh",
+            "-L",
+            connection,
+            "-N",
+            machine,
+        ]
+        res = self.execute(cmd)
+        self._tunnel_wait(socket_file)
+
+    def shell(self, cmd=None, interactive=False):
+        """
+        Pass the process over to shell
+        """
+        command = "ssh %s" % self.server
+        if interactive:
+            command = "ssh -t %s" % self.server
+        if cmd:
+            command = "%s %s" % (command, cmd)
+        os.system(command)
+        logger.info("👋️ Goodbye!")
