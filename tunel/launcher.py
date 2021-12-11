@@ -18,7 +18,19 @@ class Launcher:
         The Launcher is not responsible for managing or closing the connection.
         """
         self.ssh = tunel.ssh.Tunnel(server, **kwargs)
-        self.home = None
+
+        # A launcher can control assets locally or remotely
+        self._remote_home = None
+        self._home = None
+
+        # Add launcher specific settings, if they exist.
+        self.settings = {}
+        if self.slug in self.ssh.settings.launchers:
+            self.settings = self.ssh.settings.launchers[self.slug]
+
+    @property
+    def slug(self):
+        return str(self).lower()
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -26,17 +38,58 @@ class Launcher:
     def run(self, *args, **kwargs):
         raise NotImplementedError
 
-    def init_tunel(self):
+    @property
+    def path(self):
         """
-        Init tunel, meaning creating a directory structure in $HOME, but only
-        if the launcher needs to save some kind of state. Otherwise, not needed.
-        This is recommended to be run on the init of a launcher or during run.
+        Get additions to the path
         """
-        if not self.home:
-            self.home = self.ssh.execute_or_fail(
-                "echo %s" % self.ssh.settings.tunel_home
-            )[-1].strip()
-            self.ssh.execute_or_fail("mkdir -p %s" % os.path.join(self.home, "tunel"))
+        paths = self.settings.get("paths", "")
+        if paths:
+            paths = "PATH=%s:$PATH" % (":".join(paths))
+        return paths
+
+    @property
+    def environ(self):
+        """
+        Get envars
+        """
+        envars = self.settings.get("environment", "")
+        if envars:
+            envars = " ".join(envars)
+        return envars
+
+    @property
+    def remote_assets_dir(self):
+        """
+        Assets directory to store things.
+        """
+        return os.path.join(self.remote_home, "tunel", self.slug)
+
+    @property
+    def assets_dir(self):
+        return os.path.join(self.home, "tunel", self.slug)
+
+    @property
+    def home(self):
+        """
+        Get (or create) a local home
+        """
+        if not self._home:
+            self._home = self.ssh.settings.tunel_home
+            if not os.path.exists(self._home):
+                os.makedirs(self._home)
+        return self._home
+
+    def remote_home(self):
+        """
+        Get (or create) a remove home
+        """
+        if not self._remote_home:
+            self._remote_home = self.ssh.execute_or_fail(
+                "echo '%s'" % self.ssh.settings.tunel_remote_home
+            )
+            self.ssh.execute_or_fail("mkdir -p %s" % self.remote_assets_dir)
+        return self._remote_home
 
 
 class Slurm(Launcher):
@@ -44,15 +97,58 @@ class Slurm(Launcher):
     A slurm launcher interacts with slurm
     """
 
-    pass
+    def __init__(self, server, **kwargs):
+        super().__init__(server, **kwargs)
+        self._inventory = {}
+
+    @property
+    def modules_file(self):
+        return os.path.join(self.assets_dir, "modules.txt")
+
+    def update_inventory(self):
+
+        # if we don't have modules, write there
+        if not os.path.exists(self.modules_file):
+
+            # NOTE this currently doesn't work
+            # We'd want to store these locally
+            # ml -t spider 2> spider.log
+            res = self.ssh.execute("/bin/bash -l ml -t spider > modules.txt")
+            if res["return_code"] == 0:
+                import IPython
+
+                IPython.embed()
+
+    def run(self, *args, **kwargs):
+        if not self._inventory:
+            self.update_inventory()
+
+        # TODO add command line options here for params)
+        # TODO read in defaults from sinfo here
+
+        # If no command, get interactive node
+        cmd = args[0]
+        if not cmd:
+            logger.info("No command supplied, will init interactive session!")
+            self.ssh.shell("srun --pty bash", interactive=True)
+        else:
+            res = self.ssh.execute("sbatch %s" % " ".join(cmd))
+            self.ssh.print_output(res)
 
 
 class Singularity(Launcher):
-
-    # TODO what about exec?
     def run(self, *args, **kwargs):
-        res = self.ssh.execute("singularity exec %s" % " ".join(args[0]))
-        self.ssh.print_output(res)
+        """
+        Run handles some command to singularity (e.g., run or exec)
+        """
+        command = "%s %s singularity %s" % (self.path, self.environ, " ".join(args[0]))
+
+        # If the user wants a shell, give to them!
+        if "shell" in args[0]:
+            self.ssh.shell(command, interactive=True)
+        else:
+            res = self.ssh.execute(command)
+            self.ssh.print_output(res)
 
 
 """    

@@ -1,7 +1,10 @@
 # The tunel settings file allows a user to configure their tunel install
 
-# Tunnel home - e.g., the directory to write tunel/ to, where we store launcher assets
+# Tunnel home - e.g., the local directory to write tunel/ to, where we store launcher assets
 tunel_home: "$HOME"
+
+# And the same for remote assets
+tunel_remote_home: "$HOME"
 
 # set a default port to use for ssh
 ssh_port: 22
@@ -12,7 +15,27 @@ local_port: 4000
 
 # Default ssh config to read from
 ssh_config: ~/.ssh/config
-ssh_pkey: ~/.ssh/id_ed25519
+
+# Default directory to store sockets
+ssh_sockets: ~/.ssh/sockets
+
+# Config for specific launchers
+launchers:
+  singularity:
+
+    # Add these to the path (e.g., mksquashfs is here)
+    paths: 
+     - /usr/sbin
+
+    # Key/value pairs
+    environment:
+     - HELLO=MOTO
+
+  slurm:
+
+    # Defaults
+    memory: 8000
+    time: "6:00:00"
 
 # If random port selection used (random port is null) allow within this range
 min_port: 90000
