@@ -69,6 +69,20 @@ class Tunnel:
         cmd = ["ssh", self.server] + cmd
         return tunel.utils.run_command(cmd)
 
+    def scp_to(self, src, dest):
+        """
+        Copy a file onto the server
+        """
+        cmd = ["scp", src, "%s:%s" % (self.server, dest)]
+        return tunel.utils.run_command(cmd)
+
+    def scp_from(self, src, dest):
+        """
+        Copy a file from the server to local
+        """
+        cmd = ["scp", "%s:%s" % (self.server, src), dest]
+        return tunel.utils.run_command(cmd)
+
     def print_output(self, output, success_code=0):
         """
         Given an output dict, print and color appropriately.
