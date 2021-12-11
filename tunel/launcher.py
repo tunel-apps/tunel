@@ -135,8 +135,29 @@ class Slurm(Launcher):
     def modules_file(self):
         return os.path.join(self.assets_dir, "modules.txt")
 
-    def update_inventory(self):
+    @property
+    def nodes_file(self):
+        return os.path.join(self.assets_dir, "sinfo.txt")
 
+    def update_inventory(self):
+        self._update_inventory_modules()
+        self._update_inventory_nodes()
+
+    def _update_inventory_nodes(self):
+        """
+        Try to derive attributes for nodes
+        """
+        if not os.path.exists(self.nodes_file):
+            res = self.ssh.execute("scontrol show config")
+            tunel.utils.write_file(self.nodes_file, res["message"])
+        if os.path.exists(self.nodes_file) and "nodes" not in self._inventory:
+            self._inventory["nodes"] = tunel.utils.read_config_file(self.nodes_file)
+
+    def _update_inventory_modules(self):
+        """
+        Try to derive list of installed modules on cluster.
+        This has been tested for LMOD
+        """
         # if we don't have modules, write there
         if not os.path.exists(self.modules_file):
             res = self.scp_and_run("list_modules.sh")
@@ -150,18 +171,24 @@ class Slurm(Launcher):
                     # scp get is copying FROM the server to assets here
                     self.scp_get(res, self.modules_file)
 
+        # When we get here, only will exist if command was successful
+        if os.path.exists(self.modules_file) and "modules" not in self._inventory:
+            self._inventory["modules"] = tunel.utils.read_lines(self.modules_file)
+
     def run(self, *args, **kwargs):
+        """
+        Run a command for slurm, typically sbatch (and eventually with supporting args)
+        """
         if not self._inventory:
             self.update_inventory()
-
-        # TODO add command line options here for params)
-        # TODO read in defaults from sinfo here
 
         # If no command, get interactive node
         cmd = args[0]
         if not cmd:
             logger.info("No command supplied, will init interactive session!")
             self.ssh.shell("srun --pty bash", interactive=True)
+
+        # TODO develop workflow for script
         else:
             res = self.ssh.execute("sbatch %s" % " ".join(cmd))
             self.ssh.print_output(res)

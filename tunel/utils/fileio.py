@@ -145,6 +145,27 @@ def read_file(filename, mode="r"):
     return content
 
 
+def read_lines(filename):
+    """
+    Given a file with multple lines, read into a list
+    """
+    content = read_file(filename)
+    return [x for x in content.split("\n") if x]
+
+
+def read_config_file(filename, sep="="):
+    """
+    Given a config file with format KEY = VALUE, parse into dict
+    """
+    cfg = {}
+    for line in read_file(filename).split("\n"):
+        if sep not in line:
+            continue
+        key, val = line.split(sep, 1)
+        cfg[key.strip()] = val.strip()
+    return cfg
+
+
 def read_json(filename, mode="r"):
     """Read a json file to a dictionary."""
     return json.loads(read_file(filename))
