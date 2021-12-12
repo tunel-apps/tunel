@@ -8,6 +8,7 @@ import os
 import re
 import shutil
 import tempfile
+import yaml
 
 import json
 from tunel.logger import logger
@@ -142,6 +143,15 @@ def read_file(filename, mode="r"):
     """Read a file."""
     with open(filename, mode) as filey:
         content = filey.read()
+    return content
+
+
+def read_yaml(filename):
+    """
+    Read yaml from file
+    """
+    with open(filename, "r") as fd:
+        content = yaml.load(fd.read(), Loader=yaml.SafeLoader)
     return content
 
 

@@ -5,6 +5,15 @@ __license__ = "MPL 2.0"
 
 from tunel.logger import logger
 import tunel.launcher
+import tunel.apps
+
+
+def run_app(args, parser, extra, subparser):
+    app = tunel.apps.get_app(args.app)
+    launcher = tunel.launcher.get_launcher(app)(
+        args.server, remote_port=args.port, local_port=args.local_port
+    )
+    launcher.run_app(app)
 
 
 def run_singularity(args, parser, extra, subparser):

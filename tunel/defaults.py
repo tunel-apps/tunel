@@ -6,7 +6,15 @@ import os
 import tunel.utils as utils
 
 install_dir = utils.get_installdir()
-reps = {"$install_dir": install_dir, "$root_dir": os.path.dirname(install_dir)}
+
+# Default apps directory
+default_apps_dir = os.path.join(install_dir, "apps")
+
+reps = {
+    "$install_dir": install_dir,
+    "$root_dir": os.path.dirname(install_dir),
+    "$default_apps": default_apps_dir,
+}
 
 # The default settings file in the install root
 default_settings_file = os.path.join(reps["$install_dir"], "settings.yml")

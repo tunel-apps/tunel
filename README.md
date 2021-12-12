@@ -167,13 +167,13 @@ Tunel has the concept of launchers, or a known cluster / HPC or server technolog
 behalf. While some of these are typical of HPC, many of them are not, and could be used on a personal server that you have.
 Our launchers include:
 
-**under development**
-
  - **singularity** run a singularity container on the server directly.
  - **docker** run a docker container on the server directly.
  - **slurm**: submit jobs (or applications) via SLURM, either a job or a service on a node to forward back.
 
-#### singularity
+**under development**
+
+##### singularity
 
 Let's say you want to run a Singularity container on your remote server "waffles." You might do:
 
@@ -208,7 +208,7 @@ INFO:    Using cached SIF image
 Singularity> 
 ```
 
-#### slurm
+##### slurm
 
 The most basic command for the slurm launcher is to get an interactive node, as follows:
 
@@ -219,6 +219,51 @@ No command supplied, will init interactive session!
 ```
 
 More coming soon!
+
+#### apps
+
+A tunel app is identified by a yaml file, app.yaml, in an install directory (which it is suggested
+you namespace to make it easy to identify). By default in the tunel settings.yml, you'll notice one
+default apps directory:
+
+```yaml
+apps_dir:
+  - $default_apps
+```
+
+This defaults to [tunel/apps](tunel/apps) and although it is under development, it looks something like this:
+
+```bash
+$ tree tunel/apps/slurm/
+tunel/apps/slurm/
+├── jupyter
+│   ├── app.yaml
+│   └── jupyter.sbatch
+├── jupyter-gpu
+│   ├── app.yaml
+│   └── jupyter-gpu.sbatch
+└── jupyter-gpu
+    ├── app.yaml
+    └── jupyter-gpu.sbatch
+```
+
+You can currently list available apps found on these paths as follows:
+
+```bash
+$ tunel list-apps
+Name                 Launcher
+slurm/jupyter        slurm
+```
+
+Likely we will add example commands to each. The interaction will look something like:
+
+```bash
+$ tunel run-app oslic slurm/jupyter
+```
+
+And when finished, the above will launch a job with an interactive notebook and return the connection
+information when it's ready (not done yet). Generally this command will find the app.yaml under apps/slurm/jupyter in the default directory.
+Each app.yaml will define it's own launcher and other needs for running.
 
 ## TODO
 

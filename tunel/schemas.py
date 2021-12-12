@@ -5,6 +5,32 @@ __license__ = "MPL 2.0"
 
 schema_url = "https://json-schema.org/draft-07/schema/#"
 
+# App schema and properties
+
+appSettingsProperties = {
+    "launcher": {"type": "string"},
+    "script": {"type": "string"},
+    "needs": {
+        "type": "object",
+        "properties": {
+            "modules": {"type": "array", "items": {"type": "string"}},
+            "args": {"type": "array", "items": {"type": "string"}},
+        },
+    },
+}
+
+app_schema = {
+    "$schema": schema_url,
+    "title": "Tunel App Schema",
+    "type": "object",
+    "required": [
+        "launcher",
+        "script",
+    ],
+    "properties": appSettingsProperties,
+    "additionalProperties": False,
+}
+
 # Launchers properties
 
 singularity_launcher = {
@@ -51,11 +77,13 @@ settingsProperties = {
     "remote_port": {"type": ["number", "null"]},
     "tunel_home": {"type": "string"},
     "tunel_remote_home": {"type": "string"},
+    "tunel_remote_work": {"type": "string"},
     "ssh_config": {"type": "string"},
     "ssh_sockets": {"type": "string"},
     "min_port": {"type": "number"},
     "max_port": {"type": "number"},
     "config_editor": {"type": "string", "enum": ["nano", "vim", "emacs", "atom"]},
+    "apps_dirs": {"type": "array", "items": {"type": "string"}},
     "isolated_nodes": {"type": "boolean"},
 }
 
@@ -64,6 +92,7 @@ settings = {
     "title": "Tunel Settings Schema",
     "type": "object",
     "required": [
+        "apps_dirs",
         "local_port",
         "remote_port",
         "ssh_config",
@@ -78,105 +107,3 @@ settings = {
     "properties": settingsProperties,
     "additionalProperties": False,
 }
-
-"""
-# The simplest form of aliases is key/value pairs
-aliases = {
-    "type": "object",
-    "patternProperties": {
-        "\\w[\\w-]*": {"type": "string"},
-    },
-}
-
-
-# Features in container.yaml can be boolean or null, as they need to be
-# container technology agnostic
-features = {
-    "type": "object",
-    "patternProperties": {"\\w[\\w-]*": {"type": ["boolean", "null"]}},
-}
-
-# container features can be null or a known string
-container_features = {
-    "type": "object",
-    "properties": {
-        "gpu": {
-            "oneOf": [{"type": "null"}, {"type": "string", "enum": ["nvidia", "amd"]}]
-        },
-        "x11": {"oneOf": [{"type": "null"}, {"type": "string"}, {"type": "boolean"}]},
-        "home": {"oneOf": [{"type": "null"}, {"type": "string"}]},
-    },
-}
-
-
-# Or a list
-aliases_list = {
-    "type": "array",
-    "items": {
-        "type": "object",
-        "required": [
-            "name",
-            "command",
-        ],
-        "properties": {
-            "name": {"type": "string"},
-            "command": {"type": "string"},
-            "singularity_options": {"type": "string"},
-            "docker_options": {"type": "string"},
-        },
-    },
-}
-
-
-latest = {
-    "type": "object",
-    "minProperties": 1,
-    "maxProperties": 1,
-    "patternProperties": {
-        "\\w[\\w-]*": {"type": "string"},
-    },
-}
-
-containerConfigProperties = {
-    "latest": aliases,
-    "docker": {"type": "string"},
-    "gh": {"type": "string"},
-    "url": {"type": "string"},
-    "test": {"type": "string"},
-    "maintainer": {"type": "string"},
-    "description": {"type": "string"},
-    "tags": aliases,
-    "filter": {
-        "type": "array",
-        "items": {"type": "string"},
-    },
-    "env": aliases,
-    "features": features,
-    "aliases": {
-        "oneOf": [
-            aliases,
-            aliases_list,
-        ]
-    },
-}
-
-
-containerConfig = {
-    "$schema": schema_url,
-    "title": "ContainerConfig Schema",
-    "type": "object",
-    "required": [
-        "latest",
-        "tags",
-        "maintainer",
-        "description",
-    ],
-    "properties": containerConfigProperties,
-    "additionalProperties": False,
-}
-
-
-## Settings.yml (loads as json)
-
-shells = ["/bin/bash", "/bin/sh", "/bin/csh"]
-"""

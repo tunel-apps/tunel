@@ -1,6 +1,8 @@
 include README.md LICENSE
 recursive-include tunel *.png
 recursive-include tunel *.sh
+recursive-include tunel *.yml
+recursive-include tunel *.yaml
 recursive-include tunel *
 recursive-include scripts *
 recursive-include * *.png

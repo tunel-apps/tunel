@@ -6,6 +6,9 @@ tunel_home: "$HOME"
 # And the same for remote assets
 tunel_remote_home: "$HOME"
 
+# Working directory for containers, etc.
+tunel_remote_work: "$HOME"
+
 # set a default port to use for ssh
 ssh_port: 22
 
@@ -18,6 +21,10 @@ ssh_config: ~/.ssh/config
 
 # Default directory to store sockets
 ssh_sockets: ~/.ssh/sockets
+
+# Additional directories with apps to add (searched in order here)
+apps_dirs:
+ - $default_apps
 
 # Config for specific launchers
 launchers:

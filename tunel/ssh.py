@@ -73,6 +73,7 @@ class Tunnel:
         """
         Copy a file onto the server
         """
+        self.execute_or_fail("mkdir -p %s" % os.path.dirname(dest))
         cmd = ["scp", src, "%s:%s" % (self.server, dest)]
         return tunel.utils.run_command(cmd)
 

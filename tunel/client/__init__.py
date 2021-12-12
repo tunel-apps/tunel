@@ -79,6 +79,18 @@ def get_parser():
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
+    # Apps
+    run_app = subparsers.add_parser(
+        "run-app",
+        description="run a named application",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    list_app = subparsers.add_parser(
+        "list-apps",
+        description="list apps found on the known settings paths",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
     # Issue a command to a server
     execute = subparsers.add_parser(
         "exec",
@@ -100,15 +112,17 @@ def get_parser():
         action="store_true",
     )
 
-    for command in [tunnel, run_singularity, run_slurm]:
+    for command in [tunnel, run_singularity, run_slurm, run_app]:
         command.add_argument("--port", help="remote port to connect to.")
         command.add_argument("--local-port", help="local port to connect to.")
 
-    for command in [shell, execute, tunnel, run_singularity, run_slurm]:
+    for command in [shell, execute, tunnel, run_singularity, run_slurm, run_app]:
         command.add_argument(
             "server",
             help="server identity to interact with (e.g., name in ~/.ssh/config)",
         )
+
+    run_app.add_argument("app", help="The name of the application to run.")
     return parser
 
 
@@ -172,6 +186,10 @@ def run_tunel():
         from .launcher import run_singularity as main
     if args.command == "run-slurm":
         from .launcher import run_slurm as main
+    if args.command == "run-app":
+        from .launcher import run_app as main
+    if args.command == "list-apps":
+        from .apps import list_apps as main
 
     # Pass on to the correct parser
     return_code = 0

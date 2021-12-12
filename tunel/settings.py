@@ -71,8 +71,7 @@ class SettingsBase:
             logger.exit("%s does not exist." % self.settings_file)
 
         # Store the original settings for update as we go
-        with open(self.settings_file, "r") as fd:
-            self._settings = yaml.load(fd.read(), Loader=yaml.SafeLoader)
+        self._settings = tunel.utils.read_yaml(self.settings_file)
 
     def get(self, key, default=None):
         """
