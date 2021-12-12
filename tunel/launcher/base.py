@@ -24,6 +24,7 @@ class Launcher:
         # A launcher can control assets locally or remotely
         self._remote_work = None
         self._remote_home = None
+        self._remote_user = None
         self._home = None
 
         # Add launcher specific settings, if they exist.
@@ -59,7 +60,8 @@ class Launcher:
         for needed_module in needed_modules:
             matches = [x for x in modules if needed_module in x]
             if matches:
-                found_modules.append(matches)
+                # Choose the last (likely latest version)
+                found_modules += matches[-1]
         return found_modules
 
     def get_args(self, args):
@@ -114,6 +116,15 @@ class Launcher:
             if not os.path.exists(self.assets_dir):
                 os.makedirs(self.assets_dir)
         return self._home
+
+    @property
+    def username(self):
+        """
+        Get (or create) a local home
+        """
+        if not self._remote_user:
+            self._remote_user = self.ssh.execute_or_fail("echo '$USER'")
+        return self._remote_user
 
     @property
     def remote_home(self):

@@ -5,6 +5,7 @@ __license__ = "MPL 2.0"
 from .settings import Settings
 import tunel.defaults as defaults
 
+from jinja2 import Template
 from tunel.logger import logger
 import tunel.utils as utils
 import tunel.schemas
@@ -33,6 +34,10 @@ class App:
         return os.path.dirname(self.relative_path)
 
     @property
+    def job_name(self):
+        return self.name.replace(os.sep, "-")
+
+    @property
     def relative_path(self):
         return self.app_config.replace(self.app_root, "").strip("/")
 
@@ -47,6 +52,12 @@ class App:
         A direct get of an attribute, but default to None if doesn't exist
         """
         return self.get(key)
+
+    def load_template(self):
+        """
+        Given an app, load the template script for it.
+        """
+        return Template(utils.read_file(self.get_script()))
 
     def validate(self):
         """

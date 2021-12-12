@@ -60,6 +60,7 @@ def run_command(cmd, stream=False):
     if none specified, will alert that command failed.
 
     """
+    logger.info(" ".join(cmd))
     stdout = PIPE if not stream else None
     output = Popen(cmd, stderr=STDOUT, stdout=stdout)
     t = output.communicate()[0], output.returncode

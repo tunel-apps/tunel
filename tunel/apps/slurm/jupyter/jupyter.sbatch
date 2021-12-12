@@ -1,19 +1,5 @@
 #!/bin/bash
 
-# Usage
-
-# 1. Default Jupyter notebook (with your scratch to work in)
-# $ bash start.sh singularity-jupyter
-
-# 2. Default Jupyter notebook with custom working directory
-# $ bash start.sh singularity-jupyter /scratch/users/<username>
-
-# 3. Select your own jupyter container on Sherlock!
-# $ bash start.sh singularity-jupyter /scratch/users/<username> /path/to/container
-
-# 4. Or any singularity container...
-# $ bash start.sh singularity /path/to/container <args>
-
 PORT=$1
 NOTEBOOK_DIR=$2
 cd $NOTEBOOK_DIR
@@ -28,7 +14,14 @@ if [ ! -d "${HOME}/.local" ]; then
     mkdir -p "${HOME}/.local";
 fi
 
-# TODO load other modules here?
+# Load modules requested by user
+{% for module in modules %}module load {{ module }} || printf "Could not load {{ module }}\n"
+{% endfor %}
+
+# Add variables to PATH
+{% for path in paths %}export PATH={{ path }}:${PATH}
+{% endfor %}
+
 module load singularity || printf "Singularity is not available as a module."
 
 # First effort - 

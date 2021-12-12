@@ -218,6 +218,15 @@ No command supplied, will init interactive session!
 (base) bash-4.2$ 
 ```
 
+Let's say that you run an app (shown below) that launches a slurm job to generate a job named `slurm-jupyter`.
+If you wanted to kill it:
+
+```bash
+$ tunel stop-slurm oslic slurm-jupyter
+No command supplied, will init interactive session!
+(base) bash-4.2$ 
+```
+
 More coming soon!
 
 #### apps
@@ -258,7 +267,7 @@ slurm/jupyter        slurm
 Likely we will add example commands to each. The interaction will look something like:
 
 ```bash
-$ tunel run-app oslic slurm/jupyter
+$ tunel run-app waffles slurm/jupyter
 ```
 
 And when finished, the above will launch a job with an interactive notebook and return the connection

@@ -24,6 +24,13 @@ def run_singularity(args, parser, extra, subparser):
     launcher.run(extra)
 
 
+def stop_slurm(args, parser, extra, subparser):
+    launcher = tunel.launcher.Slurm(
+        args.server, remote_port=args.port, local_port=args.local_port
+    )
+    launcher.stop(extra)
+
+
 def run_slurm(args, parser, extra, subparser):
 
     launcher = tunel.launcher.Slurm(

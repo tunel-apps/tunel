@@ -54,6 +54,7 @@ slurm_launcher = {
     "properties": {
         "memory": {"type": ["string", "number"]},
         "time": {"type": "string"},
+        "paths": {"type": "array", "items": {"type": "string"}},
     },
     "additionalProperties": False,
 }

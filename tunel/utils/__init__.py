@@ -1,3 +1,4 @@
+from .generate import namer
 from .terminal import (
     run_command,
     check_install,

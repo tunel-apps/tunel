@@ -79,6 +79,13 @@ def get_parser():
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
+    # Stop a slurm running application
+    stop_slurm = subparsers.add_parser(
+        "stop-slurm",
+        description="stop or kill a slurm job or session.",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
     # Apps
     run_app = subparsers.add_parser(
         "run-app",
@@ -112,11 +119,19 @@ def get_parser():
         action="store_true",
     )
 
-    for command in [tunnel, run_singularity, run_slurm, run_app]:
+    for command in [tunnel, run_singularity, run_slurm, run_app, stop_slurm]:
         command.add_argument("--port", help="remote port to connect to.")
         command.add_argument("--local-port", help="local port to connect to.")
 
-    for command in [shell, execute, tunnel, run_singularity, run_slurm, run_app]:
+    for command in [
+        shell,
+        execute,
+        tunnel,
+        run_singularity,
+        run_slurm,
+        run_app,
+        stop_slurm,
+    ]:
         command.add_argument(
             "server",
             help="server identity to interact with (e.g., name in ~/.ssh/config)",
@@ -186,6 +201,8 @@ def run_tunel():
         from .launcher import run_singularity as main
     if args.command == "run-slurm":
         from .launcher import run_slurm as main
+    if args.command == "stop-slurm":
+        from .launcher import stop_slurm as main
     if args.command == "run-app":
         from .launcher import run_app as main
     if args.command == "list-apps":

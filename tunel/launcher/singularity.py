@@ -10,78 +10,6 @@ import os
 from tunel.launcher.base import Launcher
 
 
-class Slurm(Launcher):
-    """
-    A slurm launcher interacts with slurm
-    """
-
-    def __init__(self, server, **kwargs):
-        super().__init__(server, **kwargs)
-        self._inventory = {}
-
-    @property
-    def modules_file(self):
-        return os.path.join(self.assets_dir, "modules.txt")
-
-    @property
-    def nodes_file(self):
-        return os.path.join(self.assets_dir, "sinfo.txt")
-
-    def update_inventory(self):
-        self._update_inventory_modules()
-        self._update_inventory_nodes()
-
-    def _update_inventory_nodes(self):
-        """
-        Try to derive attributes for nodes
-        """
-        if not os.path.exists(self.nodes_file):
-            res = self.ssh.execute("scontrol show config")
-            tunel.utils.write_file(self.nodes_file, res["message"])
-        if os.path.exists(self.nodes_file) and "nodes" not in self._inventory:
-            self._inventory["nodes"] = tunel.utils.read_config_file(self.nodes_file)
-
-    def _update_inventory_modules(self):
-        """
-        Try to derive list of installed modules on cluster.
-        This has been tested for LMOD
-        """
-        # if we don't have modules, write there
-        if not os.path.exists(self.modules_file):
-            res = self.scp_and_run("list_modules.sh")
-            if res["return_code"] == 0:
-                res = [x for x in res["message"].split("\n") if "RESULT:" in x]
-
-                # This is the output file with list of modules
-                if res:
-                    res = res[0].split(":")[-1]
-
-                    # scp get is copying FROM the server to assets here
-                    self.scp_get(res, self.modules_file)
-
-        # When we get here, only will exist if command was successful
-        if os.path.exists(self.modules_file) and "modules" not in self._inventory:
-            self._inventory["modules"] = tunel.utils.read_lines(self.modules_file)
-
-    def run(self, *args, **kwargs):
-        """
-        Run a command for slurm, typically sbatch (and eventually with supporting args)
-        """
-        if not self._inventory:
-            self.update_inventory()
-
-        # If no command, get interactive node
-        cmd = args[0]
-        if not cmd:
-            logger.info("No command supplied, will init interactive session!")
-            self.ssh.shell("srun --pty bash", interactive=True)
-
-        # TODO develop workflow for script
-        else:
-            res = self.ssh.execute("sbatch %s" % " ".join(cmd))
-            self.ssh.print_output(res)
-
-
 class Singularity(Launcher):
     def run(self, *args, **kwargs):
         """
@@ -228,20 +156,6 @@ function set_forward_script() {
 # Job Manager
 #
 
-function check_previous_submit() {
-
-    echo "== Checking for previous notebook =="
-    PREVIOUS=`ssh ${RESOURCE} squeue --name=$NAME --user=$FORWARD_USERNAME -o "%R" -h`
-    if [ -z "$PREVIOUS" -a "${PREVIOUS+xxx}" = "xxx" ]; 
-        then
-            echo "No existing ${NAME} jobs found, continuing..."
-        else
-        echo "Found existing job for ${NAME}, ${PREVIOUS}."
-        echo "Please end.sh before using start.sh, or use resume.sh to resume."
-        exit 1
-    fi
-}
-
 
 function set_partition() {
 
@@ -332,4 +246,4 @@ function setup_port_forwarding() {
        ssh "$DOMAINNAME" -l $FORWARD_USERNAME -K -L  $PORT:$MACHINE:$PORT -N  &
     fi
 }
-"""
+f"""

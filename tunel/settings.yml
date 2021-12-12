@@ -40,6 +40,10 @@ launchers:
 
   slurm:
 
+    # Add these to the path (e.g., mksquashfs is here)
+    paths: 
+     - /usr/sbin
+
     # Defaults
     memory: 8000
     time: "6:00:00"

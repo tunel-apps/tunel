@@ -102,14 +102,15 @@ class Tunnel:
             logger.exit("\n".join(output["message"]))
         return output["message"].strip()
 
-    def tunnel(self, machine=None):
+    def tunnel(self, machine=None, port=None, remote_port=None):
         """
         Given a remote and local port, open a tunnel. If an isolated node ssh is
         done, the name of the machine is required too.
         """
+        port = port or self.local_port
+        remote_port = remote_port or self.remote_port
         logger.info(
-            "Forwarding port %s to %s:%s ..."
-            % (self.local_port, self.server, self.remote_port)
+            "Forwarding port %s to %s:%s ..." % (port, self.server, remote_port)
         )
 
         if self.settings.isolated_nodes:

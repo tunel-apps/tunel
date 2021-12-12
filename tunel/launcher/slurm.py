@@ -6,6 +6,7 @@ from tunel.logger import logger
 from tunel.launcher.base import Launcher
 import tunel.utils as utils
 import tunel.ssh
+import time
 import os
 
 here = os.path.dirname(os.path.abspath(__file__))
@@ -75,37 +76,160 @@ class Slurm(Launcher):
         # Prepare dictionary with content to render into recipes
         render = {}
 
+        # Add any paths from the config
+        paths = self.settings.get("paths", [])
+
         # TODO need to test with something that needs a module
         if app.needs:
             render["modules"] = self.get_modules(app.needs.get("modules"))
             render["args"] = self.get_args(app.needs.get("args"))
+            paths += app.needs.get("paths", [])
+            render["paths"] = paths
 
-        # TODO render script with jinja2
+        # Load the app template
+        template = app.load_template()
+        result = template.render(**render)
+
+        # Write script to temporary file
+        tmpfile = tmpfile = utils.get_tmpfile()
+        utils.write_file(tmpfile, result)
 
         # Copy over to server
-        script = app.get_script()
         remote_script = os.path.join(self.remote_assets_dir, app.name, app.script)
-        self.ssh.scp_to(script, remote_script)
+        self.ssh.scp_to(tmpfile, remote_script)
 
-        # The script is required
-        command = ["sbatch", remote_script] + render.get("args", [])
+        # Assemble the command
+        command = [
+            "sbatch",
+            "--job-name=%s" % app.job_name,
+            "--output=%s.out" % remote_script,
+            "--error=%s.err" % remote_script,
+            remote_script,
+        ] + render.get("args", [])
 
         # Launch with command
-        res = self.ssh.execute(command)
+        if not self.previous_job_exists(app.job_name):
+            self.run(command, app.job_name, logs_prefix=remote_script)
 
-    def run(self, *args, **kwargs):
+    def stop(self, names):
+        """
+        Stop one or more named jobs
+        """
+        for name in names:
+            print("Killing %s slurm job on %s" % (name, self.ssh.server))
+            self.ssh.execute_or_fail(
+                "squeue --name %s --user %s" % (name, self.username)
+                + " -o '%A' -h | xargs --no-run-if-empty /usr/bin/scancel"
+            )
+            print("Killing listeners on %s" % self.ssh.server)
+            self.ssh.execute_or_fail(
+                "lsof -i :%s -t | xargs --no-run-if-empty kill" % self.ssh.remote_port
+            )
+
+    def previous_job_exists(self, name):
+        """
+        Check to see if a previous job was submit/exists.
+        """
+        print("== Checking for previous run of %s ==" % name)
+        previous = self.ssh.execute_or_fail(
+            "squeue --name %s --user %s" % (name, self.username) + " -o %R -h"
+        )
+        if previous == "":
+            print("No existing %s jobs found, continuing." % name)
+        else:
+            logger.error("Found existing job for %s!" % name)
+            logger.exit(
+                "Please tunel stop-slurm %s %s before proceeding."
+                % (self.ssh.server, name)
+            )
+
+    def get_machine(self, name):
+        """
+        Given the name of a job, wait for the job to start and return the machine
+        TODO: we could add a max number of attempts here.
+        """
+        timeout = 2
+        attempt = 1
+        machine = ""
+        allocated = False
+        print("== Waiting for job to start, using exponential backoff ==")
+
+        # Continue waiting until machine is allocated
+        while not allocated:
+            machine = self.ssh.execute_or_fail(
+                "squeue --name %s --user %s" % (name, self.username) + " -o %N -h"
+            )
+            if machine != "":
+                print("Attempt %s: resources allocated to %s!" % (attempt, machine))
+                allocated = True
+                break
+
+            print("Attempt %s: not ready yet... retrying in %s..." % (attempt, timeout))
+            time.sleep(timeout)
+            attempt += 1
+            timeout += 2
+
+        return machine
+
+    def show_logs_instruction(self, logs_prefix):
+        """
+        print to the screen how to see currently running logs
+        """
+        print("== View logs in separate terminal ==")
+        logger.info("ssh %s cat %s.out" % (self.ssh.server, logs_prefix))
+        logger.info("ssh %s cat %s.err" % (self.ssh.server, logs_prefix))
+        print()
+
+    def show_logs(self, logs_prefix):
+        self.ssh.execute("ssh %s cat %s.out" % (self.ssh.server, logs_prefix))
+        self.ssh.execute("ssh %s cat %s.err" % (self.ssh.server, logs_prefix))
+        print()
+
+    def run(self, cmd, job_name=None, logs_prefix=None):
         """
         Run a command for slurm, typically sbatch (and eventually with supporting args)
         """
         self.update_inventory()
 
+        # Generate a name for the job, if not supplied
+        if not job_name:
+            job_name = tunel.utils.namer.generate()
+
         # If no command, get interactive node
-        cmd = args[0]
         if not cmd:
             logger.info("No command supplied, will init interactive session!")
             self.ssh.shell("srun --pty bash", interactive=True)
 
-        # TODO develop workflow for script
         else:
-            res = self.ssh.execute("sbatch %s" % " ".join(cmd))
+            if "sbatch" not in cmd:
+                cmd = ["sbatch"] + cmd
+            res = self.ssh.execute(" ".join(cmd))
             self.ssh.print_output(res)
+
+            # A successful submission should:
+            if res["return_code"] == 0:
+
+                # 1. Show the user how to quickly get logs (if logs_prefix provided)
+                if logs_prefix:
+                    self.show_logs_instruction(logs_prefix)
+                machine = self.get_machine(job_name)
+                logger.info("%s is running on %s!" % (job_name, machine))
+
+                # Setup port forwarding
+                time.sleep(10)
+                print("== Connecting to %s ==" % job_name)
+                if logs_prefix:
+                    self.show_logs(logs_prefix)
+                print("== Instructions ==")
+                print(
+                    "1. Password, output, and error printed to this terminal? Look at logs (see instruction above)"
+                )
+                print(
+                    "2. Browser: http://%s:%s/ -> http://localhost:%s/..."
+                    % (machine, self.ssh.remote_port, self.ssh.local_port)
+                )
+                print(
+                    "3. To end session: tunel stop-slurm %s %s"
+                    % (self.ssh.server, job_name)
+                )
+                self.ssh.tunnel(machine)
