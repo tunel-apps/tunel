@@ -66,6 +66,13 @@ def get_parser():
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
+    # Also support sh
+    sh = subparsers.add_parser(
+        "sh",
+        description="shell into a remote connection",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
     # Run commands will issue launcher specific commands
     # tunel run-singularity <server> <container>
     run_singularity = subparsers.add_parser(
@@ -124,6 +131,7 @@ def get_parser():
         command.add_argument("--local-port", help="local port to connect to.")
 
     for command in [
+        sh,
         shell,
         execute,
         tunnel,
@@ -191,7 +199,7 @@ def run_tunel():
                 break
 
     # Does the user want a shell?
-    if args.command == "shell":
+    if args.command in ["shell", "sh"]:
         from .shell import main
     if args.command == "exec":
         from .execute import main

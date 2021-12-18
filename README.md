@@ -87,11 +87,24 @@ $ /bin/bash scripts/hosts/sherlock_ssh.sh >> ~/.ssh/config
 
 Do not run this command if there is content in the file that you might overwrite! 
 
-#### Settings
+#### Settings File
 
 Tunel has a default settings file at [tunel/settings.yml](tunel/settings.yml]) that you can tweak
 on your local machine. The defaults should work for most, but we will detail some of the ones
 that might need customization depending on your cluster.
+
+#### Singularity Containers
+
+Most scripts that use Singularity will attempt to load it as a module, and this won't error if it fails.
+If you don't have it as a module, it's recommended to have singularity on your path, or loaded in your profile for slurm apps that use it
+or the Singularity launcher. It's also recommended to export your cache directory to somewhere with more space:
+
+```bash
+$ export SINGULARITY_CACHEDIR=$SCRATCH/.singularity
+```
+
+If you have custom logic to use Singularity that isn't encompassed in these
+two use cases, you can [let us know](https://github.com/vsoch/tunel) to ask for help, or write a custom app yourself.
 
 ### Isolated Compute Nodes
 
@@ -218,8 +231,7 @@ No command supplied, will init interactive session!
 (base) bash-4.2$ 
 ```
 
-Let's say that you run an app (shown below) that launches a slurm job to generate a job named `slurm-jupyter`.
-If you wanted to kill it:
+Let's say that you run an app [described below](#apps) that launches a slurm job to generate a job named `slurm-jupyter`. Here is how you'd kill it:
 
 ```bash
 $ tunel stop-slurm oslic slurm-jupyter
@@ -270,7 +282,8 @@ Likely we will add example commands to each. The interaction will look something
 $ tunel run-app waffles slurm/jupyter
 ```
 
-And when finished, the above will launch a job with an interactive notebook and return the connection
+You'll see the above execute commands to interact with the launcher, and then go into an exponential backoff while
+waiting for a node. When finished, the above will launch a job with an interactive notebook and return the connection
 information when it's ready (not done yet). Generally this command will find the app.yaml under apps/slurm/jupyter in the default directory.
 Each app.yaml will define it's own launcher and other needs for running.
 

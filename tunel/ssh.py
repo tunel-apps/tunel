@@ -99,7 +99,7 @@ class Tunnel:
         """
         output = self.execute(cmd)
         if output["return_code"] != success_code:
-            logger.exit("\n".join(output["message"]))
+            logger.exit(output["message"])
         return output["message"].strip()
 
     def tunnel(self, machine=None, port=None, remote_port=None):

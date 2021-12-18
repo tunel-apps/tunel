@@ -167,7 +167,7 @@ class Slurm(Launcher):
             print("Attempt %s: not ready yet... retrying in %s..." % (attempt, timeout))
             time.sleep(timeout)
             attempt += 1
-            timeout += 2
+            timeout = timeout * 2
 
         return machine
 

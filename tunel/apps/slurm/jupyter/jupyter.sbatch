@@ -30,9 +30,10 @@ then
     printf "singularity pull docker://jupyter/datascience-notebook\n"
     singularity pull "docker://jupyter/datascience-notebook"
     printf "singularity pull docker://jupyter/datascience-notebook\n"
-    printf "singularity exec --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local "docker://jupyter/datascience-notebook" jupyter notebook --no-browser --port=$PORT --ip 0.0.0.0\n"
+    printf "singularity exec --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local docker://jupyter/datascience-notebook jupyter notebook --no-browser --port=$PORT --ip 0.0.0.0\n"
     singularity exec --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local "docker://jupyter/datascience-notebook" jupyter notebook --no-browser --port=$PORT --ip 0.0.0.0
 else
+    printf "Singularity not available, trying native jupyter.\n"
     printf "jupyter notebook --no-browser --port=$PORT\n"
     jupyter notebook --no-browser --port=$PORT
 fi
