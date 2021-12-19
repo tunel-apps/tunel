@@ -60,14 +60,14 @@ class Tunnel:
     def __str__(self):
         return "[tunel-ssh]"
 
-    def execute(self, cmd, login_shell=False):
+    def execute(self, cmd, login_shell=False, quiet=False):
         """
         Execute a command via ssh and a known, named connection.
         """
         if not isinstance(cmd, list):
             cmd = shlex.split(cmd)
         cmd = ["ssh", self.server] + cmd
-        return tunel.utils.run_command(cmd)
+        return tunel.utils.run_command(cmd, quiet=quiet)
 
     def scp_to(self, src, dest):
         """
@@ -93,11 +93,11 @@ class Tunnel:
         else:
             print(output["message"].strip())
 
-    def execute_or_fail(self, cmd, success_code=0):
+    def execute_or_fail(self, cmd, success_code=0, quiet=False):
         """
         Execute a command, show the command preview, only continue on success.
         """
-        output = self.execute(cmd)
+        output = self.execute(cmd, quiet=quiet)
         if output["return_code"] != success_code:
             logger.exit(output["message"])
         return output["message"].strip()

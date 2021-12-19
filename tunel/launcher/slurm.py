@@ -6,6 +6,7 @@ from tunel.logger import logger
 from tunel.launcher.base import Launcher
 import tunel.utils as utils
 import tunel.ssh
+import threading
 import time
 import os
 
@@ -180,10 +181,14 @@ class Slurm(Launcher):
         logger.info("ssh %s cat %s.err" % (self.ssh.server, logs_prefix))
         print()
 
-    def show_logs(self, logs_prefix):
-        self.ssh.execute("ssh %s cat %s.out" % (self.ssh.server, logs_prefix))
-        self.ssh.execute("ssh %s cat %s.err" % (self.ssh.server, logs_prefix))
-        print()
+    def print_updated_logs(self, logs_prefix):
+        """
+        Start a separate thread that regularly checks and prints logs (when there is an updated line)
+        """
+        logs_thread = threading.Thread(
+            target=print_logs, name="Logger", args=[self.ssh, logs_prefix]
+        )
+        logs_thread.start()
 
     def run(self, cmd, job_name=None, logs_prefix=None):
         """
@@ -212,17 +217,16 @@ class Slurm(Launcher):
                 # 1. Show the user how to quickly get logs (if logs_prefix provided)
                 if logs_prefix:
                     self.show_logs_instruction(logs_prefix)
+
                 machine = self.get_machine(job_name)
                 logger.info("%s is running on %s!" % (job_name, machine))
 
                 # Setup port forwarding
                 time.sleep(10)
                 print("== Connecting to %s ==" % job_name)
-                if logs_prefix:
-                    self.show_logs(logs_prefix)
                 print("== Instructions ==")
                 print(
-                    "1. Password, output, and error printed to this terminal? Look at logs (see instruction above)"
+                    "1. Password, output, and error will print to this - make sure application is ready before interaction."
                 )
                 print(
                     "2. Browser: http://%s:%s/ -> http://localhost:%s/..."
@@ -232,4 +236,34 @@ class Slurm(Launcher):
                     "3. To end session: tunel stop-slurm %s %s"
                     % (self.ssh.server, job_name)
                 )
+                # Create another process to check logs?
+                if logs_prefix:
+                    self.print_updated_logs(logs_prefix)
                 self.ssh.tunnel(machine)
+
+
+def print_logs(ssh, logs_prefix):
+
+    # Output and error commands
+    output_command = "ssh %s tail -3 %s.out" % (ssh.server, logs_prefix)
+    error_command = "ssh %s tail -3 %s.err" % (ssh.server, logs_prefix)
+
+    last_out = None
+    last_err = None
+    while True:
+        time.sleep(5)
+        new_out = ssh.execute_or_fail(output_command, quiet=True)
+        new_err = ssh.execute_or_fail(error_command, quiet=True)
+        changed = False
+        if new_out != last_out:
+            logger.info("\n" + output_command)
+            print(new_out)
+            last_out = new_out
+            changed = True
+        if new_err != last_err:
+            logger.error("\n" + error_command)
+            print(new_err)
+            last_err = new_err
+            changed = True
+        if changed:
+            print()

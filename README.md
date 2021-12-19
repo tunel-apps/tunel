@@ -284,8 +284,10 @@ $ tunel run-app waffles slurm/jupyter
 
 You'll see the above execute commands to interact with the launcher, and then go into an exponential backoff while
 waiting for a node. When finished, the above will launch a job with an interactive notebook and return the connection
-information when it's ready (not done yet). Generally this command will find the app.yaml under apps/slurm/jupyter in the default directory.
-Each app.yaml will define it's own launcher and other needs for running.
+information. Note that you should watch the error and output logs to determine when the application is ready to connect to. E.g.,
+a Singularity container will likely need to be pulled, and then converted to SIF, which unfortunately isn't quick. 
+When it's ready, try connecting. This command generally works by finding the app.yaml under apps/slurm/jupyter in the default directory,
+an each app.yaml will define it's own launcher and other needs for running.
 
 ## TODO
 

@@ -50,7 +50,7 @@ def get_installdir():
     return os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 
-def run_command(cmd, stream=False):
+def run_command(cmd, stream=False, quiet=False):
     """run_command uses subprocess to send a command to the terminal.
 
     Parameters
@@ -60,7 +60,8 @@ def run_command(cmd, stream=False):
     if none specified, will alert that command failed.
 
     """
-    logger.info(" ".join(cmd))
+    if not quiet:
+        logger.info(" ".join(cmd))
     stdout = PIPE if not stream else None
     output = Popen(cmd, stderr=STDOUT, stdout=stdout)
     t = output.communicate()[0], output.returncode
