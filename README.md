@@ -106,26 +106,12 @@ $ export SINGULARITY_CACHEDIR=$SCRATCH/.singularity
 If you have custom logic to use Singularity that isn't encompassed in these
 two use cases, you can [let us know](https://github.com/vsoch/tunel) to ask for help, or write a custom app yourself.
 
-### Isolated Compute Nodes
+### Connecting to Apps
 
-Depending on your cluster, you will need to identify whether the compute nodes (not the login nodes) are isolated from the outside world or not (i.e can be ssh'd into directly). This is important when we are setting up the ssh command to port forward from the local machine to the compute node. 
-
-For HPC's where the compute node is isolated from the outside world, the ssh command basically establishes a tunnel to the login node, and then from the login node establishes another tunnel to the compute node. In this case we write a command where we port forward to the login node, and then the compute node, which is accessible from the login node. The entire command might look like this:
-
-```bash
-$ ssh -L $PORT:localhost:$PORT ${RESOURCE} ssh -L $PORT:localhost:$PORT -N "$MACHINE" &
-```
-
-In the command above, the first half is executed on the local machine `ssh -L $PORT:localhost:$PORT ${RESOURCE}`, which establishes a port forwarding to the login node. The next line `ssh -L $PORT:localhost:$PORT -N "$MACHINE" &` is run from the login node, and port forwards it to the compute node, since you can only access the compute node from the login nodes.
-
-For HPC's where the compute node is not isolated from the outside world the ssh command for port forwarding first establishes a connection the login node, but then continues to pass on the login credentials to the compute node to establish a tunnel between the localhost and the port on the compute node. 
-The ssh command in this case utilizes the flag `-K` which forwards the login credentials to the compute node:
-
-```bash
-$ ssh "$DOMAINNAME" -l $FORWARD_USERNAME -K -L  $PORT:$MACHINE:$PORT -N  &
-```
-
-The drawback of this method is that when tunel is run, you will have to authenticate twice (once at the beginning to check if a job is running on the HPC, and when the port forwarding is setup). For tunel, you can either hard code this in your [tunel/settings.yml](tunel/settings.yml) file, as `isolated_nodes: true/false` OR provide as a command line argument.
+Since we cannot reliably always have access to an exposed port, the main (suggested) way to run an app is using
+a socket. As a note, there are apps provided here intended to be used with ports, but the developer @vsoch is
+not able to test them easily since she does not have access to any resources that allow open TCP ports. However,
+if you find an issue, please open and (ideally) help debug to fix it up.
 
 ### Commands
 
@@ -157,7 +143,7 @@ $ tunel exec waffles echo `$HOME`
 
 #### tunnel
 
-The simplest thing tunnel can do is if you already have a service running on your cluster or server (e.g., let's say we ssh in and start a web server) in one terminal:
+If you are able to open ports, the simplest thing tunnel can do is if you already have a service running on your cluster or server (e.g., let's say we ssh in and start a web server) in one terminal:
 
 ```bash
 $ tunel shell waffles
@@ -257,23 +243,24 @@ This defaults to [tunel/apps](tunel/apps) and although it is under development, 
 ```bash
 $ tree tunel/apps/slurm/
 tunel/apps/slurm/
-├── jupyter
-│   ├── app.yaml
-│   └── jupyter.sbatch
-├── jupyter-gpu
-│   ├── app.yaml
-│   └── jupyter-gpu.sbatch
-└── jupyter-gpu
-    ├── app.yaml
-    └── jupyter-gpu.sbatch
+├── port
+│   └── jupyter
+│       ├── app.yaml
+│       └── jupyter.sbatch
+└── socket
+    └── jupyter
+        ├── app.yaml
+        └── jupyter.sbatch
 ```
 
+Notice that apps are organized into being accessible via port (not recommended) vs. socket.
 You can currently list available apps found on these paths as follows:
 
 ```bash
 $ tunel list-apps
 Name                 Launcher
-slurm/jupyter        slurm
+slurm/socket/jupyter slurm
+slurm/port/jupyter   slurm
 ```
 
 Likely we will add example commands to each. The interaction will look something like:

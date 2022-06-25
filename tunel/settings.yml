@@ -9,6 +9,9 @@ tunel_remote_home: "$HOME"
 # Working directory for containers, etc.
 tunel_remote_work: "$HOME"
 
+# Specific directory for remote sockets (default unset, will go in $HOME/.tunel
+tunel_remote_sockets: null
+
 # set a default port to use for ssh
 ssh_port: 22
 

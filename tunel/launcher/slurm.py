@@ -68,24 +68,33 @@ class Slurm(Launcher):
         if os.path.exists(self.modules_file) and "modules" not in self._inventory:
             self._inventory["modules"] = tunel.utils.read_lines(self.modules_file)
 
+    def prepare_render(self, app, paths):
+        """
+        Given an app, prepare default variables (and custom args) to render
+        """
+        render = {}
+        # TODO need to test with something that needs a module
+        if app.needs:
+            paths += app.needs.get("paths", [])
+            render["modules"] = self.get_modules(app.needs.get("modules"))
+            render["args"] = self.get_args(app.needs.get("args"))
+        render["jobslug"] = app.name.replace(os.sep, "-").replace("/", "-")
+        render["jobname"] = app.name
+        render["scriptdir"] = os.path.join(self.remote_assets_dir, app.name)
+        render["paths"] = paths
+        return render
+
     def run_app(self, app):
         """
         Given an app designated for slurm, run it!
         """
         self.update_inventory()
 
-        # Prepare dictionary with content to render into recipes
-        render = {}
-
         # Add any paths from the config
         paths = self.settings.get("paths", [])
 
-        # TODO need to test with something that needs a module
-        if app.needs:
-            render["modules"] = self.get_modules(app.needs.get("modules"))
-            render["args"] = self.get_args(app.needs.get("args"))
-            paths += app.needs.get("paths", [])
-            render["paths"] = paths
+        # Prepare dictionary with content to render into recipes
+        render = self.prepare_render(app, paths)
 
         # Load the app template
         template = app.load_template()
@@ -140,7 +149,7 @@ class Slurm(Launcher):
         else:
             logger.error("Found existing job for %s!" % name)
             logger.exit(
-                "Please tunel stop-slurm %s %s before proceeding."
+                "Please run 'tunel stop-slurm %s %s' before proceeding."
                 % (self.ssh.server, name)
             )
 

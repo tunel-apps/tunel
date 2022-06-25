@@ -74,6 +74,8 @@ class Launcher:
                 choices.append(str(self.ssh.remote_port))
             elif arg == "workdir":
                 choices.append(self.remote_work)
+            elif arg == "socketdir":
+                choices.append(self.remote_sockets)
             else:
                 logger.warning("%s is not a known argument type" % arg)
         return choices
@@ -148,6 +150,15 @@ class Launcher:
                 "echo '%s'" % self.ssh.settings.tunel_remote_work
             )
         return self._remote_work
+
+    @property
+    def remote_sockets(self):
+        """
+        Get a remote sockets directory
+        """
+        if self.ssh.settings.tunel_remote_sockets:
+            return self.ssh.settings.tunel_remote_sockets
+        return os.path.join(self.remote_home, ".tunel", "sockets")
 
     def scp_get(self, src, dest):
         """

@@ -79,6 +79,7 @@ settingsProperties = {
     "tunel_home": {"type": "string"},
     "tunel_remote_home": {"type": "string"},
     "tunel_remote_work": {"type": "string"},
+    "tunel_remote_sockets": {"type": ["string", "null"]},
     "ssh_config": {"type": "string"},
     "ssh_sockets": {"type": "string"},
     "min_port": {"type": "number"},
