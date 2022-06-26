@@ -9,6 +9,11 @@ import os
 import threading
 import inspect
 
+from rich.console import Console
+from rich import print
+from rich.console import Group
+from rich.panel import Panel
+
 
 class ColorizingStreamHandler(_logging.StreamHandler):
 
@@ -74,6 +79,21 @@ class Logger:
         self.logfile = None
         self.last_msg_was_job_info = False
         self.logfile_handler = None
+        self.c = Console()
+
+    def purple(self, msg):
+        self.c.print("[bold purple]%s" % msg)
+
+    def cyan(self, msg):
+        self.c.print("[bold cyan]%s" % msg)
+
+    def panel_group(self, msgs):
+        """
+        Input is a dictionary of colors (for panel background) and corresponding messages.
+        """
+        panels = [Panel(v, style="on %s" % k) for k, v in msgs.items()]
+        panel_group = Group(*panels)
+        print(Panel(panel_group))
 
     def cleanup(self):
         if self.logfile_handler is not None:

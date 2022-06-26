@@ -263,18 +263,29 @@ slurm/socket/jupyter slurm
 slurm/port/jupyter   slurm
 ```
 
-Likely we will add example commands to each. The interaction will look something like:
+If you need to use a socket (e.g., your cluster doesn't support ports) you can try:
 
 ```bash
-$ tunel run-app waffles slurm/jupyter
+$ tunel run-app waffles slurm/socket/jupyter
 ```
+This will start the job, show you an ssh command to connect when the notebook is ready (e.g., when the output
+shows up with the token) and then you can copy paste that into a separate terminal to start the tunnel.
+This might be possible to do on your behalf, but I like the user having control of when to start / stop it
+so this is the current design.
 
-You'll see the above execute commands to interact with the launcher, and then go into an exponential backoff while
-waiting for a node. When finished, the above will launch a job with an interactive notebook and return the connection
-information. Note that you should watch the error and output logs to determine when the application is ready to connect to. E.g.,
+I just created an account on OSG so I should be able to work on the port connection use case soon!
+
+##### More Detail
+
+Each app.yaml (the path of the running app that we've chosen in tunel/apps) is going to specify a launcher (e.g., slurm or singularity)
+along with different parameters that are needed. After launch, in the case of slurm you'll see the above execute commands to 
+interact with the launcher, and then go into an exponential backoff while waiting for a node. When finished, the above will 
+launch a job with an interactive notebook and return the connection information. Note that you should watch the error and output logs
+(in purple and cyan, respectively) to determine when the application is ready to connect to. E.g.,
 a Singularity container will likely need to be pulled, and then converted to SIF, which unfortunately isn't quick. 
 When it's ready, try connecting. This command generally works by finding the app.yaml under apps/slurm/jupyter in the default directory,
 an each app.yaml will define it's own launcher and other needs for running.
+
 
 ## TODO
 

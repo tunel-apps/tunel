@@ -15,6 +15,7 @@ appSettingsProperties = {
         "properties": {
             "modules": {"type": "array", "items": {"type": "string"}},
             "args": {"type": "array", "items": {"type": "string"}},
+            "socket": {"type": "boolean"},
         },
     },
 }
@@ -53,6 +54,7 @@ slurm_launcher = {
     ],
     "properties": {
         "memory": {"type": ["string", "number"]},
+        "max_attempts": {"type": ["number", "null"]},
         "time": {"type": "string"},
         "paths": {"type": "array", "items": {"type": "string"}},
     },
@@ -86,7 +88,7 @@ settingsProperties = {
     "max_port": {"type": "number"},
     "config_editor": {"type": "string", "enum": ["nano", "vim", "emacs", "atom"]},
     "apps_dirs": {"type": "array", "items": {"type": "string"}},
-    "isolated_nodes": {"type": "boolean"},
+    "tunel_spinner": {"type": "string"},
 }
 
 settings = {
@@ -104,7 +106,6 @@ settings = {
         "min_port",
         "max_port",
         "config_editor",
-        "isolated_nodes",
     ],
     "properties": settingsProperties,
     "additionalProperties": False,

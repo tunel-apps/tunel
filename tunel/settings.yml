@@ -6,6 +6,10 @@ tunel_home: "$HOME"
 # And the same for remote assets
 tunel_remote_home: "$HOME"
 
+# Tunel spinner for logging
+# See https://asciinema.org/a/504268
+tunel_spinner: dots
+
 # Working directory for containers, etc.
 tunel_remote_work: "$HOME"
 
@@ -17,7 +21,9 @@ ssh_port: 22
 
 # remote port to use (this should be randomly generated unless set here)
 remote_port: null
-local_port: 4000
+
+# TODO set as random?
+local_port: 7789
 
 # Default ssh config to read from
 ssh_config: ~/.ssh/config
@@ -51,12 +57,12 @@ launchers:
     memory: 8000
     time: "6:00:00"
 
+    # Max number of attempts to get a machine (unset is infinite, all with exponential backoff)
+    max_attempts: null
+
 # If random port selection used (random port is null) allow within this range
 min_port: 90000
 max_port: 99999
 
 # default config editor
 config_editor: vim
-
-# Are the compute nodes isolated from the outside world?
-isolated_nodes: false

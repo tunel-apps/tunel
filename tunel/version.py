@@ -19,6 +19,7 @@ INSTALL_REQUIRES = (
     ("jsonschema", {"min_version": None}),
     ("pyaml", {"min_version": None}),
     ("jinja2", {"min_version": None}),
+    ("rich", {"min_version": None}),
 )
 
 TESTS_REQUIRES = (("pytest", {"min_version": "4.6.2"}),)

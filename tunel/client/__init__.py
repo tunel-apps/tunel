@@ -99,6 +99,11 @@ def get_parser():
         description="run a named application",
         formatter_class=argparse.RawTextHelpFormatter,
     )
+    stop_app = subparsers.add_parser(
+        "stop-app",
+        description="stop a named application",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
     list_app = subparsers.add_parser(
         "list-apps",
         description="list apps found on the known settings paths",
@@ -126,7 +131,7 @@ def get_parser():
         action="store_true",
     )
 
-    for command in [tunnel, run_singularity, run_slurm, run_app, stop_slurm]:
+    for command in [tunnel, run_singularity, run_slurm, run_app, stop_app, stop_slurm]:
         command.add_argument("--port", help="remote port to connect to.")
         command.add_argument("--local-port", help="local port to connect to.")
 
@@ -138,6 +143,7 @@ def get_parser():
         run_singularity,
         run_slurm,
         run_app,
+        stop_app,
         stop_slurm,
     ]:
         command.add_argument(
@@ -145,7 +151,8 @@ def get_parser():
             help="server identity to interact with (e.g., name in ~/.ssh/config)",
         )
 
-    run_app.add_argument("app", help="The name of the application to run.")
+    for command in [run_app, stop_app]:
+        command.add_argument("app", help="The name of the application.")
     return parser
 
 
@@ -213,16 +220,18 @@ def run_tunel():
         from .launcher import stop_slurm as main
     if args.command == "run-app":
         from .launcher import run_app as main
+    if args.command == "stop-app":
+        from .launcher import stop_app as main
     if args.command == "list-apps":
         from .apps import list_apps as main
 
     # Pass on to the correct parser
     return_code = 0
-    #    try:
-    main(args=args, parser=parser, extra=extra, subparser=helper)
-    sys.exit(return_code)
-    #    except UnboundLocalError:
-    #        return_code = 1
+    try:
+        main(args=args, parser=parser, extra=extra, subparser=helper)
+        sys.exit(return_code)
+    except UnboundLocalError:
+        return_code = 1
 
     help(return_code)
 

@@ -27,15 +27,12 @@ class Tunnel:
 
         # If/when we open a shell
         self.ssh = None
-
+        self.username = None
         self.settings_file = (
             kwargs.get("settings_file") or defaults.default_settings_file
         )
         self.settings = Settings(self.settings_file)
         self.local_port = int(kwargs.get("local_port") or self.settings.local_port)
-        self.isolated_nodes = (
-            kwargs.get("isolated_nodes") or self.settings.isolated_nodes
-        )
         self.remote_port = int(
             kwargs.get("remote_port")
             or self.settings.remote_port
@@ -84,14 +81,14 @@ class Tunnel:
         cmd = ["scp", "%s:%s" % (self.server, src), dest]
         return tunel.utils.run_command(cmd)
 
-    def print_output(self, output, success_code=0):
+    def print_output(self, output, success_code=0, quiet=False):
         """
         Given an output dict, print and color appropriately.
         """
         if output["return_code"] != success_code:
             logger.error(output["message"].strip())
-        else:
-            print(output["message"].strip())
+        elif not quiet:
+            logger.info(output["message"].strip())
 
     def execute_or_fail(self, cmd, success_code=0, quiet=False):
         """
@@ -102,7 +99,7 @@ class Tunnel:
             logger.exit(output["message"])
         return output["message"].strip()
 
-    def tunnel(self, machine=None, port=None, remote_port=None):
+    def tunnel(self, machine=None, port=None, remote_port=None, socket=None, app=None):
         """
         Given a remote and local port, open a tunnel. If an isolated node ssh is
         done, the name of the machine is required too.
@@ -113,12 +110,17 @@ class Tunnel:
             "Forwarding port %s to %s:%s ..." % (port, self.server, remote_port)
         )
 
-        if self.settings.isolated_nodes:
-            if not machine:
-                logger.exit("A machine is required to forward to.")
-            self._tunnel_isolated(machine)
-        else:
-            self._tunnel_login()
+        # If no machine, we have to do a login
+        if not machine:
+            return self._tunnel_login()
+
+        # The app requires a socket
+        if app.needs.get("socket", False) is True:
+            if not socket:
+                logger.exit("A socket path is required.")
+            return self._tunnel_isolated_socket(machine, socket=socket)
+
+        return self._tunnel_isolated_port(machine)
 
     def _get_socket_path(self):
         """
@@ -147,13 +149,14 @@ class Tunnel:
         res = self.execute(cmd)
         self._tunnel_wait(socket_file)
 
-    def _tunnel_wait(self, socket_file):
+    def _tunnel_wait(self, socket_file=None):
         """
         Wait for a Control+C to exit and remove a tunnel
         """
 
         def signal_handler(sig, frame):
-            self._close_socket(socket_file)
+            if socket_file:
+                self._close_socket(socket_file)
             logger.exit("🛑️ Port forwarding stopped.", return_code=0)
 
         signal.signal(signal.SIGINT, signal_handler)
@@ -172,7 +175,38 @@ class Tunnel:
         if os.path.exists(socket_file):
             os.remove(socket_file)
 
-    def _tunnel_isolated(self, machine):
+    def _tunnel_isolated_socket(self, machine, socket):
+        """
+        # Running on login node
+        $ ssh -NT -L 8888:/tmp/test.sock user@server
+
+        # TWO COMMANDS (and assuming isolated node)
+        $ ssh -NT user@server ssh <machine> -NT -L /home/user/login-node.sock:/home/user/path/to/worker-node.sock
+
+        # And another for the local socket
+        $ ssh -NT -L <localport>:/home/user/login-node.sock user@server
+
+        # ONE COMMAND
+        $ ssh -NT -L <localport>:/home/user/login-node.sock user@server ssh <machine> -NT -L /home/user/login.node.sock:/home/user/path/to/worker-node.sock
+        """
+        login_node_socket = socket.replace(".sock", ".head-node.sock")
+        cmd = [
+            "ssh",
+            "-NT",
+            "-L",
+            "%s:%s" % (self.local_port, login_node_socket),
+            "%s@%s" % (self.username, self.server),
+            "ssh",
+            machine,
+            "-NT",
+            "-L",
+            "%s:%s" % (login_node_socket, socket),
+        ]
+        logger.c.print()
+        logger.c.print("== RUN THIS IN A SEPARATE TERMINAL AFTER THE APP IS READY ==")
+        logger.info("%s" % " ".join(cmd))
+
+    def _tunnel_isolated_port(self, machine):
         """
         Create a tunnel to an isolated node (not tested yet)
         """

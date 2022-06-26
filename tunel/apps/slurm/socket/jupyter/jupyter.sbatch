@@ -20,7 +20,7 @@ if [ ! -d "${HOME}/.local" ]; then
 fi
 
 # Remove socket if exists
-SOCKET="${SOCKET_DIR}/{{ jobslug }}.sock"
+SOCKET="{{ socket }}"
 if [[ -f "${SOCKET}" ]]; then
     echo "Removing existing socket ${SOCKET}"
     rm ${SOCKET}

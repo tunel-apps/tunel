@@ -6,6 +6,7 @@ from tunel.logger import logger
 from tunel.launcher.base import Launcher
 import tunel.utils as utils
 import tunel.ssh
+
 import threading
 import time
 import os
@@ -73,15 +74,17 @@ class Slurm(Launcher):
         Given an app, prepare default variables (and custom args) to render
         """
         render = {}
-        # TODO need to test with something that needs a module
+        slug = app.name.replace(os.sep, "-").replace("/", "-")
         if app.needs:
             paths += app.needs.get("paths", [])
             render["modules"] = self.get_modules(app.needs.get("modules"))
             render["args"] = self.get_args(app.needs.get("args"))
-        render["jobslug"] = app.name.replace(os.sep, "-").replace("/", "-")
+        render["jobslug"] = slug
         render["jobname"] = app.name
+        render["port"] = (self.ssh.remote_port,)
         render["scriptdir"] = os.path.join(self.remote_assets_dir, app.name)
         render["paths"] = paths
+        render["socket"] = os.path.join(render["scriptdir"], "%s.sock" % slug)
         return render
 
     def run_app(self, app):
@@ -95,6 +98,9 @@ class Slurm(Launcher):
 
         # Prepare dictionary with content to render into recipes
         render = self.prepare_render(app, paths)
+
+        # Clean up previous sockets
+        res = self.ssh.execute(["rm", "-rf", "%s/*.sock" % render["scriptdir"]])
 
         # Load the app template
         template = app.load_template()
@@ -119,19 +125,31 @@ class Slurm(Launcher):
 
         # Launch with command
         if not self.previous_job_exists(app.job_name):
-            self.run(command, app.job_name, logs_prefix=remote_script)
+            self.run(
+                command,
+                app.job_name,
+                logs_prefix=remote_script,
+                app=app,
+                socket=render["socket"],
+            )
+
+    def stop_app(self, app):
+        """
+        Wrapper to stop a single app.
+        """
+        return self.stop([app.name])
 
     def stop(self, names):
         """
         Stop one or more named jobs
         """
         for name in names:
-            print("Killing %s slurm job on %s" % (name, self.ssh.server))
+            logger.purple("Killing %s slurm job on %s" % (name, self.ssh.server))
             self.ssh.execute_or_fail(
                 "squeue --name %s --user %s" % (name, self.username)
                 + " -o '%A' -h | xargs --no-run-if-empty /usr/bin/scancel"
             )
-            print("Killing listeners on %s" % self.ssh.server)
+            logger.purple("Killing listeners on %s" % self.ssh.server)
             self.ssh.execute_or_fail(
                 "lsof -i :%s -t | xargs --no-run-if-empty kill" % self.ssh.remote_port
             )
@@ -140,12 +158,12 @@ class Slurm(Launcher):
         """
         Check to see if a previous job was submit/exists.
         """
-        print("== Checking for previous run of %s ==" % name)
+        logger.purple("Checking for previous run of %s" % name)
         previous = self.ssh.execute_or_fail(
             "squeue --name %s --user %s" % (name, self.username) + " -o %R -h"
         )
         if previous == "":
-            print("No existing %s jobs found, continuing." % name)
+            logger.purple("No existing %s jobs found, continuing." % name)
         else:
             logger.error("Found existing job for %s!" % name)
             logger.exit(
@@ -153,31 +171,42 @@ class Slurm(Launcher):
                 % (self.ssh.server, name)
             )
 
-    def get_machine(self, name):
+    def get_machine(self, name, max_attempts=None):
         """
         Given the name of a job, wait for the job to start and return the machine
-        TODO: we could add a max number of attempts here.
         """
+        max_attempts = max_attempts or self.settings.get("max_attempts")
         timeout = 2
         attempt = 1
         machine = ""
         allocated = False
-        print("== Waiting for job to start, using exponential backoff ==")
+
+        logger.purple("Waiting for job to start, using exponential backoff")
 
         # Continue waiting until machine is allocated
         while not allocated:
-            machine = self.ssh.execute_or_fail(
-                "squeue --name %s --user %s" % (name, self.username) + " -o %N -h"
-            )
-            if machine != "":
-                print("Attempt %s: resources allocated to %s!" % (attempt, machine))
-                allocated = True
-                break
+            with logger.c.status("Waiting...", spinner=self.ssh.settings.tunel_spinner):
+                machine = self.ssh.execute_or_fail(
+                    "squeue --name %s --user %s" % (name, self.username) + " -o %N -h"
+                )
+                if machine != "":
+                    logger.purple(
+                        "Attempt %s: resources allocated to %s!" % (attempt, machine)
+                    )
+                    allocated = True
+                    break
 
-            print("Attempt %s: not ready yet... retrying in %s..." % (attempt, timeout))
-            time.sleep(timeout)
-            attempt += 1
-            timeout = timeout * 2
+                logger.purple(
+                    "Attempt %s: not ready yet... retrying in %s..."
+                    % (attempt, timeout)
+                )
+                time.sleep(timeout)
+                attempt += 1
+                if max_attempts and attempt >= max_attempts:
+                    logger.exit(
+                        f"Max attempts {max_attempts} reached, stopping trying."
+                    )
+                timeout = timeout * 2
 
         return machine
 
@@ -185,7 +214,7 @@ class Slurm(Launcher):
         """
         print to the screen how to see currently running logs
         """
-        print("== View logs in separate terminal ==")
+        logger.purple("View logs in separate terminal")
         logger.info("ssh %s cat %s.out" % (self.ssh.server, logs_prefix))
         logger.info("ssh %s cat %s.err" % (self.ssh.server, logs_prefix))
         print()
@@ -199,7 +228,7 @@ class Slurm(Launcher):
         )
         logs_thread.start()
 
-    def run(self, cmd, job_name=None, logs_prefix=None):
+    def run(self, cmd, job_name=None, logs_prefix=None, app=None, socket=None):
         """
         Run a command for slurm, typically sbatch (and eventually with supporting args)
         """
@@ -232,23 +261,23 @@ class Slurm(Launcher):
 
                 # Setup port forwarding
                 time.sleep(10)
-                print("== Connecting to %s ==" % job_name)
-                print("== Instructions ==")
-                print(
-                    "1. Password, output, and error will print to this - make sure application is ready before interaction."
+                logger.c.print("== Connecting to %s ==" % job_name)
+                logger.c.print("== Instructions ==")
+                logger.c.print(
+                    "1. Password, output, and error will print to this - [bold]make sure application is ready before interaction."
                 )
-                print(
+                logger.c.print(
                     "2. Browser: http://%s:%s/ -> http://localhost:%s/..."
                     % (machine, self.ssh.remote_port, self.ssh.local_port)
                 )
-                print(
+                logger.c.print(
                     "3. To end session: tunel stop-slurm %s %s"
                     % (self.ssh.server, job_name)
                 )
                 # Create another process to check logs?
                 if logs_prefix:
                     self.print_updated_logs(logs_prefix)
-                self.ssh.tunnel(machine)
+                self.ssh.tunnel(machine, socket=socket, app=app)
 
 
 def print_logs(ssh, logs_prefix):
@@ -257,22 +286,19 @@ def print_logs(ssh, logs_prefix):
     output_command = "ssh %s tail -3 %s.out" % (ssh.server, logs_prefix)
     error_command = "ssh %s tail -3 %s.err" % (ssh.server, logs_prefix)
 
-    last_out = None
-    last_err = None
+    last_out = ""
+    last_err = ""
     while True:
         time.sleep(5)
         new_out = ssh.execute_or_fail(output_command, quiet=True)
         new_err = ssh.execute_or_fail(error_command, quiet=True)
-        changed = False
-        if new_out != last_out:
-            logger.info("\n" + output_command)
-            print(new_out)
+        panels = {}
+
+        if new_out and new_out != last_out:
+            panels["cyan"] = output_command + "\n" + new_out
             last_out = new_out
-            changed = True
-        if new_err != last_err:
-            logger.error("\n" + error_command)
-            print(new_err)
+        if new_err and new_err != last_err:
+            panels["magenta"] = error_command + "\n" + new_err
             last_err = new_err
-            changed = True
-        if changed:
-            print()
+        if panels:
+            logger.panel_group(panels)

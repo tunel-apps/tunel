@@ -1,7 +1,7 @@
 #!/bin/bash
 
-PORT=$1
-NOTEBOOK_DIR=$2
+PORT="{{ port }}"
+NOTEBOOK_DIR="{{ args.notebook_dir }}"
 cd $NOTEBOOK_DIR
 
 echo "Port is ${PORT}"

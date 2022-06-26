@@ -100,7 +100,7 @@ def list_apps(settings_file=None):
             try:
                 app = App(filename, app_dir)
             except:
-                logger.warning("%s is not valid" % (filename))
+                logger.exit("%s is not valid" % (filename))
                 continue
             apps[app.name] = app
 
