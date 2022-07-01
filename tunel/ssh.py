@@ -188,6 +188,16 @@ class Tunnel:
 
         # ONE COMMAND
         $ ssh -NT -L <localport>:/home/user/login-node.sock user@server ssh <machine> -NT -L /home/user/login.node.sock:/home/user/path/to/worker-node.sock
+
+        # OR us a proxy
+        ssh -J user@server <machine> -NT -L <port>:/home/user/path/to/worker-node.sock
+        """
+        self._tunnel_isolated_sockets(machine, socket)
+        self._tunnel_isolated_proxyjump_sockets(machine, socket)
+
+    def _tunnel_isolated_sockets(self, machine, socket):
+        """
+        This approach maps a socket first to th login node and connects to it.
         """
         login_node_socket = socket.replace(".sock", ".head-node.sock")
         cmd = [
@@ -204,6 +214,22 @@ class Tunnel:
         ]
         logger.c.print()
         logger.c.print("== RUN THIS IN A SEPARATE TERMINAL AFTER THE APP IS READY ==")
+        logger.info("%s" % " ".join(cmd))
+
+    def _tunnel_isolated_proxyjump_sockets(self, machine, socket):
+        """
+        This approach uses a proxyjump to only require one socket
+        """
+        logger.c.print("== OR (newer ssh) USE A PROXYJUMP ==")
+        cmd = [
+            "ssh",
+            "-J",
+            "%s@%s" % (self.username, self.server),
+            machine,
+            "-NT",
+            "-L",
+            "%s:%s" % (self.local_port, socket),
+        ]
         logger.info("%s" % " ".join(cmd))
 
     def _tunnel_isolated_port(self, machine):
