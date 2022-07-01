@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Guide &mdash; Tunel 0.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-argparse.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Developer Guide" href="developer-guide.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Tunel
+          </a>
+              <div class="version">
+                0.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ssh-config">SSH config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#settings-file">Settings File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#singularity-containers">Singularity Containers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connecting-to-apps">Connecting to Apps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#shell">shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exec">exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tunnel">tunnel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#launch">launch</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#singularity">singularity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#slurm">slurm</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#apps">apps</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app-arguments">app arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#more-detail">More Detail</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/modules.html">Tunel API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Tunel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Getting Started</a> &raquo;</li>
+      <li>User Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/getting_started/user-guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="user-guide">
+<span id="getting-started-user-guide"></span><h1>User Guide<a class="headerlink" href="#user-guide" title="Permalink to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p>Tunel is named for what it does. “Tunel” is an elegant derivation of “tunnel” and will do exactly that -
+create a tunel between your local workstation and an HPC cluster. Tunel tries to abstract away some
+of the complexity of launching interfaces that feel a bit more modern.
+In its simplest form this means:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Installing tunel locally and discovering what is available on your cluster</p></li>
+<li><p>Running a local server (or via the command line) selecting and configuring an application to run.</p></li>
+<li><p>Launching it via a ssh tunnel to your cluster resource</p></li>
+<li><p>Getting back an address to open up and start working.</p></li>
+</ol>
+</div></blockquote>
+<p>If you haven’t read <a class="reference internal" href="installation.html#getting-started-installation"><span class="std std-ref">Installation</span></a> you should do that first.</p>
+</section>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading"></a></h2>
+<p>Typically, setup is something you can do once and then will never need to do again.
+For tunel, this means:</p>
+<ol class="arabic simple">
+<li><p>Adding a named entry to your ~/.ssh/config for your cluster(s) (if you don’t have one already)</p></li>
+<li><p>Tweaking the tunel settings, if needed.</p></li>
+</ol>
+<section id="ssh-config">
+<h3>SSH config<a class="headerlink" href="#ssh-config" title="Permalink to this heading"></a></h3>
+<p>You will also need to at the minimum configure your ssh to recognize your cluster. Tunel takes a simple
+approach of using a named configuration in your <cite>~/.ssh/config</cite> that can be re-used instead of asking you for a username
+or password on the fly, and we do this to make it easy - you add the entry once and then forget about it.
+When you have it working correctly, this should work:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ssh &lt;server&gt;
+</pre></div>
+</div>
+<p>This can be easily done with some configuration of your ssh config!
+Let’s pretend we are logging into a cluster named sherlock (many clusters use this name, surprisingly!)
+as a valid host. We have provided a [hosts folder](scripts/hosts)
+for helper scripts that will generate recommended ssh configuration snippets to put in your <cite>~/.ssh/config</cite> file. Based
+on the name of the folder, you can intuit that the configuration depends on the cluster
+host. Here is how you can generate this configuration for Sherlock:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>bash scripts/hosts/sherlock_ssh.sh
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Host sherlock</span>
+<span class="go">    User put_your_username_here</span>
+<span class="go">    Hostname sh-ln01.stanford.edu</span>
+<span class="go">    GSSAPIDelegateCredentials yes</span>
+<span class="go">    GSSAPIAuthentication yes</span>
+<span class="go">    ControlMaster auto</span>
+<span class="go">    ControlPersist yes</span>
+<span class="go">    ControlPath ~/.ssh/%l%r@%h:%p</span>
+</pre></div>
+</div>
+<p>The Hostname should be the one that you typically use when you ssh into your cluster,
+and your username as well. By using these options can reduce the number of times you need to authenticate.
+It’s recommended to include the Control* directives, as they will keep a socket so you
+can login/ssh easily without needing to authenticate every time.</p>
+<p>As another example, here is a simple setup with a simple Host, Username, and custom port:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Host myserver</span>
+<span class="go">    User myuser</span>
+<span class="go">    Hostname myserver.home.network</span>
+<span class="go">    Port 92</span>
+</pre></div>
+</div>
+<p>If you want to add a configuration file for a different host (or just
+an example) please [open an issue](<a class="reference external" href="https://github.com/vsoch/tunel/issues">https://github.com/vsoch/tunel/issues</a>) or pull request.
+If you don’t have a file in the location <cite>~/.ssh/config</cite> then you can generate it programatically:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>/bin/bash scripts/hosts/sherlock_ssh.sh &gt;&gt; ~/.ssh/config
+</pre></div>
+</div>
+<p>Do not run this command if there is content in the file that you might overwrite!</p>
+</section>
+<section id="settings-file">
+<h3>Settings File<a class="headerlink" href="#settings-file" title="Permalink to this heading"></a></h3>
+<p>Tunel has a default settings file at [tunel/settings.yml](tunel/settings.yml]) that you can tweak
+on your local machine. The defaults should work for most, but we will detail some of the ones
+that might need customization depending on your cluster.</p>
+</section>
+<section id="singularity-containers">
+<h3>Singularity Containers<a class="headerlink" href="#singularity-containers" title="Permalink to this heading"></a></h3>
+<p>Most scripts that use Singularity will attempt to load it as a module, and this won’t error if it fails.
+If you don’t have it as a module, it’s recommended to have singularity on your path, or loaded in your profile for slurm apps that use it
+or the Singularity launcher. It’s also recommended to export your cache directory to somewhere with more space:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span> <span class="nv">SINGULARITY_CACHEDIR</span><span class="o">=</span><span class="nv">$SCRATCH</span>/.singularity
+</pre></div>
+</div>
+<p>If you have custom logic to use Singularity that isn’t encompassed in these
+two use cases, you can [let us know](<a class="reference external" href="https://github.com/vsoch/tunel">https://github.com/vsoch/tunel</a>) to ask for help, or write a custom app yourself.</p>
+</section>
+<section id="connecting-to-apps">
+<h3>Connecting to Apps<a class="headerlink" href="#connecting-to-apps" title="Permalink to this heading"></a></h3>
+<p>Since we cannot reliably always have access to an exposed port, the main (suggested) way to run an app is using
+a socket. Apps are organized according to using sockets or ports, e.g:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">tunel/apps</span>
+<span class="go">└── slurm</span>
+<span class="go">    ├── port</span>
+<span class="go">    │   └── jupyter</span>
+<span class="go">    │       ├── app.yaml</span>
+<span class="go">    │       └── jupyter.sbatch</span>
+<span class="go">    └── socket</span>
+<span class="go">        ├── jupyter</span>
+<span class="go">        │   ├── app.yaml</span>
+<span class="go">        │   └── jupyter.sbatch</span>
+<span class="go">        └── singularity-jupyter</span>
+<span class="go">            ├── app.yaml</span>
+<span class="go">            └── jupyter.sbatch</span>
+</pre></div>
+</div>
+<p>As a note, there are apps provided here intended to be used with ports, but the developer &#64;vsoch is
+not able to test them easily since she does not have access to any resources that allow open TCP ports. However,
+if you find an issue, please open and (ideally) help debug to fix it up.</p>
+</section>
+</section>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this heading"></a></h2>
+<p>Tunel is driven by a command line client, and (to be a developed) a web interface that allows the same functionality.</p>
+<section id="shell">
+<h3>shell<a class="headerlink" href="#shell" title="Permalink to this heading"></a></h3>
+<p>The most basic thing you can do with tunel is to open an ssh tunnel. Arguably, you’d be just as well off using <cite>ssh</cite>, however
+we provide the command as it logically fits with the tool. Let’s say we’ve defined a server named “waffles” in our ~/.ssh/config.
+We could do:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel shell waffles
+</pre></div>
+</div>
+</section>
+<section id="exec">
+<h3>exec<a class="headerlink" href="#exec" title="Permalink to this heading"></a></h3>
+<p>If you want to execute a command to a cluster (e.g., try listing files there, for example) you can use <cite>exec</cite>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel <span class="nb">exec</span> waffles ls
+</pre></div>
+</div>
+<p>or with an environment variable:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel <span class="nb">exec</span> waffles <span class="nb">echo</span> <span class="sb">`</span><span class="nv">$HOME</span><span class="sb">`</span>
+</pre></div>
+</div>
+</section>
+<section id="tunnel">
+<h3>tunnel<a class="headerlink" href="#tunnel" title="Permalink to this heading"></a></h3>
+<p>If you are able to open ports, the simplest thing tunnel can do is if you already have a service running on your cluster or server (e.g., let’s say we ssh in and start a web server) in one terminal:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel shell waffles
+<span class="gp">$ </span><span class="nb">echo</span> <span class="s2">&quot;&lt;h1&gt;Hello World&lt;/h1&gt;&quot;</span> &gt; index.html
+<span class="gp">$ </span>python -m http.server <span class="m">9999</span>
+</pre></div>
+</div>
+<p>We might want to open a tunel to this node from our local machine. That would look like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel tunnel waffles --port <span class="m">9999</span>
+</pre></div>
+</div>
+<p>If we don’t provide a <code class="docutils literal notranslate"><span class="pre">--local-port</span></code> it will default to 4000 (or the port you’ve added to your settings.yml).
+Once you’ve done this, you should be able to open your local browser to 4000 and see the file from your server!</p>
+</section>
+<section id="launch">
+<h3>launch<a class="headerlink" href="#launch" title="Permalink to this heading"></a></h3>
+<p>Tunel has the concept of launchers, or a known cluster / HPC or server technology that can launch a service or job on your
+behalf. While some of these are typical of HPC, many of them are not, and could be used on a personal server that you have.
+Our launchers include:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>singularity</strong> run a singularity container on the server directly.</p></li>
+<li><p><strong>docker</strong> run a docker container on the server directly.</p></li>
+<li><p><strong>slurm</strong>: submit jobs (or applications) via SLURM, either a job or a service on a node to forward back.</p></li>
+</ul>
+</div></blockquote>
+<p>Each launcher can be run via an app, meaning you do a <code class="docutils literal notranslate"><span class="pre">run-app</span></code> on an app.yaml that specifies the launcher,
+and we also provide courtesy functions (e.g., <code class="docutils literal notranslate"><span class="pre">run-singularity</span></code>). These might be removed at some point, not decided yet.</p>
+<section id="singularity">
+<h4>singularity<a class="headerlink" href="#singularity" title="Permalink to this heading"></a></h4>
+<p>Let’s say you want to run a Singularity container on your remote server “waffles.” You might do:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-singularity waffles <span class="nb">exec</span> docker://busybox <span class="nb">echo</span> hello
+</pre></div>
+</div>
+<p>The above provides your request to run (or exec, as shown above) to Singularity.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-singularity waffles <span class="nb">exec</span> docker://busybox <span class="nb">echo</span> hello
+<span class="go">INFO:    Converting OCI blobs to SIF format</span>
+<span class="go">INFO:    Starting build...</span>
+<span class="go">Getting image source signatures</span>
+<span class="go">Copying blob sha256:3cb635b06aa273034d7080e0242e4b6628c59347d6ddefff019bfd82f45aa7d5</span>
+<span class="go">Copying config sha256:03781489f3738437ae98f13df5c28cc98bbc582254cfbf04cc7381f1c2ac1cc0</span>
+<span class="go">Writing manifest to image destination</span>
+<span class="go">Storing signatures</span>
+<span class="go">2021/12/10 13:56:01  info unpack layer: sha256:3cb635b06aa273034d7080e0242e4b6628c59347d6ddefff019bfd82f45aa7d5</span>
+<span class="go">2021/12/10 13:56:01  warn xattr{home} ignoring ENOTSUP on setxattr &quot;user.rootlesscontainers&quot;</span>
+<span class="go">2021/12/10 13:56:01  warn xattr{/tmp/build-temp-105506159/rootfs/home} destination filesystem does not support xattrs, further warnings will be suppressed</span>
+<span class="go">INFO:    Creating SIF file...</span>
+<span class="go">hello</span>
+</pre></div>
+</div>
+<p>For this launcher, if your cluster doesn’t have defaults for <code class="docutils literal notranslate"><span class="pre">SINGULARITY_CACHEDIR</span></code> (or other environment variables)
+or things on the path, you can customize the settings.yml to add them. Take a look at the <cite>launchers -&gt; singularity</cite> section
+to customize. Finally, you can even start an interactive shell directly into a container!</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-singularity waffles shell docker://busybox
+<span class="go">INFO:    Using cached SIF image</span>
+<span class="go">Singularity&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="slurm">
+<h4>slurm<a class="headerlink" href="#slurm" title="Permalink to this heading"></a></h4>
+<p>The most basic command for the slurm launcher is to get an interactive node, as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-slurm waffles
+<span class="go">No command supplied, will init interactive session!</span>
+<span class="gp gp-VirtualEnv">(base)</span> <span class="go">bash-4.2$</span>
+</pre></div>
+</div>
+<p>Let’s say that you run an app [described below](#apps) that launches a slurm job to generate a job named <cite>slurm-jupyter</cite>. Here is how you’d kill it:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel stop-slurm oslic slurm-jupyter
+<span class="go">No command supplied, will init interactive session!</span>
+<span class="gp gp-VirtualEnv">(base)</span> <span class="go">bash-4.2$</span>
+</pre></div>
+</div>
+<p>More coming soon!</p>
+</section>
+</section>
+<section id="apps">
+<h3>apps<a class="headerlink" href="#apps" title="Permalink to this heading"></a></h3>
+<p>A tunel app is identified by a yaml file, app.yaml, in an install directory (which it is suggested
+you namespace to make it easy to identify). By default in the tunel settings.yml, you’ll notice one
+default apps directory:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apps_dir</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$default_apps</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This defaults to [tunel/apps](tunel/apps) and although it is under development, it looks something like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tree tunel/apps/slurm/
+<span class="go">tunel/apps/slurm/</span>
+<span class="go">├── port</span>
+<span class="go">│   └── jupyter</span>
+<span class="go">│       ├── app.yaml</span>
+<span class="go">│       └── jupyter.sbatch</span>
+<span class="go">└── socket</span>
+<span class="go">    └── jupyter</span>
+<span class="go">        ├── app.yaml</span>
+<span class="go">        └── jupyter.sbatch</span>
+</pre></div>
+</div>
+<p>Notice that apps are organized into being accessible via port (not recommended) vs. socket.
+You can currently list available apps found on these paths as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel list-apps
+<span class="go">Name                 Launcher</span>
+<span class="go">slurm/socket/jupyter slurm</span>
+<span class="go">slurm/port/jupyter   slurm</span>
+</pre></div>
+</div>
+<p>If you need to use a socket (e.g., your cluster doesn’t support ports) you can try:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-app waffles slurm/socket/jupyter
+</pre></div>
+</div>
+<p>This will start the job, show you two options for ssh commands to connect when the notebook is ready (e.g., when the output
+shows up with the token) and then you can copy paste that into a separate terminal to start the tunnel.
+This might be possible to do on your behalf, but I like the user having control of when to start / stop it
+so this is the current design. It will ask you for your password, and if you don’t want to do that,
+try adding your rsa keys to the authorized_keys file in your ~/.ssh directory on your cluster (thanks to [&#64;becker33](<a class="reference external" href="https://github.com/becker33">https://github.com/becker33</a>) for this tip)!
+I just created an account on OSG so I should be able to work on the port connection use case soon!</p>
+<section id="app-arguments">
+<h4>app arguments<a class="headerlink" href="#app-arguments" title="Permalink to this heading"></a></h4>
+<p>Apps can be customized with arguments. For example, the <cite>slurm/socket/jupyter-singularity</cite> app can run a jupyter notebook
+or a jupyterlab instance, and to do that, you can see the argument defined in the app.yaml:</p>
+<p>TODO</p>
+<p><code class="docutils literal notranslate"><span class="pre">`yaml</span>
+<span class="pre">`</span></code></p>
+</section>
+<section id="more-detail">
+<h4>More Detail<a class="headerlink" href="#more-detail" title="Permalink to this heading"></a></h4>
+<p>Each app.yaml (the path of the running app that we’ve chosen in tunel/apps) is going to specify a launcher (e.g., slurm or singularity)
+along with different parameters that are needed. After launch, in the case of slurm you’ll see the above execute commands to
+interact with the launcher, and then go into an exponential backoff while waiting for a node. When finished, the above will
+launch a job with an interactive notebook and return the connection information. Note that you should watch the error and output logs
+(in purple and cyan, respectively) to determine when the application is ready to connect to. E.g.,
+a Singularity container will likely need to be pulled, and then converted to SIF, which unfortunately isn’t quick.
+When it’s ready, try connecting. This command generally works by finding the app.yaml under apps/slurm/jupyter in the default directory,
+an each app.yaml will define it’s own launcher and other needs for running.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="developer-guide.html" class="btn btn-neutral float-right" title="Developer Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-2022, Vanessa Sochat.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,7 +1,0 @@
-tunel.egg-info/
-* __pycache__
-env
-__pycache__
-.env
-.eggs
-docs/_build

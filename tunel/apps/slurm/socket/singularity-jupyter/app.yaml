@@ -1,8 +1,0 @@
-launcher: slurm
-script: jupyter.sbatch
-needs:
-  socket: true
-  modules:
-    - jupyter 
-  args:
-    - workdir

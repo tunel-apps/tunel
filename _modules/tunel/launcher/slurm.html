@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tunel.launcher.slurm &mdash; Tunel 0.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sphinx-argparse.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> Tunel
+          </a>
+              <div class="version">
+                0.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/developer-guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_reference/modules.html">Tunel API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tunel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+          <li><a href="../launcher.html">tunel.launcher</a> &raquo;</li>
+      <li>tunel.launcher.slurm</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tunel.launcher.slurm</h1><div class="highlight"><pre>
+<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Vanessa Sochat&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2021-2022, Vanessa Sochat&quot;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;MPL 2.0&quot;</span>
+
+<span class="kn">from</span> <span class="nn">tunel.logger</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">tunel.launcher.base</span> <span class="kn">import</span> <span class="n">Launcher</span>
+<span class="kn">import</span> <span class="nn">tunel.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">tunel.ssh</span>
+
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="Slurm"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm">[docs]</a><span class="k">class</span> <span class="nc">Slurm</span><span class="p">(</span><span class="n">Launcher</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A slurm launcher interacts with slurm</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_inventory</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">modules_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">assets_dir</span><span class="p">,</span> <span class="s2">&quot;modules.txt&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nodes_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">assets_dir</span><span class="p">,</span> <span class="s2">&quot;sinfo.txt&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Slurm.update_inventory"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.update_inventory">[docs]</a>    <span class="k">def</span> <span class="nf">update_inventory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inventory</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_inventory_modules</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_inventory_nodes</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_update_inventory_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to derive attributes for nodes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes_file</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;scontrol show config&quot;</span><span class="p">)</span>
+            <span class="n">tunel</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes_file</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes_file</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;nodes&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inventory</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_inventory</span><span class="p">[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tunel</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">read_config_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes_file</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_inventory_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to derive list of installed modules on cluster.</span>
+<span class="sd">        This has been tested for LMOD</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if we don&#39;t have modules, write there</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules_file</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scp_and_run</span><span class="p">(</span><span class="s2">&quot;list_modules.sh&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;return_code&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="s2">&quot;RESULT:&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+
+                <span class="c1"># This is the output file with list of modules</span>
+                <span class="k">if</span> <span class="n">res</span><span class="p">:</span>
+                    <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+                    <span class="c1"># scp get is copying FROM the server to assets here</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">scp_get</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules_file</span><span class="p">)</span>
+
+        <span class="c1"># When we get here, only will exist if command was successful</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules_file</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;modules&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inventory</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_inventory</span><span class="p">[</span><span class="s2">&quot;modules&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tunel</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">read_lines</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules_file</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Slurm.prepare_render"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.prepare_render">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">paths</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given an app, prepare default variables (and custom args) to render</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">render</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">slug</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">needs</span><span class="p">:</span>
+            <span class="n">paths</span> <span class="o">+=</span> <span class="n">app</span><span class="o">.</span><span class="n">needs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;paths&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">render</span><span class="p">[</span><span class="s2">&quot;modules&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_modules</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">needs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modules&quot;</span><span class="p">))</span>
+            <span class="n">render</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_args</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">needs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">))</span>
+        <span class="n">render</span><span class="p">[</span><span class="s2">&quot;jobslug&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slug</span>
+        <span class="n">render</span><span class="p">[</span><span class="s2">&quot;jobname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">render</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">remote_port</span>
+        <span class="n">render</span><span class="p">[</span><span class="s2">&quot;scriptdir&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_assets_dir</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">render</span><span class="p">[</span><span class="s2">&quot;paths&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">paths</span>
+        <span class="n">render</span><span class="p">[</span><span class="s2">&quot;socket&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">render</span><span class="p">[</span><span class="s2">&quot;scriptdir&quot;</span><span class="p">],</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.sock&quot;</span> <span class="o">%</span> <span class="n">slug</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">render</span></div>
+
+<div class="viewcode-block" id="Slurm.run_app"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.run_app">[docs]</a>    <span class="k">def</span> <span class="nf">run_app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given an app designated for slurm, run it!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_inventory</span><span class="p">()</span>
+
+        <span class="c1"># Add any paths from the config</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;paths&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="c1"># Prepare dictionary with content to render into recipes</span>
+        <span class="n">render</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_render</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span>
+
+        <span class="c1"># Clean up previous sockets</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;rm&quot;</span><span class="p">,</span> <span class="s2">&quot;-rf&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/*.sock&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;scriptdir&quot;</span><span class="p">]])</span>
+
+        <span class="c1"># Load the app template</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">load_template</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">render</span><span class="p">)</span>
+
+        <span class="c1"># Write script to temporary file</span>
+        <span class="n">tmpfile</span> <span class="o">=</span> <span class="n">tmpfile</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_tmpfile</span><span class="p">()</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+        <span class="c1"># Copy over to server</span>
+        <span class="n">remote_script</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_assets_dir</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">script</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">scp_to</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">,</span> <span class="n">remote_script</span><span class="p">)</span>
+
+        <span class="c1"># Assemble the command</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;sbatch&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--job-name=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">app</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span>
+            <span class="s2">&quot;--output=</span><span class="si">%s</span><span class="s2">.out&quot;</span> <span class="o">%</span> <span class="n">remote_script</span><span class="p">,</span>
+            <span class="s2">&quot;--error=</span><span class="si">%s</span><span class="s2">.err&quot;</span> <span class="o">%</span> <span class="n">remote_script</span><span class="p">,</span>
+            <span class="n">remote_script</span><span class="p">,</span>
+        <span class="p">]</span> <span class="o">+</span> <span class="n">render</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="c1"># Launch with command</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_job_exists</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">job_name</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="n">command</span><span class="p">,</span>
+                <span class="n">app</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span>
+                <span class="n">logs_prefix</span><span class="o">=</span><span class="n">remote_script</span><span class="p">,</span>
+                <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">,</span>
+                <span class="n">socket</span><span class="o">=</span><span class="n">render</span><span class="p">[</span><span class="s2">&quot;socket&quot;</span><span class="p">],</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Slurm.stop_app"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.stop_app">[docs]</a>    <span class="k">def</span> <span class="nf">stop_app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wrapper to stop a single app.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">([</span><span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Slurm.stop"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stop one or more named jobs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">purple</span><span class="p">(</span><span class="s2">&quot;Killing </span><span class="si">%s</span><span class="s2"> slurm job on </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute_or_fail</span><span class="p">(</span>
+                <span class="s2">&quot;squeue --name </span><span class="si">%s</span><span class="s2"> --user </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; -o &#39;%A&#39; -h | xargs --no-run-if-empty /usr/bin/scancel&quot;</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">purple</span><span class="p">(</span><span class="s2">&quot;Killing listeners on </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute_or_fail</span><span class="p">(</span>
+                <span class="s2">&quot;lsof -i :</span><span class="si">%s</span><span class="s2"> -t | xargs --no-run-if-empty kill&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">remote_port</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Slurm.previous_job_exists"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.previous_job_exists">[docs]</a>    <span class="k">def</span> <span class="nf">previous_job_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check to see if a previous job was submit/exists.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">purple</span><span class="p">(</span><span class="s2">&quot;Checking for previous run of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">previous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute_or_fail</span><span class="p">(</span>
+            <span class="s2">&quot;squeue --name </span><span class="si">%s</span><span class="s2"> --user </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; -o %R -h&quot;</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">previous</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">purple</span><span class="p">(</span><span class="s2">&quot;No existing </span><span class="si">%s</span><span class="s2"> jobs found, continuing.&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Found existing job for </span><span class="si">%s</span><span class="s2">!&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
+                <span class="s2">&quot;Please run &#39;tunel stop-slurm </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&#39; before proceeding.&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Slurm.get_machine"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.get_machine">[docs]</a>    <span class="k">def</span> <span class="nf">get_machine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">max_attempts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given the name of a job, wait for the job to start and return the machine</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">max_attempts</span> <span class="o">=</span> <span class="n">max_attempts</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_attempts&quot;</span><span class="p">)</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">attempt</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">machine</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">allocated</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">purple</span><span class="p">(</span><span class="s2">&quot;Waiting for job to start, using exponential backoff&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Continue waiting until machine is allocated</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">allocated</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="s2">&quot;Waiting...&quot;</span><span class="p">,</span> <span class="n">spinner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">tunel_spinner</span><span class="p">):</span>
+                <span class="n">machine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute_or_fail</span><span class="p">(</span>
+                    <span class="s2">&quot;squeue --name </span><span class="si">%s</span><span class="s2"> --user </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; -o %N -h&quot;</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">machine</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">purple</span><span class="p">(</span>
+                        <span class="s2">&quot;Attempt </span><span class="si">%s</span><span class="s2">: resources allocated to </span><span class="si">%s</span><span class="s2">!&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">attempt</span><span class="p">,</span> <span class="n">machine</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">allocated</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">purple</span><span class="p">(</span>
+                    <span class="s2">&quot;Attempt </span><span class="si">%s</span><span class="s2">: not ready yet... retrying in </span><span class="si">%s</span><span class="s2">...&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">attempt</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+                <span class="n">attempt</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">max_attempts</span> <span class="ow">and</span> <span class="n">attempt</span> <span class="o">&gt;=</span> <span class="n">max_attempts</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Max attempts </span><span class="si">{</span><span class="n">max_attempts</span><span class="si">}</span><span class="s2"> reached, stopping trying.&quot;</span>
+                    <span class="p">)</span>
+                <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span> <span class="o">*</span> <span class="mi">2</span>
+
+        <span class="k">return</span> <span class="n">machine</span></div>
+
+<div class="viewcode-block" id="Slurm.show_logs_instruction"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.show_logs_instruction">[docs]</a>    <span class="k">def</span> <span class="nf">show_logs_instruction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        print to the screen how to see currently running logs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">purple</span><span class="p">(</span><span class="s2">&quot;View logs in separate terminal&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;ssh </span><span class="si">%s</span><span class="s2"> cat </span><span class="si">%s</span><span class="s2">.out&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;ssh </span><span class="si">%s</span><span class="s2"> cat </span><span class="si">%s</span><span class="s2">.err&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Slurm.print_updated_logs"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.print_updated_logs">[docs]</a>    <span class="k">def</span> <span class="nf">print_updated_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start a separate thread that regularly checks and prints logs (when there is an updated line)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logs_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">print_logs</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Logger&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">logs_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Slurm.run"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">job_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">socket</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run a command for slurm, typically sbatch (and eventually with supporting args)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_inventory</span><span class="p">()</span>
+
+        <span class="c1"># Generate a name for the job, if not supplied</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">job_name</span><span class="p">:</span>
+            <span class="n">job_name</span> <span class="o">=</span> <span class="n">tunel</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">namer</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+
+        <span class="c1"># If no command, get interactive node</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cmd</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No command supplied, will init interactive session!&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">shell</span><span class="p">(</span><span class="s2">&quot;srun --pty bash&quot;</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;sbatch&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sbatch&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">cmd</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">print_output</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+            <span class="c1"># A successful submission should:</span>
+            <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;return_code&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+                <span class="c1"># 1. Show the user how to quickly get logs (if logs_prefix provided)</span>
+                <span class="k">if</span> <span class="n">logs_prefix</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">show_logs_instruction</span><span class="p">(</span><span class="n">logs_prefix</span><span class="p">)</span>
+
+                <span class="n">machine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_machine</span><span class="p">(</span><span class="n">job_name</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is running on </span><span class="si">%s</span><span class="s2">!&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">job_name</span><span class="p">,</span> <span class="n">machine</span><span class="p">))</span>
+
+                <span class="c1"># Setup port forwarding</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;== Connecting to </span><span class="si">%s</span><span class="s2"> ==&quot;</span> <span class="o">%</span> <span class="n">job_name</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;== Instructions ==&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+                    <span class="s2">&quot;1. Password, output, and error will print to this - [bold]make sure application is ready before interaction.&quot;</span>
+                <span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+                    <span class="s2">&quot;2. Browser: http://</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/ -&gt; http://localhost:</span><span class="si">%s</span><span class="s2">/...&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">machine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">remote_port</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">local_port</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+                    <span class="s2">&quot;3. To end session: tunel stop-slurm </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">job_name</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="c1"># Create another process to check logs?</span>
+                <span class="k">if</span> <span class="n">logs_prefix</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">print_updated_logs</span><span class="p">(</span><span class="n">logs_prefix</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">tunnel</span><span class="p">(</span><span class="n">machine</span><span class="p">,</span> <span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="print_logs"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.print_logs">[docs]</a><span class="k">def</span> <span class="nf">print_logs</span><span class="p">(</span><span class="n">ssh</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">):</span>
+
+    <span class="c1"># Output and error commands</span>
+    <span class="n">output_command</span> <span class="o">=</span> <span class="s2">&quot;ssh </span><span class="si">%s</span><span class="s2"> tail -3 </span><span class="si">%s</span><span class="s2">.out&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">)</span>
+    <span class="n">error_command</span> <span class="o">=</span> <span class="s2">&quot;ssh </span><span class="si">%s</span><span class="s2"> tail -3 </span><span class="si">%s</span><span class="s2">.err&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">)</span>
+
+    <span class="n">last_out</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">last_err</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">new_out</span> <span class="o">=</span> <span class="n">ssh</span><span class="o">.</span><span class="n">execute_or_fail</span><span class="p">(</span><span class="n">output_command</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">new_err</span> <span class="o">=</span> <span class="n">ssh</span><span class="o">.</span><span class="n">execute_or_fail</span><span class="p">(</span><span class="n">error_command</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">panels</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="n">new_out</span> <span class="ow">and</span> <span class="n">new_out</span> <span class="o">!=</span> <span class="n">last_out</span><span class="p">:</span>
+            <span class="n">panels</span><span class="p">[</span><span class="s2">&quot;cyan&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_command</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">new_out</span>
+            <span class="n">last_out</span> <span class="o">=</span> <span class="n">new_out</span>
+        <span class="k">if</span> <span class="n">new_err</span> <span class="ow">and</span> <span class="n">new_err</span> <span class="o">!=</span> <span class="n">last_err</span><span class="p">:</span>
+            <span class="n">panels</span><span class="p">[</span><span class="s2">&quot;magenta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">error_command</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">new_err</span>
+            <span class="n">last_err</span> <span class="o">=</span> <span class="n">new_err</span>
+        <span class="k">if</span> <span class="n">panels</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">panel_group</span><span class="p">(</span><span class="n">panels</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-2022, Vanessa Sochat.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

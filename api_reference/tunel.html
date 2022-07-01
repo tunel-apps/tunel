@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tunel package &mdash; Tunel 0.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-argparse.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tunel.client package" href="tunel.client.html" />
+    <link rel="prev" title="Tunel API" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Tunel
+          </a>
+              <div class="version">
+                0.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/developer-guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Tunel API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">tunel package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tunel.client.html">tunel.client package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.launcher.html">tunel.launcher package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.utils.html">tunel.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tunel.apps">tunel.apps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tunel.defaults">tunel.defaults module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tunel.logger">tunel.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tunel.schemas">tunel.schemas module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tunel.settings">tunel.settings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tunel.ssh">tunel.ssh module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tunel.version">tunel.version module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tunel">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Tunel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">Tunel API</a> &raquo;</li>
+      <li>tunel package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api_reference/tunel.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tunel-package">
+<h1>tunel package<a class="headerlink" href="#tunel-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tunel.client.html">tunel.client package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tunel.client.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.client.html#module-tunel.client.apps">tunel.client.apps module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.client.html#module-tunel.client.execute">tunel.client.execute module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.client.html#module-tunel.client.launcher">tunel.client.launcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.client.html#module-tunel.client.shell">tunel.client.shell module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.client.html#module-tunel.client.tunnel">tunel.client.tunnel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.client.html#module-tunel.client">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tunel.launcher.html">tunel.launcher package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tunel.launcher.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tunel.launcher.scripts.html">tunel.launcher.scripts package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tunel.launcher.scripts.html#module-tunel.launcher.scripts">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.launcher.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.launcher.html#module-tunel.launcher.base">tunel.launcher.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.launcher.html#module-tunel.launcher.singularity">tunel.launcher.singularity module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.launcher.html#module-tunel.launcher.slurm">tunel.launcher.slurm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.launcher.html#module-tunel.launcher">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tunel.utils.html">tunel.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tunel.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.utils.html#module-tunel.utils.fileio">tunel.utils.fileio module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.utils.html#module-tunel.utils.generate">tunel.utils.generate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.utils.html#module-tunel.utils.terminal">tunel.utils.terminal module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.utils.html#module-tunel.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-tunel.apps">
+<span id="tunel-apps-module"></span><h2>tunel.apps module<a class="headerlink" href="#module-tunel.apps" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tunel.apps.App">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.apps.</span></span><span class="sig-name descname"><span class="pre">App</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#App"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.App" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.apps.App.app_dir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">app_dir</span></span><a class="headerlink" href="#tunel.apps.App.app_dir" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.apps.App.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#App.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.App.get" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.apps.App.get_script">
+<span class="sig-name descname"><span class="pre">get_script</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#App.get_script"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.App.get_script" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.apps.App.job_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">job_name</span></span><a class="headerlink" href="#tunel.apps.App.job_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.apps.App.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#App.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.App.load" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.apps.App.load_template">
+<span class="sig-name descname"><span class="pre">load_template</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#App.load_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.App.load_template" title="Permalink to this definition"></a></dt>
+<dd><p>Given an app, load the template script for it.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.apps.App.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#tunel.apps.App.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.apps.App.relative_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">relative_path</span></span><a class="headerlink" href="#tunel.apps.App.relative_path" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.apps.App.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#App.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.App.validate" title="Permalink to this definition"></a></dt>
+<dd><p>Validate the loaded settings with jsonschema</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tunel.apps.get_app">
+<span class="sig-prename descclassname"><span class="pre">tunel.apps.</span></span><span class="sig-name descname"><span class="pre">get_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#get_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.get_app" title="Permalink to this definition"></a></dt>
+<dd><p>Given an app name, get the loaded app for it</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tunel.apps.list_apps">
+<span class="sig-prename descclassname"><span class="pre">tunel.apps.</span></span><span class="sig-name descname"><span class="pre">list_apps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#list_apps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.list_apps" title="Permalink to this definition"></a></dt>
+<dd><p>Given the user settings,</p>
+</dd></dl>
+
+</section>
+<section id="module-tunel.defaults">
+<span id="tunel-defaults-module"></span><h2>tunel.defaults module<a class="headerlink" href="#module-tunel.defaults" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-tunel.logger">
+<span id="tunel-logger-module"></span><h2>tunel.logger module<a class="headerlink" href="#module-tunel.logger" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.logger.</span></span><span class="sig-name descname"><span class="pre">ColorizingStreamHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nocolor=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stderr&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_threads=False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#ColorizingStreamHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">StreamHandler</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.BLACK">
+<span class="sig-name descname"><span class="pre">BLACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.BLACK" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.BLUE">
+<span class="sig-name descname"><span class="pre">BLUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.BLUE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.BOLD_SEQ">
+<span class="sig-name descname"><span class="pre">BOLD_SEQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[1m'</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.BOLD_SEQ" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.COLOR_SEQ">
+<span class="sig-name descname"><span class="pre">COLOR_SEQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[%dm'</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.COLOR_SEQ" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.CYAN">
+<span class="sig-name descname"><span class="pre">CYAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.CYAN" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.GREEN">
+<span class="sig-name descname"><span class="pre">GREEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.GREEN" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.MAGENTA">
+<span class="sig-name descname"><span class="pre">MAGENTA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.MAGENTA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.RED">
+<span class="sig-name descname"><span class="pre">RED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.RED" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.RESET_SEQ">
+<span class="sig-name descname"><span class="pre">RESET_SEQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[0m'</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.RESET_SEQ" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.WHITE">
+<span class="sig-name descname"><span class="pre">WHITE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.WHITE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.YELLOW">
+<span class="sig-name descname"><span class="pre">YELLOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.YELLOW" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.can_color_tty">
+<span class="sig-name descname"><span class="pre">can_color_tty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#ColorizingStreamHandler.can_color_tty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.can_color_tty" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.colors">
+<span class="sig-name descname"><span class="pre">colors</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'CRITICAL':</span> <span class="pre">1,</span> <span class="pre">'DEBUG':</span> <span class="pre">4,</span> <span class="pre">'ERROR':</span> <span class="pre">1,</span> <span class="pre">'INFO':</span> <span class="pre">2,</span> <span class="pre">'WARNING':</span> <span class="pre">3}</span></em><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.colors" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.decorate">
+<span class="sig-name descname"><span class="pre">decorate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#ColorizingStreamHandler.decorate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.decorate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.emit">
+<span class="sig-name descname"><span class="pre">emit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#ColorizingStreamHandler.emit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.emit" title="Permalink to this definition"></a></dt>
+<dd><p>Emit a record.</p>
+<p>If a formatter is specified, it is used to format the record.
+The record is then written to the stream with a trailing newline.  If
+exception information is present, it is formatted using
+traceback.print_exception and appended to the stream.  If the stream
+has an ‘encoding’ attribute, it is used to determine how to do the
+output to the stream.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.logger.ColorizingStreamHandler.is_tty">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_tty</span></span><a class="headerlink" href="#tunel.logger.ColorizingStreamHandler.is_tty" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tunel.logger.Logger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.logger.</span></span><span class="sig-name descname"><span class="pre">Logger</span></span><a class="reference internal" href="../_modules/tunel/logger.html#Logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.cleanup">
+<span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.cleanup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.cleanup" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.cyan">
+<span class="sig-name descname"><span class="pre">cyan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.cyan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.cyan" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.debug">
+<span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.debug"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.debug" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.error" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.exit">
+<span class="sig-name descname"><span class="pre">exit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.exit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.exit" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.handler">
+<span class="sig-name descname"><span class="pre">handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.handler" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.info" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.location">
+<span class="sig-name descname"><span class="pre">location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.location" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.panel_group">
+<span class="sig-name descname"><span class="pre">panel_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.panel_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.panel_group" title="Permalink to this definition"></a></dt>
+<dd><p>Input is a dictionary of colors (for panel background) and corresponding messages.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.progress">
+<span class="sig-name descname"><span class="pre">progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">done</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.progress" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.purple">
+<span class="sig-name descname"><span class="pre">purple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.purple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.purple" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.set_level">
+<span class="sig-name descname"><span class="pre">set_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.set_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.set_level" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.set_stream_handler">
+<span class="sig-name descname"><span class="pre">set_stream_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.set_stream_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.set_stream_handler" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.shellcmd">
+<span class="sig-name descname"><span class="pre">shellcmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.shellcmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.shellcmd" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.text_handler">
+<span class="sig-name descname"><span class="pre">text_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.text_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.text_handler" title="Permalink to this definition"></a></dt>
+<dd><p>The default snakemake log handler.
+Prints the output to the console.
+:param msg: the log message dictionary
+:type msg: dict</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.logger.Logger.warning">
+<span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#Logger.warning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.Logger.warning" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tunel.logger.setup_logger">
+<span class="sig-prename descclassname"><span class="pre">tunel.logger.</span></span><span class="sig-name descname"><span class="pre">setup_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printshellcmds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nocolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stdout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wms_monitor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/logger.html#setup_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.logger.setup_logger" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-tunel.schemas">
+<span id="tunel-schemas-module"></span><h2>tunel.schemas module<a class="headerlink" href="#module-tunel.schemas" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-tunel.settings">
+<span id="tunel-settings-module"></span><h2>tunel.settings module<a class="headerlink" href="#module-tunel.settings" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tunel.settings.Settings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.settings.</span></span><span class="sig-name descname"><span class="pre">Settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/settings.html#Settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.settings.Settings" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tunel.settings.SettingsBase" title="tunel.settings.SettingsBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">SettingsBase</span></code></a></p>
+<p>The settings class is a wrapper for easily parsing a settings.yml file.</p>
+<p>We parse into a query-able class. It also gives us control to update settings,
+meaning we change the values and then write them to file. It’s basically
+a dictionary-like class with extra functions.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tunel.settings.SettingsBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.settings.</span></span><span class="sig-name descname"><span class="pre">SettingsBase</span></span><a class="reference internal" href="../_modules/tunel/settings.html#SettingsBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.settings.SettingsBase" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.settings.SettingsBase.change_validate">
+<span class="sig-name descname"><span class="pre">change_validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/settings.html#SettingsBase.change_validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.settings.SettingsBase.change_validate" title="Permalink to this definition"></a></dt>
+<dd><p>A courtesy function to validate a new config addition.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.settings.SettingsBase.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/settings.html#SettingsBase.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.settings.SettingsBase.delete" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.settings.SettingsBase.edit">
+<span class="sig-name descname"><span class="pre">edit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/settings.html#SettingsBase.edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.settings.SettingsBase.edit" title="Permalink to this definition"></a></dt>
+<dd><p>Interactively edit a config file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.settings.SettingsBase.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/settings.html#SettingsBase.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.settings.SettingsBase.get" title="Permalink to this definition"></a></dt>
+<dd><p>Get a settings value, doing appropriate substitution and expansion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.settings.SettingsBase.get_settings_file">
+<span class="sig-name descname"><span class="pre">get_settings_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/settings.html#SettingsBase.get_settings_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.settings.SettingsBase.get_settings_file" title="Permalink to this definition"></a></dt>
+<dd><p>Get the preferred used settings file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.settings.SettingsBase.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/settings.html#SettingsBase.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.settings.SettingsBase.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load the settings file into the settings object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.settings.SettingsBase.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/settings.html#SettingsBase.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.settings.SettingsBase.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save settings, but do not change order of anything.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.settings.SettingsBase.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/settings.html#SettingsBase.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.settings.SettingsBase.validate" title="Permalink to this definition"></a></dt>
+<dd><p>Validate the loaded settings with jsonschema</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tunel.ssh">
+<span id="tunel-ssh-module"></span><h2>tunel.ssh module<a class="headerlink" href="#module-tunel.ssh" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tunel.ssh.Tunnel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.ssh.</span></span><span class="sig-name descname"><span class="pre">Tunnel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An ssh tunnel provides a route for the user to interact with an application
+This basically enables local port forwarding (called an ss tunnel) using
+the library Paramiko.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.ssh.Tunnel.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">login_shell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.execute" title="Permalink to this definition"></a></dt>
+<dd><p>Execute a command via ssh and a known, named connection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.ssh.Tunnel.execute_or_fail">
+<span class="sig-name descname"><span class="pre">execute_or_fail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.execute_or_fail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.execute_or_fail" title="Permalink to this definition"></a></dt>
+<dd><p>Execute a command, show the command preview, only continue on success.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.ssh.Tunnel.print_output">
+<span class="sig-name descname"><span class="pre">print_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.print_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.print_output" title="Permalink to this definition"></a></dt>
+<dd><p>Given an output dict, print and color appropriately.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.ssh.Tunnel.scp_from">
+<span class="sig-name descname"><span class="pre">scp_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.scp_from"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.scp_from" title="Permalink to this definition"></a></dt>
+<dd><p>Copy a file from the server to local</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.ssh.Tunnel.scp_to">
+<span class="sig-name descname"><span class="pre">scp_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.scp_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.scp_to" title="Permalink to this definition"></a></dt>
+<dd><p>Copy a file onto the server</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.ssh.Tunnel.shell">
+<span class="sig-name descname"><span class="pre">shell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interactive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.shell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.shell" title="Permalink to this definition"></a></dt>
+<dd><p>Pass the process over to shell</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.ssh.Tunnel.tunnel">
+<span class="sig-name descname"><span class="pre">tunnel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">socket</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.tunnel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.tunnel" title="Permalink to this definition"></a></dt>
+<dd><p>Given a remote and local port, open a tunnel. If an isolated node ssh is
+done, the name of the machine is required too.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tunel.version">
+<span id="tunel-version-module"></span><h2>tunel.version module<a class="headerlink" href="#module-tunel.version" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-tunel">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tunel" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Tunel API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tunel.client.html" class="btn btn-neutral float-right" title="tunel.client package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-2022, Vanessa Sochat.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

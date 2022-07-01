@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tunel.launcher package &mdash; Tunel 0.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-argparse.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tunel.launcher.scripts package" href="tunel.launcher.scripts.html" />
+    <link rel="prev" title="tunel.client package" href="tunel.client.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Tunel
+          </a>
+              <div class="version">
+                0.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/developer-guide.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Tunel API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="tunel.html">tunel package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="tunel.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tunel.client.html">tunel.client package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">tunel.launcher package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.utils.html">tunel.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#module-tunel.apps">tunel.apps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#module-tunel.defaults">tunel.defaults module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#module-tunel.logger">tunel.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#module-tunel.schemas">tunel.schemas module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#module-tunel.settings">tunel.settings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#module-tunel.ssh">tunel.ssh module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#module-tunel.version">tunel.version module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#module-tunel">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Tunel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">Tunel API</a> &raquo;</li>
+          <li><a href="tunel.html">tunel package</a> &raquo;</li>
+      <li>tunel.launcher package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api_reference/tunel.launcher.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tunel-launcher-package">
+<h1>tunel.launcher package<a class="headerlink" href="#tunel-launcher-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tunel.launcher.scripts.html">tunel.launcher.scripts package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tunel.launcher.scripts.html#module-tunel.launcher.scripts">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-tunel.launcher.base">
+<span id="tunel-launcher-base-module"></span><h2>tunel.launcher.base module<a class="headerlink" href="#module-tunel.launcher.base" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.launcher.base.</span></span><span class="sig-name descname"><span class="pre">Launcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/base.html#Launcher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.base.Launcher" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A launcher is a base for executing commands.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.assets">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assets</span></span><a class="headerlink" href="#tunel.launcher.base.Launcher.assets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.assets_dir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assets_dir</span></span><a class="headerlink" href="#tunel.launcher.base.Launcher.assets_dir" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.environ">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">environ</span></span><a class="headerlink" href="#tunel.launcher.base.Launcher.environ" title="Permalink to this definition"></a></dt>
+<dd><p>Get envars</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.get_args">
+<span class="sig-name descname"><span class="pre">get_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/base.html#Launcher.get_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.base.Launcher.get_args" title="Permalink to this definition"></a></dt>
+<dd><p>Given a list of needed args, return values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.get_modules">
+<span class="sig-name descname"><span class="pre">get_modules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">needed_modules</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/base.html#Launcher.get_modules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.base.Launcher.get_modules" title="Permalink to this definition"></a></dt>
+<dd><p>Given a list of needed modules, return for an app to load</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.home">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">home</span></span><a class="headerlink" href="#tunel.launcher.base.Launcher.home" title="Permalink to this definition"></a></dt>
+<dd><p>Get (or create) a local home</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#tunel.launcher.base.Launcher.path" title="Permalink to this definition"></a></dt>
+<dd><p>Get additions to the path</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.remote_assets_dir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_assets_dir</span></span><a class="headerlink" href="#tunel.launcher.base.Launcher.remote_assets_dir" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.remote_home">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_home</span></span><a class="headerlink" href="#tunel.launcher.base.Launcher.remote_home" title="Permalink to this definition"></a></dt>
+<dd><p>Get (or create) a remote home</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.remote_sockets">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_sockets</span></span><a class="headerlink" href="#tunel.launcher.base.Launcher.remote_sockets" title="Permalink to this definition"></a></dt>
+<dd><p>Get a remote sockets directory</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.remote_work">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remote_work</span></span><a class="headerlink" href="#tunel.launcher.base.Launcher.remote_work" title="Permalink to this definition"></a></dt>
+<dd><p>Get a remote work (must exist)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/base.html#Launcher.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.base.Launcher.run" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.run_app">
+<span class="sig-name descname"><span class="pre">run_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/base.html#Launcher.run_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.base.Launcher.run_app" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.scp_and_run">
+<span class="sig-name descname"><span class="pre">scp_and_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/base.html#Launcher.scp_and_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.base.Launcher.scp_and_run" title="Permalink to this definition"></a></dt>
+<dd><p>Given a local script, copy to cluster, run, and return the result</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.scp_get">
+<span class="sig-name descname"><span class="pre">scp_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/base.html#Launcher.scp_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.base.Launcher.scp_get" title="Permalink to this definition"></a></dt>
+<dd><p>Copy an asset FROM the server to local assets</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.slug">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">slug</span></span><a class="headerlink" href="#tunel.launcher.base.Launcher.slug" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/base.html#Launcher.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.base.Launcher.stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.stop_app">
+<span class="sig-name descname"><span class="pre">stop_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/base.html#Launcher.stop_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.base.Launcher.stop_app" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.base.Launcher.username">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#tunel.launcher.base.Launcher.username" title="Permalink to this definition"></a></dt>
+<dd><p>Get (or create) a local home</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tunel.launcher.singularity">
+<span id="tunel-launcher-singularity-module"></span><h2>tunel.launcher.singularity module<a class="headerlink" href="#module-tunel.launcher.singularity" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tunel.launcher.singularity.Singularity">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.launcher.singularity.</span></span><span class="sig-name descname"><span class="pre">Singularity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/singularity.html#Singularity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.singularity.Singularity" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tunel.launcher.base.Launcher" title="tunel.launcher.base.Launcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">Launcher</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.singularity.Singularity.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/singularity.html#Singularity.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.singularity.Singularity.run" title="Permalink to this definition"></a></dt>
+<dd><p>Run handles some command to singularity (e.g., run or exec)</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tunel.launcher.slurm">
+<span id="tunel-launcher-slurm-module"></span><h2>tunel.launcher.slurm module<a class="headerlink" href="#module-tunel.launcher.slurm" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.launcher.slurm.</span></span><span class="sig-name descname"><span class="pre">Slurm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tunel.launcher.base.Launcher" title="tunel.launcher.base.Launcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">Launcher</span></code></a></p>
+<p>A slurm launcher interacts with slurm</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.get_machine">
+<span class="sig-name descname"><span class="pre">get_machine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_attempts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.get_machine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.get_machine" title="Permalink to this definition"></a></dt>
+<dd><p>Given the name of a job, wait for the job to start and return the machine</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.modules_file">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modules_file</span></span><a class="headerlink" href="#tunel.launcher.slurm.Slurm.modules_file" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.nodes_file">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nodes_file</span></span><a class="headerlink" href="#tunel.launcher.slurm.Slurm.nodes_file" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.prepare_render">
+<span class="sig-name descname"><span class="pre">prepare_render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.prepare_render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.prepare_render" title="Permalink to this definition"></a></dt>
+<dd><p>Given an app, prepare default variables (and custom args) to render</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.previous_job_exists">
+<span class="sig-name descname"><span class="pre">previous_job_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.previous_job_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.previous_job_exists" title="Permalink to this definition"></a></dt>
+<dd><p>Check to see if a previous job was submit/exists.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.print_updated_logs">
+<span class="sig-name descname"><span class="pre">print_updated_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logs_prefix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.print_updated_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.print_updated_logs" title="Permalink to this definition"></a></dt>
+<dd><p>Start a separate thread that regularly checks and prints logs (when there is an updated line)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">socket</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.run" title="Permalink to this definition"></a></dt>
+<dd><p>Run a command for slurm, typically sbatch (and eventually with supporting args)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.run_app">
+<span class="sig-name descname"><span class="pre">run_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.run_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.run_app" title="Permalink to this definition"></a></dt>
+<dd><p>Given an app designated for slurm, run it!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.show_logs_instruction">
+<span class="sig-name descname"><span class="pre">show_logs_instruction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logs_prefix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.show_logs_instruction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.show_logs_instruction" title="Permalink to this definition"></a></dt>
+<dd><p>print to the screen how to see currently running logs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.stop" title="Permalink to this definition"></a></dt>
+<dd><p>Stop one or more named jobs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.stop_app">
+<span class="sig-name descname"><span class="pre">stop_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.stop_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.stop_app" title="Permalink to this definition"></a></dt>
+<dd><p>Wrapper to stop a single app.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.update_inventory">
+<span class="sig-name descname"><span class="pre">update_inventory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.update_inventory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.update_inventory" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tunel.launcher.slurm.print_logs">
+<span class="sig-prename descclassname"><span class="pre">tunel.launcher.slurm.</span></span><span class="sig-name descname"><span class="pre">print_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs_prefix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#print_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.print_logs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-tunel.launcher">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tunel.launcher" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tunel.launcher.get_launcher">
+<span class="sig-prename descclassname"><span class="pre">tunel.launcher.</span></span><span class="sig-name descname"><span class="pre">get_launcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher.html#get_launcher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.get_launcher" title="Permalink to this definition"></a></dt>
+<dd><p>Get a launcher for a loaded app</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tunel.client.html" class="btn btn-neutral float-left" title="tunel.client package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tunel.launcher.scripts.html" class="btn btn-neutral float-right" title="tunel.launcher.scripts package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-2022, Vanessa Sochat.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
