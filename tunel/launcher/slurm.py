@@ -81,7 +81,7 @@ class Slurm(Launcher):
             render["args"] = self.get_args(app.needs.get("args"))
         render["jobslug"] = slug
         render["jobname"] = app.name
-        render["port"] = (self.ssh.remote_port,)
+        render["port"] = self.ssh.remote_port
         render["scriptdir"] = os.path.join(self.remote_assets_dir, app.name)
         render["paths"] = paths
         render["socket"] = os.path.join(render["scriptdir"], "%s.sock" % slug)

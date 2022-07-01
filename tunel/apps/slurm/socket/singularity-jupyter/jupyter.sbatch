@@ -46,9 +46,7 @@ then
     printf "singularity pull docker://jupyter/datascience-notebook\n"
     singularity pull ${CONTAINER} "docker://jupyter/datascience-notebook"
     printf "singularity exec --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local ${CONTAINER} jupyter notebook --no-browser --sock ${SOCKET}\n"
-    singularity exec --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local --bind ${HOME}/.jupyter:/home/jovyan/.jupyter "${CONTAINER}" jupyter notebook --no-browser --sock ${SOCKET}
+    singularity exec {% if args.jupyterlab %}--env JUPYTER_ENABLE_LAB=yes{% endif %} --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local --bind ${HOME}/.jupyter:/home/jovyan/.jupyter "${CONTAINER}" jupyter notebook --no-browser --sock ${SOCKET}
 else
-    printf "Singularity not available, trying native jupyter.\n"
-    printf "jupyter notebook --no-browser --sock ${SOCKET}\n"
-    jupyter notebook --no-browser --sock ${SOCKET}
+    printf "Singularity is not available.\n"
 fi
