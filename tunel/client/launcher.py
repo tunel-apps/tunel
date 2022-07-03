@@ -3,7 +3,6 @@ __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
 
-from tunel.logger import logger
 import tunel.launcher
 import tunel.apps
 
@@ -11,7 +10,7 @@ import tunel.apps
 
 
 def run_app(args, parser, extra, subparser):
-    app = tunel.apps.get_app(args.app)
+    app = tunel.apps.get_app(args.app, extra)
     launcher = tunel.launcher.get_launcher(app)(
         args.server, remote_port=args.port, local_port=args.local_port
     )
@@ -19,7 +18,7 @@ def run_app(args, parser, extra, subparser):
 
 
 def stop_app(args, parser, extra, subparser):
-    app = tunel.apps.get_app(args.app)
+    app = tunel.apps.get_app(args.app, extra)
     launcher = tunel.launcher.get_launcher(app)(
         args.server, remote_port=args.port, local_port=args.local_port
     )

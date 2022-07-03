@@ -2,8 +2,6 @@ __author__ = "Vanessa Sochat"
 __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
-from tunel.logger import logger
-import tunel.utils as utils
 import tunel.ssh
 import os
 
@@ -70,21 +68,29 @@ class Launcher:
                 found_modules += matches[-1]
         return found_modules
 
-    def get_args(self, args):
+    def prepare_render(self, app, paths):
         """
-        Given a list of needed args, return values
+        Given an app, prepare default variables (and custom args) to render
         """
-        # TODO this should be a dict of kwargs, and defaults should be
-        # provided to render
-        choices = []
-        for arg in args:
-            if arg == "port":
-                choices.append(str(self.ssh.remote_port))
-            elif arg == "workdir":
-                choices.append(self.remote_work)
-            else:
-                logger.warning("%s is not a known argument type" % arg)
-        return choices
+        render = {"args": app.args}
+        slug = app.name.replace(os.sep, "-").replace("/", "-")
+        if app.needs:
+            paths += app.needs.get("paths", [])
+        render["jobslug"] = slug
+        render["jobname"] = app.name
+        render["port"] = self.ssh.remote_port
+        render["scriptdir"] = os.path.join(self.remote_assets_dir, app.name)
+        render["paths"] = paths
+        render["socket"] = os.path.join(render["scriptdir"], "%s.sock" % slug)
+
+        # This is second priority to args.workdir
+        if self.remote_work:
+            render["workdir"] = self.remote_work
+
+        # Does the subclass have customizations?
+        if hasattr(self, "_prepare_render"):
+            render.update(self._prepare_render(app, paths))
+        return render
 
     @property
     def path(self):
@@ -128,7 +134,7 @@ class Launcher:
     @property
     def username(self):
         """
-        Get (or create) a local home
+        Get the username
         """
         if not self._remote_user:
             self._remote_user = self.ssh.execute_or_fail("echo '$USER'")

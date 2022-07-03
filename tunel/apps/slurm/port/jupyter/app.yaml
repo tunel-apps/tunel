@@ -1,8 +1,4 @@
 launcher: slurm
 script: jupyter.sbatch
-needs:
-  modules:
-    - jupyter 
-  args:
-  # TODO how to customize this? from command line and with default?
-    - workdir
+args:
+  - workdir

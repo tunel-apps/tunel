@@ -4,27 +4,19 @@ JOB_NAME="{{ jobname }}"
 SOCKET_DIR="{{ scriptdir }}"
 mkdir -p ${SOCKET_DIR}
 
-# Working Directory
-NOTEBOOK_DIR=$1
-cd $NOTEBOOK_DIR
+# Set WORKDIR, first to args.workdir, then settings.yml workdir, then $HOME
+{% include "bash/set-workdir.sh" %}
+cd $WORKDIR
 
 echo "Job is ${JOB_NAME}"
 echo "Socket directory is ${SOCKET_DIR}"
-echo "Notebook working directory is ${NOTEBOOK_DIR}"
-cd ${NOTEBOOK_DIR}
+echo "Notebook working directory is ${WORKDIR}"
 
 # Create .local folder for default modules, if doesn't exist
-if [ ! -d "${HOME}/.local" ]; then
-    echo "Creating local python modules folder to map at ${HOME}/.local";
-    mkdir -p "${HOME}/.local";
-fi
+{% include "bash/python/create-local.sh" %}
 
 # Remove socket if exists
-SOCKET="{{ socket }}"
-if [[ -f "${SOCKET}" ]]; then
-    echo "Removing existing socket ${SOCKET}"
-    rm ${SOCKET}
-fi
+{% include "bash/socket/set-socket.sh" %}
 
 # Load modules requested by user
 {% for module in modules %}module load {{ module }} || printf "Could not load {{ module }}\n"

@@ -19,6 +19,9 @@ tunel_remote_sockets: null
 # set a default port to use for ssh
 ssh_port: 22
 
+# set a default shell
+shell: /bin/bash
+
 # remote port to use (this should be randomly generated unless set here)
 remote_port: null
 

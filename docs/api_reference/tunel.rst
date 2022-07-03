@@ -9,6 +9,8 @@ Subpackages
 
    tunel.client
    tunel.launcher
+   tunel.ssh
+   tunel.templates
    tunel.utils
 
 Submodules
@@ -54,10 +56,10 @@ tunel.settings module
    :undoc-members:
    :show-inheritance:
 
-tunel.ssh module
-----------------
+tunel.template module
+---------------------
 
-.. automodule:: tunel.ssh
+.. automodule:: tunel.template
    :members:
    :undoc-members:
    :show-inheritance:

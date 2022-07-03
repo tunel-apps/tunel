@@ -3,4 +3,5 @@
 # new files generated (to update) by doing:
 #
 # 
+rm api_reference/tunel.*
 sphinx-apidoc -o api_reference/ ../tunel

@@ -4,7 +4,6 @@ __license__ = "MPL 2.0"
 
 
 from tunel.logger import logger
-from tunel.ssh import Tunnel
 
 
 def list_apps(args, parser, extra, subparser):

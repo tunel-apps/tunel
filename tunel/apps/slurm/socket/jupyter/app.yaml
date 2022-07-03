@@ -1,8 +1,7 @@
 launcher: slurm
 script: jupyter.sbatch
+args:
+  # Working directory for the notebook
+  - workdir
 needs:
   socket: true
-  modules:
-    - jupyter 
-  args:
-    - workdir

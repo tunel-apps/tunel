@@ -69,22 +69,14 @@ class Slurm(Launcher):
         if os.path.exists(self.modules_file) and "modules" not in self._inventory:
             self._inventory["modules"] = tunel.utils.read_lines(self.modules_file)
 
-    def prepare_render(self, app, paths):
+    def _prepare_render(self, app, paths):
         """
         Given an app, prepare default variables (and custom args) to render
         """
         render = {}
-        slug = app.name.replace(os.sep, "-").replace("/", "-")
+        # TODO needs should not be hard coded for slurm
         if app.needs:
-            paths += app.needs.get("paths", [])
             render["modules"] = self.get_modules(app.needs.get("modules"))
-            render["args"] = self.get_args(app.needs.get("args"))
-        render["jobslug"] = slug
-        render["jobname"] = app.name
-        render["port"] = self.ssh.remote_port
-        render["scriptdir"] = os.path.join(self.remote_assets_dir, app.name)
-        render["paths"] = paths
-        render["socket"] = os.path.join(render["scriptdir"], "%s.sock" % slug)
         return render
 
     def run_app(self, app):
@@ -100,14 +92,14 @@ class Slurm(Launcher):
         render = self.prepare_render(app, paths)
 
         # Clean up previous sockets
-        res = self.ssh.execute(["rm", "-rf", "%s/*.sock" % render["scriptdir"]])
+        self.ssh.execute(["rm", "-rf", "%s/*.sock" % render["scriptdir"]])
 
         # Load the app template
         template = app.load_template()
         result = template.render(**render)
 
         # Write script to temporary file
-        tmpfile = tmpfile = utils.get_tmpfile()
+        tmpfile = utils.get_tmpfile()
         utils.write_file(tmpfile, result)
 
         # Copy over to server

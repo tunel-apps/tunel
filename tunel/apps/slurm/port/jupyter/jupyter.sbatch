@@ -1,18 +1,19 @@
 #!/bin/bash
 
-PORT="{{ port }}"
-NOTEBOOK_DIR="{{ args.notebook_dir }}"
-cd $NOTEBOOK_DIR
+# NOTE THIS PORT METHOD IS NOT TESTED YET
+
+# Sets $PORT envar from args.port then port
+{% include "bash/network/set-port.sh" %}
+
+# Working Directory
+{% include "bash/set-workdir.sh" %}
+cd $WORKDIR
 
 echo "Port is ${PORT}"
-echo "Notebook working directory is ${NOTEBOOK_DIR}"
-cd ${NOTEBOOK_DIR}
+echo "Notebook working directory is ${WORKDIR}"
 
 # Create .local folder for default modules, if doesn't exist
-if [ ! -d "${HOME}/.local" ]; then
-    echo "Creating local python modules folder to map at ${HOME}/.local";
-    mkdir -p "${HOME}/.local";
-fi
+{% include "bash/python/create-local.sh" %}
 
 # Load modules requested by user
 {% for module in modules %}module load {{ module }} || printf "Could not load {{ module }}\n"

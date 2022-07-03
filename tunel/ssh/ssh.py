@@ -3,17 +3,14 @@ __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
 
-from .settings import Settings
+from tunel.settings import Settings
 import tunel.defaults as defaults
+import tunel.ssh.commands as commands
 from tunel.logger import logger
 import tunel.utils
-import getpass
 import random
-import re
 import os
-import signal
 import shlex
-import subprocess
 
 
 class Tunnel:
@@ -57,14 +54,17 @@ class Tunnel:
     def __str__(self):
         return "[tunel-ssh]"
 
-    def execute(self, cmd, login_shell=False, quiet=False):
+    def execute(self, cmd, login_shell=False, quiet=False, stream=False):
         """
         Execute a command via ssh and a known, named connection.
         """
         if not isinstance(cmd, list):
             cmd = shlex.split(cmd)
-        cmd = ["ssh", self.server] + cmd
-        return tunel.utils.run_command(cmd, quiet=quiet)
+        if stream:
+            cmd = ["ssh", "-t", self.server] + cmd
+        else:
+            cmd = ["ssh", self.server] + cmd
+        return tunel.utils.run_command(cmd, quiet=quiet, stream=stream)
 
     def scp_to(self, src, dest):
         """
@@ -85,9 +85,9 @@ class Tunnel:
         """
         Given an output dict, print and color appropriately.
         """
-        if output["return_code"] != success_code:
+        if output["return_code"] != success_code and output["message"]:
             logger.error(output["message"].strip())
-        elif not quiet:
+        elif not quiet and output["message"]:
             logger.info(output["message"].strip())
 
     def execute_or_fail(self, cmd, success_code=0, quiet=False):
@@ -99,17 +99,28 @@ class Tunnel:
             logger.exit(output["message"])
         return output["message"].strip()
 
-    def tunnel(self, machine=None, port=None, remote_port=None, socket=None, app=None):
+    def tunnel_login_node(self, port=None, remote_port=None, socket=None, app=None):
         """
-        Given a remote and local port, open a tunnel. If an isolated node ssh is
-        done, the name of the machine is required too.
+        Create a tunnel directly to the login node (e.g., a Singularity app)
         """
+        # The app requires a socket
+        if app.needs.get("socket", False) is True:
+            if not socket:
+                logger.exit("A socket path is required.")
+            return self._tunnel_login_node_socket(socket)
+
         port = port or self.local_port
         remote_port = remote_port or self.remote_port
         logger.info(
             "Forwarding port %s to %s:%s ..." % (port, self.server, remote_port)
         )
+        return self._tunnel_login_node_port()
 
+    def tunnel(self, machine=None, port=None, remote_port=None, socket=None, app=None):
+        """
+        Given a remote and local port, open a tunnel. If an isolated node ssh is
+        done, the name of the machine is required too.
+        """
         # If no machine, we have to do a login
         if not machine:
             return self._tunnel_login()
@@ -120,6 +131,11 @@ class Tunnel:
                 logger.exit("A socket path is required.")
             return self._tunnel_isolated_socket(machine, socket=socket)
 
+        port = port or self.local_port
+        remote_port = remote_port or self.remote_port
+        logger.info(
+            "Forwarding port %s to %s:%s ..." % (port, self.server, remote_port)
+        )
         return self._tunnel_isolated_port(machine)
 
     def _get_socket_path(self):
@@ -130,38 +146,6 @@ class Tunnel:
         if not os.path.exists(socket_dir):
             os.mkdir(socket_dir)
         return tunel.utils.get_tmpfile(socket_dir, prefix=self.server)
-
-    def _tunnel_login(self):
-        """
-        Create a simple tunnel to the login node (assumes not isolated nodes)
-        """
-        socket_file = self._get_socket_path()
-        cmd = [
-            "-K",
-            "-f",
-            "-M",
-            "-S",
-            socket_file,
-            "-L",
-            "%s:%s:%s" % (self.local_port, self.server, self.remote_port),
-            "-N",
-        ]
-        res = self.execute(cmd)
-        self._tunnel_wait(socket_file)
-
-    def _tunnel_wait(self, socket_file=None):
-        """
-        Wait for a Control+C to exit and remove a tunnel
-        """
-
-        def signal_handler(sig, frame):
-            if socket_file:
-                self._close_socket(socket_file)
-            logger.exit("🛑️ Port forwarding stopped.", return_code=0)
-
-        signal.signal(signal.SIGINT, signal_handler)
-        print("Press Ctrl+C")
-        signal.pause()
 
     def _close_socket(self, socket_file):
         """
@@ -175,87 +159,6 @@ class Tunnel:
         if os.path.exists(socket_file):
             os.remove(socket_file)
 
-    def _tunnel_isolated_socket(self, machine, socket):
-        """
-        # Running on login node
-        $ ssh -NT -L 8888:/tmp/test.sock user@server
-
-        # TWO COMMANDS (and assuming isolated node)
-        $ ssh -NT user@server ssh <machine> -NT -L /home/user/login-node.sock:/home/user/path/to/worker-node.sock
-
-        # And another for the local socket
-        $ ssh -NT -L <localport>:/home/user/login-node.sock user@server
-
-        # ONE COMMAND
-        $ ssh -NT -L <localport>:/home/user/login-node.sock user@server ssh <machine> -NT -L /home/user/login.node.sock:/home/user/path/to/worker-node.sock
-
-        # OR us a proxy
-        ssh -J user@server <machine> -NT -L <port>:/home/user/path/to/worker-node.sock
-        """
-        self._tunnel_isolated_sockets(machine, socket)
-        self._tunnel_isolated_proxyjump_sockets(machine, socket)
-
-    def _tunnel_isolated_sockets(self, machine, socket):
-        """
-        This approach maps a socket first to th login node and connects to it.
-        """
-        login_node_socket = socket.replace(".sock", ".head-node.sock")
-        cmd = [
-            "ssh",
-            "-NT",
-            "-L",
-            "%s:%s" % (self.local_port, login_node_socket),
-            "%s@%s" % (self.username, self.server),
-            "ssh",
-            machine,
-            "-NT",
-            "-L",
-            "%s:%s" % (login_node_socket, socket),
-        ]
-        logger.c.print()
-        logger.c.print("== RUN THIS IN A SEPARATE TERMINAL AFTER THE APP IS READY ==")
-        logger.info("%s" % " ".join(cmd))
-
-    def _tunnel_isolated_proxyjump_sockets(self, machine, socket):
-        """
-        This approach uses a proxyjump to only require one socket
-        """
-        logger.c.print("== OR (newer ssh) USE A PROXYJUMP ==")
-        cmd = [
-            "ssh",
-            "-J",
-            "%s@%s" % (self.username, self.server),
-            machine,
-            "-NT",
-            "-L",
-            "%s:%s" % (self.local_port, socket),
-        ]
-        logger.info("%s" % " ".join(cmd))
-
-    def _tunnel_isolated_port(self, machine):
-        """
-        Create a tunnel to an isolated node (not tested yet)
-        """
-        socket_file = self._get_socket_path()
-
-        # TODO do we need to close up connections on login node?
-        connection = "%s:localhost:%s" % (self.local_port, self.remote_port)
-        cmd = [
-            "-f",
-            "-S",
-            socket_path,
-            "-L",
-            connection,
-            self.server,
-            "ssh",
-            "-L",
-            connection,
-            "-N",
-            machine,
-        ]
-        res = self.execute(cmd)
-        self._tunnel_wait(socket_file)
-
     def shell(self, cmd=None, interactive=False):
         """
         Pass the process over to shell
@@ -267,3 +170,15 @@ class Tunnel:
             command = "%s %s" % (command, cmd)
         os.system(command)
         logger.info("👋️ Goodbye!")
+
+
+# Add tunnel commands to class (only done for organization)
+
+Tunnel._tunnel_wait = commands._tunnel_wait
+Tunnel._tunnel_isolated_socket = commands._tunnel_isolated_socket
+Tunnel._tunnel_isolated_sockets = commands._tunnel_isolated_sockets
+Tunnel._tunnel_isolated_proxyjump_sockets = commands._tunnel_isolated_proxyjump_sockets
+Tunnel._tunnel_isolated_port = commands._tunnel_isolated_port
+Tunnel._tunnel_login = commands._tunnel_login
+Tunnel._tunnel_login_node_port = commands._tunnel_login_node_port
+Tunnel._tunnel_login_node_socket = commands._tunnel_login_node_socket

@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="-104.28571"
+     inkscape:cx="-115.71429"
      inkscape:cy="548.57143"
      inkscape:document-units="mm"
      inkscape:current-layer="g879"
@@ -64,27 +64,35 @@
            cx="490.23514"
            cy="236.90179"
            rx="99.407738"
-           ry="101.67559" />
+           ry="101.67559"
+           inkscape:export-xdpi="31.940001"
+           inkscape:export-ydpi="31.940001" />
         <ellipse
            style="opacity:1;fill:#0091d5;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
            id="path897-3"
            cx="490.23511"
            cy="236.16624"
            rx="77.10714"
-           ry="78.866234" />
+           ry="78.866234"
+           inkscape:export-xdpi="31.940001"
+           inkscape:export-ydpi="31.940001" />
         <ellipse
            style="opacity:1;fill:#74c885;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
            id="path897-3-5"
            cx="489.85715"
            cy="236.3367"
            rx="58.964283"
-           ry="60.309471" />
+           ry="60.309471"
+           inkscape:export-xdpi="31.940001"
+           inkscape:export-ydpi="31.940001" />
         <text
            xml:space="preserve"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
            x="467.17859"
            y="275.83334"
-           id="text1037"><tspan
+           id="text1037"
+           inkscape:export-xdpi="31.940001"
+           inkscape:export-ydpi="31.940001"><tspan
              sodipodi:role="line"
              id="tspan1035"
              x="467.17859"

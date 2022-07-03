@@ -10,11 +10,12 @@ schema_url = "https://json-schema.org/draft-07/schema/#"
 appSettingsProperties = {
     "launcher": {"type": "string"},
     "script": {"type": "string"},
+    "args": {"type": "array", "items": {"type": "string"}},
+    "examples": {"type": "array", "items": {"type": "string"}},
     "needs": {
         "type": "object",
         "properties": {
             "modules": {"type": "array", "items": {"type": "string"}},
-            "args": {"type": "array", "items": {"type": "string"}},
             "socket": {"type": "boolean"},
         },
     },
@@ -72,6 +73,8 @@ launchers = {
     "additionalProperties": False,
 }
 
+shells = ["/bin/bash", "/bin/sh", "/bin/csh"]
+
 # Currently all of these are required
 settingsProperties = {
     "ssh_port": {"type": "number"},
@@ -86,6 +89,7 @@ settingsProperties = {
     "ssh_sockets": {"type": "string"},
     "min_port": {"type": "number"},
     "max_port": {"type": "number"},
+    "shell": {"type": "string", "enum": shells},
     "config_editor": {"type": "string", "enum": ["nano", "vim", "emacs", "atom"]},
     "apps_dirs": {"type": "array", "items": {"type": "string"}},
     "tunel_spinner": {"type": "string"},

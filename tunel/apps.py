@@ -5,8 +5,8 @@ __license__ = "MPL 2.0"
 from .settings import Settings
 import tunel.defaults as defaults
 
-from jinja2 import Template
 from tunel.logger import logger
+from tunel.template import Template
 import tunel.utils as utils
 import tunel.schemas
 import jsonschema
@@ -15,6 +15,7 @@ import os
 
 class App:
     def __init__(self, app_config, app_dir, validate=True):
+        self.args = {}
         self.app_config = app_config
         self.app_root = app_dir
         self.load(validate)
@@ -53,11 +54,32 @@ class App:
         """
         return self.get(key)
 
+    def add_args(self, extra):
+        """
+        Extra is a list of args, in either format:
+
+        --name=value
+        --flag
+
+        They must start with -- to be considered.
+        """
+        for extra in extra:
+            if not extra.startswith("--"):
+                continue
+            arg = extra.lstrip("--").split("=")
+            if len(arg) == 1:
+                self.args[arg[0]] = True
+            elif len(arg) == 2:
+                self.args[arg[0]] = arg[1]
+            else:
+                logger.warning(f"Unexpected argument: {extra}, skipping.")
+
     def load_template(self):
         """
         Given an app, load the template script for it.
         """
-        return Template(utils.read_file(self.get_script()))
+        template = Template()
+        return template.load(self.get_script())
 
     def validate(self):
         """
@@ -71,14 +93,16 @@ class App:
             self.validate()
 
 
-def get_app(app):
+def get_app(app, extra=None):
     """
     Given an app name, get the loaded app for it
     """
     apps = list_apps()
     if app not in apps:
         logger.exit("Cannot find app %s\nChoices are:\n%s" % (app, "\n  ".join(apps)))
-    return apps[app]
+    app = apps[app]
+    app.add_args(extra)
+    return app
 
 
 def list_apps(settings_file=None):

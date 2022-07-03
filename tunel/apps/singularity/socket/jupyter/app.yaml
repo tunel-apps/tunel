@@ -1,0 +1,14 @@
+launcher: singularity
+script: jupyter.sh
+needs:
+  socket: true
+examples:
+  - tunel run-app waffles singularity/socket/jupyter --container=docker://jupyter/datascience-notebook
+args:
+ # Change jupyter container used (default is datascience notebook)
+ # must start with container URI to pull (e.g., docker://)
+ - container
+ 
+ # Try running jupyterlab instead (set to true)
+ - jupyterlab
+
