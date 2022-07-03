@@ -103,12 +103,14 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/tunel.html#tunel.apps.App">App (class in tunel.apps)</a>
+      <li><a href="api_reference/tunel.html#tunel.apps.App.add_args">add_args() (tunel.apps.App method)</a>
 </li>
-      <li><a href="api_reference/tunel.html#tunel.apps.App.app_dir">app_dir (tunel.apps.App property)</a>
+      <li><a href="api_reference/tunel.html#tunel.apps.App">App (class in tunel.apps)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/tunel.html#tunel.apps.App.app_dir">app_dir (tunel.apps.App property)</a>
+</li>
       <li><a href="api_reference/tunel.launcher.html#tunel.launcher.base.Launcher.assets">assets (tunel.launcher.base.Launcher property)</a>
 </li>
       <li><a href="api_reference/tunel.launcher.html#tunel.launcher.base.Launcher.assets_dir">assets_dir (tunel.launcher.base.Launcher property)</a>
@@ -189,9 +191,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/tunel.html#tunel.logger.Logger.error">error() (tunel.logger.Logger method)</a>
 </li>
-      <li><a href="api_reference/tunel.html#tunel.ssh.Tunnel.execute">execute() (tunel.ssh.Tunnel method)</a>
+      <li><a href="api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.execute">execute() (tunel.ssh.ssh.Tunnel method)</a>
 </li>
-      <li><a href="api_reference/tunel.html#tunel.ssh.Tunnel.execute_or_fail">execute_or_fail() (tunel.ssh.Tunnel method)</a>
+      <li><a href="api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.execute_or_fail">execute_or_fail() (tunel.ssh.ssh.Tunnel method)</a>
 </li>
       <li><a href="api_reference/tunel.html#tunel.logger.Logger.exit">exit() (tunel.logger.Logger method)</a>
 </li>
@@ -208,10 +210,10 @@
       <ul>
         <li><a href="api_reference/tunel.html#tunel.settings.SettingsBase.get">(tunel.settings.SettingsBase method)</a>
 </li>
+        <li><a href="api_reference/tunel.html#tunel.template.Template.get">(tunel.template.Template method)</a>
+</li>
       </ul></li>
       <li><a href="api_reference/tunel.html#tunel.apps.get_app">get_app() (in module tunel.apps)</a>
-</li>
-      <li><a href="api_reference/tunel.launcher.html#tunel.launcher.base.Launcher.get_args">get_args() (tunel.launcher.base.Launcher method)</a>
 </li>
       <li><a href="api_reference/tunel.utils.html#tunel.utils.fileio.get_file_hash">get_file_hash() (in module tunel.utils.fileio)</a>
 </li>
@@ -288,6 +290,8 @@
       <ul>
         <li><a href="api_reference/tunel.html#tunel.settings.SettingsBase.load">(tunel.settings.SettingsBase method)</a>
 </li>
+        <li><a href="api_reference/tunel.html#tunel.template.Template.load">(tunel.template.Template method)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -355,7 +359,15 @@
 </li>
         <li><a href="api_reference/tunel.html#module-tunel.settings">tunel.settings</a>
 </li>
-        <li><a href="api_reference/tunel.html#module-tunel.ssh">tunel.ssh</a>
+        <li><a href="api_reference/tunel.ssh.html#module-tunel.ssh">tunel.ssh</a>
+</li>
+        <li><a href="api_reference/tunel.ssh.html#module-tunel.ssh.commands">tunel.ssh.commands</a>
+</li>
+        <li><a href="api_reference/tunel.ssh.html#module-tunel.ssh.ssh">tunel.ssh.ssh</a>
+</li>
+        <li><a href="api_reference/tunel.html#module-tunel.template">tunel.template</a>
+</li>
+        <li><a href="api_reference/tunel.templates.html#module-tunel.templates">tunel.templates</a>
 </li>
         <li><a href="api_reference/tunel.utils.html#module-tunel.utils">tunel.utils</a>
 </li>
@@ -394,18 +406,24 @@
 </li>
       <li><a href="api_reference/tunel.launcher.html#tunel.launcher.base.Launcher.path">path (tunel.launcher.base.Launcher property)</a>
 </li>
-      <li><a href="api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.prepare_render">prepare_render() (tunel.launcher.slurm.Slurm method)</a>
+      <li><a href="api_reference/tunel.launcher.html#tunel.launcher.base.Launcher.prepare_render">prepare_render() (tunel.launcher.base.Launcher method)</a>
 </li>
       <li><a href="api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.previous_job_exists">previous_job_exists() (tunel.launcher.slurm.Slurm method)</a>
 </li>
       <li><a href="api_reference/tunel.utils.html#tunel.utils.fileio.print_json">print_json() (in module tunel.utils.fileio)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/tunel.launcher.html#tunel.launcher.slurm.print_logs">print_logs() (in module tunel.launcher.slurm)</a>
 </li>
-      <li><a href="api_reference/tunel.html#tunel.ssh.Tunnel.print_output">print_output() (tunel.ssh.Tunnel method)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.print_output">print_output() (tunel.ssh.ssh.Tunnel method)</a>
 </li>
+      <li><a href="api_reference/tunel.launcher.html#tunel.launcher.singularity.print_tunnel_instructions">print_tunnel_instructions() (in module tunel.launcher.singularity)</a>
+
+      <ul>
+        <li><a href="api_reference/tunel.launcher.html#tunel.launcher.singularity.Singularity.print_tunnel_instructions">(tunel.launcher.singularity.Singularity method)</a>
+</li>
+      </ul></li>
       <li><a href="api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.print_updated_logs">print_updated_logs() (tunel.launcher.slurm.Slurm method)</a>
 </li>
       <li><a href="api_reference/tunel.html#tunel.logger.Logger.progress">progress() (tunel.logger.Logger method)</a>
@@ -461,6 +479,8 @@
       <ul>
         <li><a href="api_reference/tunel.launcher.html#tunel.launcher.base.Launcher.run_app">(tunel.launcher.base.Launcher method)</a>
 </li>
+        <li><a href="api_reference/tunel.launcher.html#tunel.launcher.singularity.Singularity.run_app">(tunel.launcher.singularity.Singularity method)</a>
+</li>
         <li><a href="api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.run_app">(tunel.launcher.slurm.Slurm method)</a>
 </li>
       </ul></li>
@@ -482,11 +502,11 @@
 </li>
       <li><a href="api_reference/tunel.launcher.html#tunel.launcher.base.Launcher.scp_and_run">scp_and_run() (tunel.launcher.base.Launcher method)</a>
 </li>
-      <li><a href="api_reference/tunel.html#tunel.ssh.Tunnel.scp_from">scp_from() (tunel.ssh.Tunnel method)</a>
+      <li><a href="api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.scp_from">scp_from() (tunel.ssh.ssh.Tunnel method)</a>
 </li>
       <li><a href="api_reference/tunel.launcher.html#tunel.launcher.base.Launcher.scp_get">scp_get() (tunel.launcher.base.Launcher method)</a>
 </li>
-      <li><a href="api_reference/tunel.html#tunel.ssh.Tunnel.scp_to">scp_to() (tunel.ssh.Tunnel method)</a>
+      <li><a href="api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.scp_to">scp_to() (tunel.ssh.ssh.Tunnel method)</a>
 </li>
       <li><a href="api_reference/tunel.html#tunel.logger.Logger.set_level">set_level() (tunel.logger.Logger method)</a>
 </li>
@@ -498,7 +518,7 @@
 </li>
       <li><a href="api_reference/tunel.html#tunel.logger.setup_logger">setup_logger() (in module tunel.logger)</a>
 </li>
-      <li><a href="api_reference/tunel.html#tunel.ssh.Tunnel.shell">shell() (tunel.ssh.Tunnel method)</a>
+      <li><a href="api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.shell">shell() (tunel.ssh.ssh.Tunnel method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -534,6 +554,8 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/tunel.html#tunel.template.Template">Template (class in tunel.template)</a>
+</li>
       <li><a href="api_reference/tunel.html#tunel.logger.Logger.text_handler">text_handler() (tunel.logger.Logger method)</a>
 </li>
       <li>
@@ -620,8 +642,6 @@
         <li><a href="api_reference/tunel.launcher.scripts.html#module-tunel.launcher.scripts">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     tunel.launcher.singularity
 
@@ -636,6 +656,8 @@
         <li><a href="api_reference/tunel.launcher.html#module-tunel.launcher.slurm">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     tunel.logger
 
@@ -661,7 +683,35 @@
     tunel.ssh
 
       <ul>
-        <li><a href="api_reference/tunel.html#module-tunel.ssh">module</a>
+        <li><a href="api_reference/tunel.ssh.html#module-tunel.ssh">module</a>
+</li>
+      </ul></li>
+      <li>
+    tunel.ssh.commands
+
+      <ul>
+        <li><a href="api_reference/tunel.ssh.html#module-tunel.ssh.commands">module</a>
+</li>
+      </ul></li>
+      <li>
+    tunel.ssh.ssh
+
+      <ul>
+        <li><a href="api_reference/tunel.ssh.html#module-tunel.ssh.ssh">module</a>
+</li>
+      </ul></li>
+      <li>
+    tunel.template
+
+      <ul>
+        <li><a href="api_reference/tunel.html#module-tunel.template">module</a>
+</li>
+      </ul></li>
+      <li>
+    tunel.templates
+
+      <ul>
+        <li><a href="api_reference/tunel.templates.html#module-tunel.templates">module</a>
 </li>
       </ul></li>
       <li>
@@ -699,9 +749,11 @@
         <li><a href="api_reference/tunel.html#module-tunel.version">module</a>
 </li>
       </ul></li>
-      <li><a href="api_reference/tunel.html#tunel.ssh.Tunnel">Tunnel (class in tunel.ssh)</a>
+      <li><a href="api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel">Tunnel (class in tunel.ssh.ssh)</a>
 </li>
-      <li><a href="api_reference/tunel.html#tunel.ssh.Tunnel.tunnel">tunnel() (tunel.ssh.Tunnel method)</a>
+      <li><a href="api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.tunnel">tunnel() (tunel.ssh.ssh.Tunnel method)</a>
+</li>
+      <li><a href="api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.tunnel_login_node">tunnel_login_node() (tunel.ssh.ssh.Tunnel method)</a>
 </li>
   </ul></td>
 </tr></table>

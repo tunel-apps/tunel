@@ -47,7 +47,14 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tunel-apps">Tunel Apps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#args">Args</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#includes">Includes</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -84,7 +91,44 @@
 <p>This developer guide includes more complex interactions like contributing
 apps and launchers. If you haven’t read <a class="reference internal" href="installation.html#getting-started-installation"><span class="std std-ref">Installation</span></a>
 you should do that first.</p>
-<p><strong>tba</strong></p>
+<section id="tunel-apps">
+<h2>Tunel Apps<a class="headerlink" href="#tunel-apps" title="Permalink to this heading"></a></h2>
+<section id="args">
+<h3>Args<a class="headerlink" href="#args" title="Permalink to this heading"></a></h3>
+<p>When you write an app, it comes down to putting an <code class="docutils literal notranslate"><span class="pre">app.yaml</span></code> under some nested
+subfolder of the tunel app folders (or a custom one that you’ve created and adding
+to your tunel settings under <code class="docutils literal notranslate"><span class="pre">apps_dirs</span></code>. An app definition looks like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">launcher</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">singularity</span><span class="w"></span>
+<span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter.sh</span><span class="w"></span>
+<span class="nt">args</span><span class="p">:</span><span class="w"></span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Note that args should be a list of arguments that can be rendered in your template.
+If you need a default, this should be provided on the level of the template.</p>
+</section>
+<section id="includes">
+<h3>Includes<a class="headerlink" href="#includes" title="Permalink to this heading"></a></h3>
+<p>Since there is often shared logic between apps, we have a shared templates
+folder in which you can write snippets that intend to be shared. As an example,
+it’s fairly common with Singularity containers to want to check for a cache directory
+being set, and if it’s not set, set it somewhere with a lot of space (e.g., a temporary
+filesystem). The snippet in bash might look like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">if [ -z ${SINGULARITY_CACHEDIR+x} ]; then</span>
+<span class="go">    export SINGULARITY_CACHEDIR=/tmp</span>
+<span class="go">fi</span>
+</pre></div>
+</div>
+<p>And then within your templates for a script or sbatch script, instead of needing
+to write that out many times (and update each one) you can include the template:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Include Singularity cachedir <span class="k">if</span> not <span class="nb">set</span>
+<span class="go">{% include &quot;bash/singularity-cache-tmp.sh&quot; %}</span>
+</pre></div>
+</div>
+<p>Note that this templates directory is at <code class="docutils literal notranslate"><span class="pre">tunel/templates</span></code> and should be organized
+logically (e.g., by language or other relevant context).</p>
+</section>
+</section>
 </section>
 
 

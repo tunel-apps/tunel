@@ -97,9 +97,79 @@ Do not run this command if there is content in the file that you might overwrite
 Settings File
 -------------
 
-Tunel has a default settings file at [tunel/settings.yml](tunel/settings.yml]) that you can tweak
+Tunel has a default settings file at ``tunel/settings.yml`` that you can tweak
 on your local machine. The defaults should work for most, but we will detail some of the ones
-that might need customization depending on your cluster.
+that might need customization depending on your cluster. Settings includes the following:
+
+
+.. list-table:: Title
+   :widths: 25 65 10
+   :header-rows: 1
+
+   * - Name
+     - Description
+     - Default
+   * - tunel_home
+     - The directory on your local machine to write any local assets, e.g., "tunel" will be written here
+     - ``$HOME`` locally
+   * - tunel_remote_home
+     - The directory on your remote to write "tunel" with scripts, sockets, and assets
+     - ``$HOME`` on your remote
+   * - tunel_spinner
+     - Tunel spinner for logger (see `example spinners <https://asciinema.org/a/504268>`_)
+     - dots
+   * - tunel_remote_work
+     - Working directory to use for notebooks or apps. If not set, can be set on command line with ``--workdir``
+     - ``$HOME``
+   * - tunel_remote_sockets
+     - Specific directory for remote sockets
+     - ``$HOME/.tunel``
+   * - ssh_port
+     - set a default port to use for ssh
+     - 22
+   * - shell
+     - set a default shell
+     - /bin/bash
+   * - remote_port
+     - remote port to use (this should be randomly generated unless set here)
+     - unset
+   * - local_port
+     - local port to use (when mapping a notebook, etc.)
+     - 7789
+   * - ssh_config
+     - Default ssh config to read from
+     - ``~/.ssh/config``
+   * - ssh_sockets
+     - Default directory to store sockets
+     - ``~/.ssh/sockets``
+   * - apps_dirs
+     - Additional directories with apps to add (searched in order here)
+     - ``$default_apps`` (in tunel/apps)
+   * - launchers.singularity.paths
+     - Add these to the path (e.g., mksquashfs is here) (list)
+     - ``- /usr/sbin``
+   * - launchers.singularity.environment
+     - key value pairs of environment variables
+     - ``- HELLO=MOTO``
+   * - launchers.slurm.paths
+     - Add these to the path (e.g., mksquashfs is here) (list)
+     - ``- /usr/sbin``
+   * - launchers.slurm.memory
+     - Default job memory to ask for
+     - 8000
+   * - launchers.slurm.time
+     - Default job time to ask for
+     - 3:00:00
+   * - min_port
+     - If random port selection used (random port is null) allow within this range
+     - 90000
+   * - max_port
+     - If random port selection used (random port is null) allow within this range
+     - 99999
+   * - config_editor
+     - Default config editor
+     - vim
+
 
 Singularity Containers
 ----------------------
@@ -302,7 +372,7 @@ default apps directory:
       - $default_apps
 
 
-This defaults to [tunel/apps](tunel/apps) and although it is under development, it looks something like this:
+This defaults to ``tunel/apps`` and although it is under development, it looks something like this:
 
 .. code-block:: console
 
@@ -328,31 +398,35 @@ You can currently list available apps found on these paths as follows:
     slurm/port/jupyter   slurm
    
 
-If you need to use a socket (e.g., your cluster doesn't support ports) you can try:
-
-
-.. code-block:: console
-
-    $ tunel run-app waffles slurm/socket/jupyter
-
-
-This will start the job, show you two options for ssh commands to connect when the notebook is ready (e.g., when the output
+If you need to use a socket, the app will have needs->socket->true. Socket enabled apps will
+start the job, show you two options for ssh commands to connect when the notebook is ready (e.g., when the output
 shows up with the token) and then you can copy paste that into a separate terminal to start the tunnel.
 This might be possible to do on your behalf, but I like the user having control of when to start / stop it
 so this is the current design. It will ask you for your password, and if you don't want to do that,
-try adding your rsa keys to the authorized_keys file in your ~/.ssh directory on your cluster (thanks to [@becker33](https://github.com/becker33) for this tip)!
-I just created an account on OSG so I should be able to work on the port connection use case soon!
+try adding your rsa keys to the authorized_keys file in your ~/.ssh directory on your cluster (thanks to `@becker33 <https://github.com/becker33>`_ for this tip)!
+
+workdir
+^^^^^^^
+
+Tunel has a special setup for working directory:
+
+1. If you set ``--workdir`` on the command line (and the app uses it in its template) it will use this.
+2. Otherwise, set ``tunel_remote_work`` in your settings.yaml to set a more global working directory.
+3. The default working directory, given nothing else is set, is ``$HOME``
+
 
 app arguments
 ^^^^^^^^^^^^^
 
-Apps can be customized with arguments. For example, the `slurm/socket/jupyter-singularity` app can run a jupyter notebook
-or a jupyterlab instance, and to do that, you can see the argument defined in the app.yaml:
+Apps can be customized with arguments. For example, the ``singularity/port/jupyter`` app can run a jupyter notebook,
+with a default jupyter container, or one that you select with container:
 
-TODO
+.. code-block:: console
 
-```yaml
-```
+    $ tunel run-app waffles singularity/port/jupyter --container=docker://jupyter/datascience-notebook
+
+For the above, since it's for a Singularity container we provide the full unique resource identifier with ``docker://``.
+Also note that app arguments *must* start with two slashes.
 
 
 More Detail

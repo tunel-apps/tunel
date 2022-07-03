@@ -83,7 +83,9 @@
 
 <span class="kn">from</span> <span class="nn">tunel.logger</span> <span class="kn">import</span> <span class="n">logger</span>
 <span class="kn">import</span> <span class="nn">tunel.utils</span> <span class="k">as</span> <span class="nn">utils</span>
-<span class="kn">import</span> <span class="nn">tunel.ssh</span>
+
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">tunel.launcher.base</span> <span class="kn">import</span> <span class="n">Launcher</span>
@@ -101,7 +103,64 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">shell</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">print_output</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">print_output</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Singularity.run_app"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.singularity.Singularity.run_app">[docs]</a>    <span class="k">def</span> <span class="nf">run_app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A Singularity app means running a container directly with some arguments, etc.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Make sure we set the username to the ssh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span>
+
+        <span class="c1"># Add any paths from the config</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;paths&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="c1"># Prepare dictionary with content to render into recipes</span>
+        <span class="n">render</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_render</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span>
+
+        <span class="c1"># Clean up previous sockets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;rm&quot;</span><span class="p">,</span> <span class="s2">&quot;-rf&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/*.sock&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;scriptdir&quot;</span><span class="p">]])</span>
+
+        <span class="c1"># Load the app template</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">load_template</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">render</span><span class="p">)</span>
+
+        <span class="c1"># Write script to temporary file</span>
+        <span class="n">tmpfile</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_tmpfile</span><span class="p">()</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+        <span class="c1"># Copy over to server</span>
+        <span class="n">remote_script</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_assets_dir</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">script</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">scp_to</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">,</span> <span class="n">remote_script</span><span class="p">)</span>
+
+        <span class="c1"># Instead of a Singularity command, we run the script</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;== INSTRUCTIONS WILL BE PRINTED 10 second delay ==&quot;</span><span class="p">)</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span>
+            <span class="n">remote_script</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_tunnel_instructions</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;socket&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Singularity.print_tunnel_instructions"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.singularity.Singularity.print_tunnel_instructions">[docs]</a>    <span class="k">def</span> <span class="nf">print_tunnel_instructions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">socket</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start a separate thread to print connection details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">print_tunnel_instructions</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Logger&quot;</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">socket</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="print_tunnel_instructions"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.singularity.print_tunnel_instructions">[docs]</a><span class="k">def</span> <span class="nf">print_tunnel_instructions</span><span class="p">(</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">socket</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+    <span class="n">ssh</span><span class="o">.</span><span class="n">tunnel_login_node</span><span class="p">(</span><span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

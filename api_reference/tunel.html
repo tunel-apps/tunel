@@ -56,6 +56,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="tunel.client.html">tunel.client package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tunel.launcher.html">tunel.launcher package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.ssh.html">tunel.ssh package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.templates.html">tunel.templates package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tunel.utils.html">tunel.utils package</a></li>
 </ul>
 </li>
@@ -65,7 +67,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-tunel.logger">tunel.logger module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-tunel.schemas">tunel.schemas module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-tunel.settings">tunel.settings module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-tunel.ssh">tunel.ssh module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tunel.template">tunel.template module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-tunel.version">tunel.version module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-tunel">Module contents</a></li>
 </ul>
@@ -130,6 +132,17 @@
 <li class="toctree-l2"><a class="reference internal" href="tunel.launcher.html#module-tunel.launcher">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="tunel.ssh.html">tunel.ssh package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tunel.ssh.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.ssh.html#module-tunel.ssh.commands">tunel.ssh.commands module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.ssh.html#module-tunel.ssh.ssh">tunel.ssh.ssh module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.ssh.html#module-tunel.ssh">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tunel.templates.html">tunel.templates package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tunel.templates.html#module-tunel.templates">Module contents</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="tunel.utils.html">tunel.utils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tunel.utils.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tunel.utils.html#module-tunel.utils.fileio">tunel.utils.fileio module</a></li>
@@ -150,6 +163,15 @@
 <dt class="sig sig-object py" id="tunel.apps.App">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.apps.</span></span><span class="sig-name descname"><span class="pre">App</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#App"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.App" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tunel.apps.App.add_args">
+<span class="sig-name descname"><span class="pre">add_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extra</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#App.add_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.App.add_args" title="Permalink to this definition"></a></dt>
+<dd><p>Extra is a list of args, in either format:</p>
+<p>–name=value
+–flag</p>
+<p>They must start with – to be considered.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="tunel.apps.App.app_dir">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">app_dir</span></span><a class="headerlink" href="#tunel.apps.App.app_dir" title="Permalink to this definition"></a></dt>
@@ -201,7 +223,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tunel.apps.get_app">
-<span class="sig-prename descclassname"><span class="pre">tunel.apps.</span></span><span class="sig-name descname"><span class="pre">get_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#get_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.get_app" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">tunel.apps.</span></span><span class="sig-name descname"><span class="pre">get_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/apps.html#get_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.apps.get_app" title="Permalink to this definition"></a></dt>
 <dd><p>Given an app name, get the loaded app for it</p>
 </dd></dl>
 
@@ -476,56 +498,23 @@ a dictionary-like class with extra functions.</p>
 </dd></dl>
 
 </section>
-<section id="module-tunel.ssh">
-<span id="tunel-ssh-module"></span><h2>tunel.ssh module<a class="headerlink" href="#module-tunel.ssh" title="Permalink to this heading"></a></h2>
+<section id="module-tunel.template">
+<span id="tunel-template-module"></span><h2>tunel.template module<a class="headerlink" href="#module-tunel.template" title="Permalink to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="tunel.ssh.Tunnel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.ssh.</span></span><span class="sig-name descname"><span class="pre">Tunnel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="tunel.template.Template">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tunel.template.</span></span><span class="sig-name descname"><span class="pre">Template</span></span><a class="reference internal" href="../_modules/tunel/template.html#Template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.template.Template" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>An ssh tunnel provides a route for the user to interact with an application
-This basically enables local port forwarding (called an ss tunnel) using
-the library Paramiko.</p>
+<p>Supporting functions for loading any kind of apps template</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="tunel.ssh.Tunnel.execute">
-<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">login_shell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.execute" title="Permalink to this definition"></a></dt>
-<dd><p>Execute a command via ssh and a known, named connection.</p>
+<dt class="sig sig-object py" id="tunel.template.Template.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/template.html#Template.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.template.Template.get" title="Permalink to this definition"></a></dt>
+<dd><p>Get a template from templates</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="tunel.ssh.Tunnel.execute_or_fail">
-<span class="sig-name descname"><span class="pre">execute_or_fail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.execute_or_fail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.execute_or_fail" title="Permalink to this definition"></a></dt>
-<dd><p>Execute a command, show the command preview, only continue on success.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="tunel.ssh.Tunnel.print_output">
-<span class="sig-name descname"><span class="pre">print_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.print_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.print_output" title="Permalink to this definition"></a></dt>
-<dd><p>Given an output dict, print and color appropriately.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="tunel.ssh.Tunnel.scp_from">
-<span class="sig-name descname"><span class="pre">scp_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.scp_from"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.scp_from" title="Permalink to this definition"></a></dt>
-<dd><p>Copy a file from the server to local</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="tunel.ssh.Tunnel.scp_to">
-<span class="sig-name descname"><span class="pre">scp_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.scp_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.scp_to" title="Permalink to this definition"></a></dt>
-<dd><p>Copy a file onto the server</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="tunel.ssh.Tunnel.shell">
-<span class="sig-name descname"><span class="pre">shell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interactive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.shell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.shell" title="Permalink to this definition"></a></dt>
-<dd><p>Pass the process over to shell</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="tunel.ssh.Tunnel.tunnel">
-<span class="sig-name descname"><span class="pre">tunnel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">socket</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/ssh.html#Tunnel.tunnel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.ssh.Tunnel.tunnel" title="Permalink to this definition"></a></dt>
-<dd><p>Given a remote and local port, open a tunnel. If an isolated node ssh is
-done, the name of the machine is required too.</p>
+<dt class="sig sig-object py" id="tunel.template.Template.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/template.html#Template.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.template.Template.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load the default module template.</p>
 </dd></dl>
 
 </dd></dl>

@@ -65,6 +65,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#apps">apps</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#workdir">workdir</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app-arguments">app arguments</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#more-detail">More Detail</a></li>
 </ul>
@@ -180,9 +181,105 @@ If you don’t have a file in the location <cite>~/.ssh/config</cite> then you c
 </section>
 <section id="settings-file">
 <h3>Settings File<a class="headerlink" href="#settings-file" title="Permalink to this heading"></a></h3>
-<p>Tunel has a default settings file at [tunel/settings.yml](tunel/settings.yml]) that you can tweak
+<p>Tunel has a default settings file at <code class="docutils literal notranslate"><span class="pre">tunel/settings.yml</span></code> that you can tweak
 on your local machine. The defaults should work for most, but we will detail some of the ones
-that might need customization depending on your cluster.</p>
+that might need customization depending on your cluster. Settings includes the following:</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Title</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 65%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>tunel_home</p></td>
+<td><p>The directory on your local machine to write any local assets, e.g., “tunel” will be written here</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$HOME</span></code> locally</p></td>
+</tr>
+<tr class="row-odd"><td><p>tunel_remote_home</p></td>
+<td><p>The directory on your remote to write “tunel” with scripts, sockets, and assets</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$HOME</span></code> on your remote</p></td>
+</tr>
+<tr class="row-even"><td><p>tunel_spinner</p></td>
+<td><p>Tunel spinner for logger (see <a class="reference external" href="https://asciinema.org/a/504268">example spinners</a>)</p></td>
+<td><p>dots</p></td>
+</tr>
+<tr class="row-odd"><td><p>tunel_remote_work</p></td>
+<td><p>Working directory to use for notebooks or apps. If not set, can be set on command line with <code class="docutils literal notranslate"><span class="pre">--workdir</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$HOME</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>tunel_remote_sockets</p></td>
+<td><p>Specific directory for remote sockets</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$HOME/.tunel</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>ssh_port</p></td>
+<td><p>set a default port to use for ssh</p></td>
+<td><p>22</p></td>
+</tr>
+<tr class="row-even"><td><p>shell</p></td>
+<td><p>set a default shell</p></td>
+<td><p>/bin/bash</p></td>
+</tr>
+<tr class="row-odd"><td><p>remote_port</p></td>
+<td><p>remote port to use (this should be randomly generated unless set here)</p></td>
+<td><p>unset</p></td>
+</tr>
+<tr class="row-even"><td><p>local_port</p></td>
+<td><p>local port to use (when mapping a notebook, etc.)</p></td>
+<td><p>7789</p></td>
+</tr>
+<tr class="row-odd"><td><p>ssh_config</p></td>
+<td><p>Default ssh config to read from</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">~/.ssh/config</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>ssh_sockets</p></td>
+<td><p>Default directory to store sockets</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">~/.ssh/sockets</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>apps_dirs</p></td>
+<td><p>Additional directories with apps to add (searched in order here)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$default_apps</span></code> (in tunel/apps)</p></td>
+</tr>
+<tr class="row-even"><td><p>launchers.singularity.paths</p></td>
+<td><p>Add these to the path (e.g., mksquashfs is here) (list)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">/usr/sbin</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>launchers.singularity.environment</p></td>
+<td><p>key value pairs of environment variables</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">HELLO=MOTO</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>launchers.slurm.paths</p></td>
+<td><p>Add these to the path (e.g., mksquashfs is here) (list)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">/usr/sbin</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>launchers.slurm.memory</p></td>
+<td><p>Default job memory to ask for</p></td>
+<td><p>8000</p></td>
+</tr>
+<tr class="row-even"><td><p>launchers.slurm.time</p></td>
+<td><p>Default job time to ask for</p></td>
+<td><p>3:00:00</p></td>
+</tr>
+<tr class="row-odd"><td><p>min_port</p></td>
+<td><p>If random port selection used (random port is null) allow within this range</p></td>
+<td><p>90000</p></td>
+</tr>
+<tr class="row-even"><td><p>max_port</p></td>
+<td><p>If random port selection used (random port is null) allow within this range</p></td>
+<td><p>99999</p></td>
+</tr>
+<tr class="row-odd"><td><p>config_editor</p></td>
+<td><p>Default config editor</p></td>
+<td><p>vim</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="singularity-containers">
 <h3>Singularity Containers<a class="headerlink" href="#singularity-containers" title="Permalink to this heading"></a></h3>
@@ -328,7 +425,7 @@ default apps directory:</p>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$default_apps</span><span class="w"></span>
 </pre></div>
 </div>
-<p>This defaults to [tunel/apps](tunel/apps) and although it is under development, it looks something like this:</p>
+<p>This defaults to <code class="docutils literal notranslate"><span class="pre">tunel/apps</span></code> and although it is under development, it looks something like this:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tree tunel/apps/slurm/
 <span class="go">tunel/apps/slurm/</span>
 <span class="go">├── port</span>
@@ -349,23 +446,30 @@ You can currently list available apps found on these paths as follows:</p>
 <span class="go">slurm/port/jupyter   slurm</span>
 </pre></div>
 </div>
-<p>If you need to use a socket (e.g., your cluster doesn’t support ports) you can try:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-app waffles slurm/socket/jupyter
-</pre></div>
-</div>
-<p>This will start the job, show you two options for ssh commands to connect when the notebook is ready (e.g., when the output
+<p>If you need to use a socket, the app will have needs-&gt;socket-&gt;true. Socket enabled apps will
+start the job, show you two options for ssh commands to connect when the notebook is ready (e.g., when the output
 shows up with the token) and then you can copy paste that into a separate terminal to start the tunnel.
 This might be possible to do on your behalf, but I like the user having control of when to start / stop it
 so this is the current design. It will ask you for your password, and if you don’t want to do that,
-try adding your rsa keys to the authorized_keys file in your ~/.ssh directory on your cluster (thanks to [&#64;becker33](<a class="reference external" href="https://github.com/becker33">https://github.com/becker33</a>) for this tip)!
-I just created an account on OSG so I should be able to work on the port connection use case soon!</p>
+try adding your rsa keys to the authorized_keys file in your ~/.ssh directory on your cluster (thanks to <a class="reference external" href="https://github.com/becker33">&#64;becker33</a> for this tip)!</p>
+<section id="workdir">
+<h4>workdir<a class="headerlink" href="#workdir" title="Permalink to this heading"></a></h4>
+<p>Tunel has a special setup for working directory:</p>
+<ol class="arabic simple">
+<li><p>If you set <code class="docutils literal notranslate"><span class="pre">--workdir</span></code> on the command line (and the app uses it in its template) it will use this.</p></li>
+<li><p>Otherwise, set <code class="docutils literal notranslate"><span class="pre">tunel_remote_work</span></code> in your settings.yaml to set a more global working directory.</p></li>
+<li><p>The default working directory, given nothing else is set, is <code class="docutils literal notranslate"><span class="pre">$HOME</span></code></p></li>
+</ol>
+</section>
 <section id="app-arguments">
 <h4>app arguments<a class="headerlink" href="#app-arguments" title="Permalink to this heading"></a></h4>
-<p>Apps can be customized with arguments. For example, the <cite>slurm/socket/jupyter-singularity</cite> app can run a jupyter notebook
-or a jupyterlab instance, and to do that, you can see the argument defined in the app.yaml:</p>
-<p>TODO</p>
-<p><code class="docutils literal notranslate"><span class="pre">`yaml</span>
-<span class="pre">`</span></code></p>
+<p>Apps can be customized with arguments. For example, the <code class="docutils literal notranslate"><span class="pre">singularity/port/jupyter</span></code> app can run a jupyter notebook,
+with a default jupyter container, or one that you select with container:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-app waffles singularity/port/jupyter --container<span class="o">=</span>docker://jupyter/datascience-notebook
+</pre></div>
+</div>
+<p>For the above, since it’s for a Singularity container we provide the full unique resource identifier with <code class="docutils literal notranslate"><span class="pre">docker://</span></code>.
+Also note that app arguments <em>must</em> start with two slashes.</p>
 </section>
 <section id="more-detail">
 <h4>More Detail<a class="headerlink" href="#more-detail" title="Permalink to this heading"></a></h4>
