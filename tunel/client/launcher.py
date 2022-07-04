@@ -6,7 +6,7 @@ __license__ = "MPL 2.0"
 import tunel.launcher
 import tunel.apps
 
-# Generic stop
+# Generic apps
 
 
 def run_app(args, parser, extra, subparser):
@@ -26,6 +26,21 @@ def stop_app(args, parser, extra, subparser):
 
 
 # Specific to launcher
+
+
+def run_condor(args, parser, extra, subparser):
+
+    launcher = tunel.launcher.HTCondor(
+        args.server, remote_port=args.port, local_port=args.local_port
+    )
+    launcher.run(extra)
+
+
+def stop_condor(args, parser, extra, subparser):
+    launcher = tunel.launcher.HTCondor(
+        args.server, remote_port=args.port, local_port=args.local_port
+    )
+    launcher.stop(extra)
 
 
 def run_singularity(args, parser, extra, subparser):

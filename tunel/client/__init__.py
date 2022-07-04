@@ -85,11 +85,22 @@ def get_parser():
         description="launch a slurm job or session.",
         formatter_class=argparse.RawTextHelpFormatter,
     )
+    run_condor = subparsers.add_parser(
+        "run-condor",
+        description="launch an htcondor job or session.",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
 
     # Stop a slurm running application
     stop_slurm = subparsers.add_parser(
         "stop-slurm",
         description="stop or kill a slurm job or session.",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
+    stop_condor = subparsers.add_parser(
+        "stop-condor",
+        description="stop or kill an HTCondor job or session.",
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
@@ -137,7 +148,17 @@ def get_parser():
         action="store_true",
     )
 
-    for command in [tunnel, run_singularity, run_slurm, run_app, stop_app, stop_slurm]:
+    launchers = [
+        run_singularity,
+        run_slurm,
+        run_app,
+        stop_app,
+        stop_slurm,
+        run_condor,
+        stop_condor,
+    ]
+
+    for command in [tunnel] + launchers:
         command.add_argument("--port", help="remote port to connect to.")
         command.add_argument("--local-port", help="local port to connect to.")
 
@@ -146,12 +167,7 @@ def get_parser():
         shell,
         execute,
         tunnel,
-        run_singularity,
-        run_slurm,
-        run_app,
-        stop_app,
-        stop_slurm,
-    ]:
+    ] + launchers:
         command.add_argument(
             "server",
             help="server identity to interact with (e.g., name in ~/.ssh/config)",
@@ -222,8 +238,12 @@ def run_tunel():
         from .launcher import run_singularity as main
     if args.command == "run-slurm":
         from .launcher import run_slurm as main
+    if args.command == "run-condor":
+        from .launcher import run_condor as main
     if args.command == "stop-slurm":
         from .launcher import stop_slurm as main
+    if args.command == "stop-condor":
+        from .launcher import stop_condor as main
     if args.command == "run-app":
         from .launcher import run_app as main
     if args.command == "stop-app":

@@ -50,6 +50,12 @@ launchers:
     environment:
      - HELLO=MOTO
 
+  htcondor:
+    paths: 
+     - /usr/sbin
+    memory: 8000
+    time: "3:00:00"
+
   slurm:
 
     # Add these to the path (e.g., mksquashfs is here)

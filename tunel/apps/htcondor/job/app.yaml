@@ -1,0 +1,7 @@
+launcher: htcondor
+script: job.sh
+args:
+  - cpus
+  - memory
+  - disk
+  - njobs

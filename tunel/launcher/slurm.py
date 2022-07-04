@@ -99,19 +99,18 @@ class Slurm(Launcher):
         result = template.render(**render)
 
         # Write script to temporary file
-        tmpfile = utils.get_tmpfile()
-        utils.write_file(tmpfile, result)
+        tmpfile = self.write_temporary_script(result)
 
         # Copy over to server
-        remote_script = os.path.join(self.remote_assets_dir, app.name, app.script)
-        self.ssh.scp_to(tmpfile, remote_script)
+        self.ssh.scp_to(tmpfile, render["script"])
+        os.remove(tmpfile)
 
         # Assemble the command
         command = [
             "sbatch",
             "--job-name=%s" % app.job_name,
-            "--output=%s.out" % remote_script,
-            "--error=%s.err" % remote_script,
+            "--output=%s.out" % render["log_output"],
+            "--error=%s.err" % render["log_error"],
             remote_script,
         ] + render.get("args", [])
 

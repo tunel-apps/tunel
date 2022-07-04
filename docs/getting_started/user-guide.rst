@@ -290,7 +290,7 @@ Our launchers include:
  - **singularity** run a singularity container on the server directly.
  - **docker** run a docker container on the server directly.
  - **slurm**: submit jobs (or applications) via SLURM, either a job or a service on a node to forward back.
-
+ - **condor**: submit jobs (or apps) to an HTCondor cluster.
 
 Each launcher can be run via an app, meaning you do a ``run-app`` on an app.yaml that specifies the launcher,
 and we also provide courtesy functions (e.g., ``run-singularity``). These might be removed at some point, not decided yet.
@@ -348,7 +348,7 @@ The most basic command for the slurm launcher is to get an interactive node, as 
     No command supplied, will init interactive session!
     (base) bash-4.2$ 
     
-Let's say that you run an app [described below](#apps) that launches a slurm job to generate a job named `slurm-jupyter`. Here is how you'd kill it:
+Let's say that you run an app (described below) that launches a slurm job to generate a job named `slurm-jupyter`. Here is how you'd kill it:
 
 .. code-block:: console
    
@@ -357,7 +357,55 @@ Let's say that you run an app [described below](#apps) that launches a slurm job
     (base) bash-4.2$ 
 
 
-More coming soon!
+HTCondor
+^^^^^^^^
+
+To get an interactive node via HTCondor:
+
+
+.. code-block:: console
+
+    $ tunel run-condor osg
+    No command supplied, will init interactive session!
+    (base) bash-4.2$ 
+
+You can also run a specific command to hit the head node:
+
+    $ tunel run-condor osg ls
+    tunel
+    tutorial-quickstart
+    
+To launch a job, you can use an app that has a particular submission script provided:
+
+.. code-block:: console
+   
+    $ tunel run-app osg htcondor/job
+
+For any HTCondor job, you can customize the following on the fly as an argument:
+
+ - **njobs**: the number of jobs to queue (defaults to 1 if unset)
+ - **memory**: MB of memory, without "MB" (defaults to 1 MB)
+ - **disk**: MB of disk space, also without MB (defaults to 1 MB)
+ - **cpus**: number of CPUs to request (defaults to 1)
+
+
+For example:
+
+.. code-block:: console
+
+    $ tunel run-app osg htcondor/job --cpus=1 --disk=1 --njobs=1
+
+And then to stop a job:
+
+.. code-block:: console
+
+    $ tunel stop-condor osg htcondor-job
+
+.. ::note
+
+    This only adds basic functionality - a Singularity interactive notebook has been tested
+    but @vsoch doesn't have a full HTCondor cluster (that allows interactive jobs) to fully
+    test interactive apps! If you can help here, please do!
 
 apps
 ----
