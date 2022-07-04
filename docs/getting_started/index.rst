@@ -20,7 +20,7 @@ In its simplest form this means:
 If you have any questions or issues, please `let us know <https://github.com/vsoch/tunel/issues>`_
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    installation
    user-guide

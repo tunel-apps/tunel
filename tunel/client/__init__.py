@@ -109,6 +109,12 @@ def get_parser():
         description="list apps found on the known settings paths",
         formatter_class=argparse.RawTextHelpFormatter,
     )
+    list_app.add_argument(
+        "--validate",
+        help="validate apps loading",
+        default=False,
+        action="store_true",
+    )
 
     # Issue a command to a server
     execute = subparsers.add_parser(
