@@ -441,9 +441,15 @@ default apps directory:</p>
 <p>Notice that apps are organized into being accessible via port (not recommended) vs. socket.
 You can currently list available apps found on these paths as follows:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel list-apps
-<span class="go">Name                 Launcher</span>
-<span class="go">slurm/socket/jupyter slurm</span>
-<span class="go">slurm/port/jupyter   slurm</span>
+<span class="go">                     Tunel Apps</span>
+<span class="go">|---|----------------------------------|-------------|</span>
+<span class="go">| # | Name                             |   Launcher  |</span>
+<span class="go">|---|----------------------------------|-------------|</span>
+<span class="go">│ 0 │ slurm/socket/singularity-jupyter │       slurm │</span>
+<span class="go">│ 1 │ slurm/socket/jupyter             │       slurm │</span>
+<span class="go">│ 2 │ slurm/port/jupyter               │       slurm │</span>
+<span class="go">│ 3 │ singularity/socket/jupyter       │ singularity │</span>
+<span class="go">└───┴──────────────────────────────────┴─────────────┘</span>
 </pre></div>
 </div>
 <p>If you need to use a socket, the app will have needs-&gt;socket-&gt;true. Socket enabled apps will

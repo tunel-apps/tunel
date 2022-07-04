@@ -183,7 +183,7 @@
     <span class="k">return</span> <span class="n">app</span></div>
 
 
-<div class="viewcode-block" id="list_apps"><a class="viewcode-back" href="../../api_reference/tunel.html#tunel.apps.list_apps">[docs]</a><span class="k">def</span> <span class="nf">list_apps</span><span class="p">(</span><span class="n">settings_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="list_apps"><a class="viewcode-back" href="../../api_reference/tunel.html#tunel.apps.list_apps">[docs]</a><span class="k">def</span> <span class="nf">list_apps</span><span class="p">(</span><span class="n">settings_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the user settings,</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -202,8 +202,11 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">app</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">app_dir</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not valid&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span><span class="p">))</span>
-                <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not valid&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not valid&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+                    <span class="k">continue</span>
             <span class="n">apps</span><span class="p">[</span><span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">app</span>
 
     <span class="k">return</span> <span class="n">apps</span></div>
