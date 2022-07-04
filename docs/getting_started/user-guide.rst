@@ -393,9 +393,15 @@ You can currently list available apps found on these paths as follows:
 .. code-block:: console
 
     $ tunel list-apps
-    Name                 Launcher
-    slurm/socket/jupyter slurm
-    slurm/port/jupyter   slurm
+                         Tunel Apps                                                                                      
+    |---|----------------------------------|-------------|
+    | # | Name                             |   Launcher  |                                                               
+    |---|----------------------------------|-------------|                                                               
+    │ 0 │ slurm/socket/singularity-jupyter │       slurm │                                                                
+    │ 1 │ slurm/socket/jupyter             │       slurm │                                                                
+    │ 2 │ slurm/port/jupyter               │       slurm │                                                                
+    │ 3 │ singularity/socket/jupyter       │ singularity │                                                                
+    └───┴──────────────────────────────────┴─────────────┘    
    
 
 If you need to use a socket, the app will have needs->socket->true. Socket enabled apps will

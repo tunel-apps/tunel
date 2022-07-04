@@ -105,7 +105,7 @@ def get_app(app, extra=None):
     return app
 
 
-def list_apps(settings_file=None):
+def list_apps(settings_file=None, validate=False):
     """
     Given the user settings,
     """
@@ -124,8 +124,11 @@ def list_apps(settings_file=None):
             try:
                 app = App(filename, app_dir)
             except:
-                logger.exit("%s is not valid" % (filename))
-                continue
+                if validate:
+                    logger.exit("%s is not valid" % (filename))
+                else:
+                    logger.error("%s is not valid" % (filename))
+                    continue
             apps[app.name] = app
 
     return apps

@@ -30,7 +30,7 @@ Create "tunel" command over
 - should tunel use shpc to pull / run containers, or just do on the fly?
 - tunel alone should open UI that feels like cloud
 
-## Developer Environemnts
+## Developer Environments
 
 Request a node, akin to cloud - come up with standard sizes (and can we sniff slurm conf for this too?) and then
 offer a UI to deploy!
