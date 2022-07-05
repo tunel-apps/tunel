@@ -85,7 +85,7 @@
 <span class="kn">import</span> <span class="nn">tunel.launcher</span>
 <span class="kn">import</span> <span class="nn">tunel.apps</span>
 
-<span class="c1"># Generic stop</span>
+<span class="c1"># Generic apps</span>
 
 
 <div class="viewcode-block" id="run_app"><a class="viewcode-back" href="../../../api_reference/tunel.client.html#tunel.client.launcher.run_app">[docs]</a><span class="k">def</span> <span class="nf">run_app</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">extra</span><span class="p">,</span> <span class="n">subparser</span><span class="p">):</span>
@@ -105,6 +105,21 @@
 
 
 <span class="c1"># Specific to launcher</span>
+
+
+<div class="viewcode-block" id="run_condor"><a class="viewcode-back" href="../../../api_reference/tunel.client.html#tunel.client.launcher.run_condor">[docs]</a><span class="k">def</span> <span class="nf">run_condor</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">extra</span><span class="p">,</span> <span class="n">subparser</span><span class="p">):</span>
+
+    <span class="n">launcher</span> <span class="o">=</span> <span class="n">tunel</span><span class="o">.</span><span class="n">launcher</span><span class="o">.</span><span class="n">HTCondor</span><span class="p">(</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">remote_port</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">local_port</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">local_port</span>
+    <span class="p">)</span>
+    <span class="n">launcher</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">extra</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="stop_condor"><a class="viewcode-back" href="../../../api_reference/tunel.client.html#tunel.client.launcher.stop_condor">[docs]</a><span class="k">def</span> <span class="nf">stop_condor</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">extra</span><span class="p">,</span> <span class="n">subparser</span><span class="p">):</span>
+    <span class="n">launcher</span> <span class="o">=</span> <span class="n">tunel</span><span class="o">.</span><span class="n">launcher</span><span class="o">.</span><span class="n">HTCondor</span><span class="p">(</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">remote_port</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">local_port</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">local_port</span>
+    <span class="p">)</span>
+    <span class="n">launcher</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">extra</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="run_singularity"><a class="viewcode-back" href="../../../api_reference/tunel.client.html#tunel.client.launcher.run_singularity">[docs]</a><span class="k">def</span> <span class="nf">run_singularity</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">extra</span><span class="p">,</span> <span class="n">subparser</span><span class="p">):</span>

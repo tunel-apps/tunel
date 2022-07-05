@@ -54,3 +54,58 @@ to write that out many times (and update each one) you can include the template:
 
 Note that this templates directory is at ``tunel/templates`` and should be organized
 logically (e.g., by language or other relevant context).
+
+
+Template Variables
+------------------
+
+If you write a job file or template, in addition to arguments that the user might
+provide on the command line (and you should always set a default for) the following
+variables are always available:
+
+.. list-table:: Template Variables
+   :widths: 25 65 10
+   :header-rows: 1
+
+   * - Name
+     - Description
+     - Default
+   * - args
+     - Dictionary of arguments that a user might provide from the command line (e.g., ``{{ args.cpus }}``.
+     - {}
+   * - paths
+     - List of paths derived from the launcher config in settings, plus any from the app.needs.path section of an app.yaml
+     - []
+   * - jobslug
+     - The full job name with path separators replaced with single dashes. E.g., ``{{ jobslug }}`` renders to ``htcondor-job``
+     - defaults to the job name slugified
+   * - jobname
+     - The job name, automatically assigned
+     - defaults to the job name
+   * - port
+     - ssh remote port
+     - defaults to the default in your settings.yaml
+   * - scriptdir
+     - the remote assets directory plus the app name
+     - As an example, ``${HOME}/tunel/htcondor/job``
+   * - socket
+     - fullpath to a socket file (.sock) in case the job needs one
+     - As an example, ``${HOME}/tunel/htcondor/job/htcondor-job.sock``     
+   * - script
+     - fullpath to a main job script ("script" in the app.yaml) post-render
+     - As an example, ``${HOME}/tunel/slurm/jupyter/jupyter.sbatch``
+   * - script_basename
+     - The script basename
+     - As an example, ``jupyter.sbatch``
+   * - log_output
+     - log output file (*.out) in the scriptdir
+     - As an example, ``jupyter.sbatch.out``
+   * - log_error
+     - log error file (*.err) in the scriptdir
+     - As an example, ``jupyter.sbatch.err``
+   * - log_file
+     - single logging file (if needed) in the scriptdir
+     - As an example, ``jupyter.sbatch.log``
+   * - workdir
+     - If ``tunel_remote_work`` is defined in settings, this variable first, overridden by --workdir on the command line.
+     - As an example, ``/usr/workdir/username/``

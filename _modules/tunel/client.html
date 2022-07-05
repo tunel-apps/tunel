@@ -163,11 +163,22 @@
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;launch a slurm job or session.&quot;</span><span class="p">,</span>
         <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="n">run_condor</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="s2">&quot;run-condor&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;launch an htcondor job or session.&quot;</span><span class="p">,</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># Stop a slurm running application</span>
     <span class="n">stop_slurm</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
         <span class="s2">&quot;stop-slurm&quot;</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;stop or kill a slurm job or session.&quot;</span><span class="p">,</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">stop_condor</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="s2">&quot;stop-condor&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;stop or kill an HTCondor job or session.&quot;</span><span class="p">,</span>
         <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -215,7 +226,17 @@
         <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="p">[</span><span class="n">tunnel</span><span class="p">,</span> <span class="n">run_singularity</span><span class="p">,</span> <span class="n">run_slurm</span><span class="p">,</span> <span class="n">run_app</span><span class="p">,</span> <span class="n">stop_app</span><span class="p">,</span> <span class="n">stop_slurm</span><span class="p">]:</span>
+    <span class="n">launchers</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">run_singularity</span><span class="p">,</span>
+        <span class="n">run_slurm</span><span class="p">,</span>
+        <span class="n">run_app</span><span class="p">,</span>
+        <span class="n">stop_app</span><span class="p">,</span>
+        <span class="n">stop_slurm</span><span class="p">,</span>
+        <span class="n">run_condor</span><span class="p">,</span>
+        <span class="n">stop_condor</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="p">[</span><span class="n">tunnel</span><span class="p">]</span> <span class="o">+</span> <span class="n">launchers</span><span class="p">:</span>
         <span class="n">command</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--port&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;remote port to connect to.&quot;</span><span class="p">)</span>
         <span class="n">command</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--local-port&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;local port to connect to.&quot;</span><span class="p">)</span>
 
@@ -224,12 +245,7 @@
         <span class="n">shell</span><span class="p">,</span>
         <span class="n">execute</span><span class="p">,</span>
         <span class="n">tunnel</span><span class="p">,</span>
-        <span class="n">run_singularity</span><span class="p">,</span>
-        <span class="n">run_slurm</span><span class="p">,</span>
-        <span class="n">run_app</span><span class="p">,</span>
-        <span class="n">stop_app</span><span class="p">,</span>
-        <span class="n">stop_slurm</span><span class="p">,</span>
-    <span class="p">]:</span>
+    <span class="p">]</span> <span class="o">+</span> <span class="n">launchers</span><span class="p">:</span>
         <span class="n">command</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
             <span class="s2">&quot;server&quot;</span><span class="p">,</span>
             <span class="n">help</span><span class="o">=</span><span class="s2">&quot;server identity to interact with (e.g., name in ~/.ssh/config)&quot;</span><span class="p">,</span>
@@ -300,8 +316,12 @@
         <span class="kn">from</span> <span class="nn">.launcher</span> <span class="kn">import</span> <span class="n">run_singularity</span> <span class="k">as</span> <span class="n">main</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;run-slurm&quot;</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">.launcher</span> <span class="kn">import</span> <span class="n">run_slurm</span> <span class="k">as</span> <span class="n">main</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;run-condor&quot;</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">.launcher</span> <span class="kn">import</span> <span class="n">run_condor</span> <span class="k">as</span> <span class="n">main</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;stop-slurm&quot;</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">.launcher</span> <span class="kn">import</span> <span class="n">stop_slurm</span> <span class="k">as</span> <span class="n">main</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;stop-condor&quot;</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">.launcher</span> <span class="kn">import</span> <span class="n">stop_condor</span> <span class="k">as</span> <span class="n">main</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;run-app&quot;</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">.launcher</span> <span class="kn">import</span> <span class="n">run_app</span> <span class="k">as</span> <span class="n">main</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;stop-app&quot;</span><span class="p">:</span>

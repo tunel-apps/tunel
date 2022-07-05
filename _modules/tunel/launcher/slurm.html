@@ -178,19 +178,18 @@
         <span class="n">result</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">render</span><span class="p">)</span>
 
         <span class="c1"># Write script to temporary file</span>
-        <span class="n">tmpfile</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_tmpfile</span><span class="p">()</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="n">tmpfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_temporary_script</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
         <span class="c1"># Copy over to server</span>
-        <span class="n">remote_script</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_assets_dir</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">script</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">scp_to</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">,</span> <span class="n">remote_script</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">scp_to</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">,</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;script&quot;</span><span class="p">])</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">)</span>
 
         <span class="c1"># Assemble the command</span>
         <span class="n">command</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;sbatch&quot;</span><span class="p">,</span>
             <span class="s2">&quot;--job-name=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">app</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span>
-            <span class="s2">&quot;--output=</span><span class="si">%s</span><span class="s2">.out&quot;</span> <span class="o">%</span> <span class="n">remote_script</span><span class="p">,</span>
-            <span class="s2">&quot;--error=</span><span class="si">%s</span><span class="s2">.err&quot;</span> <span class="o">%</span> <span class="n">remote_script</span><span class="p">,</span>
+            <span class="s2">&quot;--output=</span><span class="si">%s</span><span class="s2">.out&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_output&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;--error=</span><span class="si">%s</span><span class="s2">.err&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_error&quot;</span><span class="p">],</span>
             <span class="n">remote_script</span><span class="p">,</span>
         <span class="p">]</span> <span class="o">+</span> <span class="n">render</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="p">[])</span>
 

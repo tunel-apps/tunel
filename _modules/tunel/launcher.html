@@ -77,6 +77,7 @@
              
   <h1>Source code for tunel.launcher</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Launcher</span>
+<span class="kn">from</span> <span class="nn">.htcondor</span> <span class="kn">import</span> <span class="n">HTCondor</span>
 <span class="kn">from</span> <span class="nn">.slurm</span> <span class="kn">import</span> <span class="n">Slurm</span>
 <span class="kn">from</span> <span class="nn">.singularity</span> <span class="kn">import</span> <span class="n">Singularity</span>
 
@@ -85,6 +86,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get a launcher for a loaded app</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">launcher</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;htcondor&quot;</span><span class="p">,</span> <span class="s2">&quot;condor&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">HTCondor</span>
     <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">launcher</span> <span class="o">==</span> <span class="s2">&quot;slurm&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Slurm</span>
     <span class="k">elif</span> <span class="n">app</span><span class="o">.</span><span class="n">launcher</span> <span class="o">==</span> <span class="s2">&quot;singularity&quot;</span><span class="p">:</span>

@@ -62,6 +62,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#launch">launch</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#singularity">singularity</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#slurm">slurm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#htcondor">HTCondor</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#apps">apps</a><ul>
@@ -185,7 +186,7 @@ If you don’t have a file in the location <cite>~/.ssh/config</cite> then you c
 on your local machine. The defaults should work for most, but we will detail some of the ones
 that might need customization depending on your cluster. Settings includes the following:</p>
 <table class="docutils align-default" id="id1">
-<caption><span class="caption-text">Title</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Settings</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 65%" />
@@ -364,6 +365,7 @@ Our launchers include:</p>
 <li><p><strong>singularity</strong> run a singularity container on the server directly.</p></li>
 <li><p><strong>docker</strong> run a docker container on the server directly.</p></li>
 <li><p><strong>slurm</strong>: submit jobs (or applications) via SLURM, either a job or a service on a node to forward back.</p></li>
+<li><p><strong>condor</strong>: submit jobs (or apps) to an HTCondor cluster.</p></li>
 </ul>
 </div></blockquote>
 <p>Each launcher can be run via an app, meaning you do a <code class="docutils literal notranslate"><span class="pre">run-app</span></code> on an app.yaml that specifies the launcher,
@@ -407,13 +409,48 @@ to customize. Finally, you can even start an interactive shell directly into a c
 <span class="gp gp-VirtualEnv">(base)</span> <span class="go">bash-4.2$</span>
 </pre></div>
 </div>
-<p>Let’s say that you run an app [described below](#apps) that launches a slurm job to generate a job named <cite>slurm-jupyter</cite>. Here is how you’d kill it:</p>
+<p>Let’s say that you run an app (described below) that launches a slurm job to generate a job named <cite>slurm-jupyter</cite>. Here is how you’d kill it:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel stop-slurm oslic slurm-jupyter
 <span class="go">No command supplied, will init interactive session!</span>
 <span class="gp gp-VirtualEnv">(base)</span> <span class="go">bash-4.2$</span>
 </pre></div>
 </div>
-<p>More coming soon!</p>
+</section>
+<section id="htcondor">
+<h4>HTCondor<a class="headerlink" href="#htcondor" title="Permalink to this heading"></a></h4>
+<p>To get an interactive node via HTCondor:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-condor osg
+<span class="go">No command supplied, will init interactive session!</span>
+<span class="gp gp-VirtualEnv">(base)</span> <span class="go">bash-4.2$</span>
+</pre></div>
+</div>
+<p>You can also run a specific command to hit the head node:</p>
+<blockquote>
+<div><p>$ tunel run-condor osg ls
+tunel
+tutorial-quickstart</p>
+</div></blockquote>
+<p>To launch a job, you can use an app that has a particular submission script provided:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-app osg htcondor/job
+</pre></div>
+</div>
+<p>For any HTCondor job, you can customize the following on the fly as an argument:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>njobs</strong>: the number of jobs to queue (defaults to 1 if unset)</p></li>
+<li><p><strong>memory</strong>: MB of memory, without “MB” (defaults to 1 MB)</p></li>
+<li><p><strong>disk</strong>: MB of disk space, also without MB (defaults to 1 MB)</p></li>
+<li><p><strong>cpus</strong>: number of CPUs to request (defaults to 1)</p></li>
+</ul>
+</div></blockquote>
+<p>For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-app osg htcondor/job --cpus<span class="o">=</span><span class="m">1</span> --disk<span class="o">=</span><span class="m">1</span> --njobs<span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>And then to stop a job:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel stop-condor osg htcondor-job
+</pre></div>
+</div>
 </section>
 </section>
 <section id="apps">
