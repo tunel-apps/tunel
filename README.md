@@ -17,9 +17,8 @@ See our ⭐️ [documentation](https://vsoch.github.io/tunel) ⭐️ to get star
 
 ## TODO
 
- - singularity apps should be more advanced with ports, contaners pre-set
- - test on htcondor
- 
+ - update htcondor to use Python API
+  
 Should there be an init/check command that sniffs what is available on a cluster? E.g., singularity, sbatch, sinfo, module load, etc.
 Create "tunel" command over
 

@@ -47,6 +47,7 @@ singularity_launcher = {
     "additionalProperties": False,
 }
 
+# This is also shared by htcondor
 slurm_launcher = {
     "type": "object",
     "required": [
@@ -66,10 +67,15 @@ slurm_launcher = {
 launchers = {
     "type": "object",
     "required": [
+        "htcondor",
         "singularity",
         "slurm",
     ],
-    "properties": {"singularity": singularity_launcher, "slurm": slurm_launcher},
+    "properties": {
+        "singularity": singularity_launcher,
+        "slurm": slurm_launcher,
+        "htcondor": slurm_launcher,
+    },
     "additionalProperties": False,
 }
 

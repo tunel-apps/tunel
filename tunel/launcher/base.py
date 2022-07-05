@@ -2,6 +2,7 @@ __author__ = "Vanessa Sochat"
 __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
+import tunel.utils as utils
 import tunel.ssh
 import os
 
@@ -53,6 +54,14 @@ class Launcher:
     def stop_app(self, *args, **kwargs):
         raise NotImplementedError
 
+    def write_temporary_script(self, content):
+        """
+        Write a temporary script to file
+        """
+        tmpfile = utils.get_tmpfile()
+        utils.write_file(tmpfile, content)
+        return tmpfile
+
     def get_modules(self, needed_modules):
         """
         Given a list of needed modules, return for an app to load
@@ -83,9 +92,18 @@ class Launcher:
         render["paths"] = paths
         render["socket"] = os.path.join(render["scriptdir"], "%s.sock" % slug)
 
+        # Remote script, output and error files
+        render["script"] = os.path.join(self.remote_assets_dir, app.name, app.script)
+        render["script_basename"] = app.script
+        render["log_output"] = render["script"] + ".out"
+        render["log_error"] = render["script"] + ".err"
+        render["log_file"] = render["script"] + ".log"
+
         # This is second priority to args.workdir
         if self.remote_work:
             render["workdir"] = self.remote_work
+        if "workdir" in render["args"]:
+            render["workdir"] = render["args"]
 
         # Does the subclass have customizations?
         if hasattr(self, "_prepare_render"):

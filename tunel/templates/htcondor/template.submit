@@ -1,0 +1,15 @@
+# The executable is the main program or script to do the work of a single job
+executable = {{ script }}
+
+# Output, error, and execution steps
+error = {{ log_error }}
+output = {{ log_output }}
+log = {{ log_file }}
+
+# Resources that this job will need:
+request_cpus = {% if args.cpus %}{{ args.cpus }}{% else %}1{% endif %}
+request_memory = {% if args.memory %}{{ args.memory }} MB{% else %}1 MB{% endif %}
+request_disk = {% if args.disk %}{{ args.disk }} MB{% else %}1 MB{% endif %}
+
+# How many jobs of the above should be queued.
+queue {% if args.njobs %}{{ args.njobs }}{% else %}1{% endif %}
