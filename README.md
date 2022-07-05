@@ -17,8 +17,7 @@ See our ⭐️ [documentation](https://vsoch.github.io/tunel) ⭐️ to get star
 
 ## TODO
 
- - test on htcondor
- - table of render variables for launcher
+ - update htcondor to use Python API
   
 Should there be an init/check command that sniffs what is available on a cluster? E.g., singularity, sbatch, sinfo, module load, etc.
 Create "tunel" command over

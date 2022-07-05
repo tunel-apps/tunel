@@ -102,7 +102,7 @@ on your local machine. The defaults should work for most, but we will detail som
 that might need customization depending on your cluster. Settings includes the following:
 
 
-.. list-table:: Title
+.. list-table:: Settings
    :widths: 25 65 10
    :header-rows: 1
 
@@ -405,7 +405,8 @@ And then to stop a job:
 
     This only adds basic functionality - a Singularity interactive notebook has been tested
     but @vsoch doesn't have a full HTCondor cluster (that allows interactive jobs) to fully
-    test interactive apps! If you can help here, please do!
+    test interactive apps! If you can help here, please do! Additionally, we plan to update
+    this launcher to take advantage of the HTCondor Python API (if reasonable to do).
 
 apps
 ----

@@ -102,6 +102,8 @@ class Launcher:
         # This is second priority to args.workdir
         if self.remote_work:
             render["workdir"] = self.remote_work
+        if "workdir" in render["args"]:
+            render["workdir"] = render["args"]
 
         # Does the subclass have customizations?
         if hasattr(self, "_prepare_render"):
