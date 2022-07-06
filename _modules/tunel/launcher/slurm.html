@@ -191,7 +191,7 @@
             <span class="s2">&quot;--output=</span><span class="si">%s</span><span class="s2">.out&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_output&quot;</span><span class="p">],</span>
             <span class="s2">&quot;--error=</span><span class="si">%s</span><span class="s2">.err&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_error&quot;</span><span class="p">],</span>
             <span class="n">remote_script</span><span class="p">,</span>
-        <span class="p">]</span> <span class="o">+</span> <span class="n">render</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="p">]</span>
 
         <span class="c1"># Launch with command</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_job_exists</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">job_name</span><span class="p">):</span>
