@@ -4,6 +4,8 @@ needs:
   socket: true
 examples:
   - tunel run-app waffles singularity/socket/jupyter --container=docker://jupyter/datascience-notebook
+ # Run Jupyterlab login node (via Singularity container) on open science grid
+  - tunel run-app osg singularity/socket/jupyter --jupyterlab=true
 args:
  # Change jupyter container used (default is datascience notebook)
  # must start with container URI to pull (e.g., docker://)

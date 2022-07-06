@@ -112,7 +112,7 @@ class Slurm(Launcher):
             "--output=%s.out" % render["log_output"],
             "--error=%s.err" % render["log_error"],
             remote_script,
-        ] + render.get("args", [])
+        ]
 
         # Launch with command
         if not self.previous_job_exists(app.job_name):
