@@ -5,3 +5,5 @@ __pycache__
 .env
 .eggs
 docs/_build
+apps/Gemfile.lock
+apps/_site
