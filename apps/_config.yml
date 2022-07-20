@@ -3,7 +3,7 @@
 # Site settings
 title: Tunel Apps
 description: "Tunel Apps"
-baseurl: "/_static/apps" #important: start with /
+baseurl: "/tunel/_static/apps" #important: start with /
 url: ""
 docs: https://vsoch.github.io/tunel/
 
