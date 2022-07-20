@@ -12,6 +12,10 @@ jobs:
         with:
           ref: "gh-pages"
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+
       - name: Create environment
         run: python -m venv env
 
@@ -27,6 +31,7 @@ jobs:
           pip install -e .
           tunel docgen apps/_library
           cd apps
+          bundle install
           ./generate.sh
           cd ../docs
           pip install -r requirements.txt
