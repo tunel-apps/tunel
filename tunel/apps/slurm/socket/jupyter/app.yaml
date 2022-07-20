@@ -1,7 +1,13 @@
 launcher: slurm
 script: jupyter.sbatch
+description: A Jupyter notebook intended to be run with a slurm job, interactive via a socket.
 args:
-  # Working directory for the notebook
-  - workdir
+ - name: workdir
+   description: Working directory for the notebook
+ - name: jupyterlab
+   description:  Try running jupyterlab instead (e,g. set to true to enable) 
+ - name: modules
+   description: comma separated list of modules to load
+   split: ","
 needs:
   socket: true

@@ -25,7 +25,10 @@ jobs:
           git clone https://github.com/vsoch/tunel
           cd tunel
           pip install -e .
-          cd docs
+          tunel docgen apps/_library
+          cd apps
+          ./generate.sh
+          cd ../docs
           pip install -r requirements.txt
           make html
           mv $root/.git _build/html/.git

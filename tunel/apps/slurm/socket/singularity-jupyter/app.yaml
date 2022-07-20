@@ -1,8 +1,13 @@
 launcher: slurm
 script: jupyter.sbatch
+description: A jupyter notebook (or lab) intended to be run in a Singularity container.
+args:
+ - name: jupyterlab
+   description:  Try running jupyterlab instead (e,g. set to true to enable) 
+ - name: workdir
+   description: Working directory for the notebook
+ - name: modules
+   description: comma separated list of modules to load
+   split: ","
 needs:
   socket: true
-  modules:
-    - jupyter 
-  args:
-    - workdir

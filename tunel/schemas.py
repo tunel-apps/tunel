@@ -7,11 +7,22 @@ schema_url = "https://json-schema.org/draft-07/schema/#"
 
 # App schema and properties
 
+arguments = {
+    "type": "object",
+    "required": ["name", "description"],
+    "properties": {
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "split": {"type": ["null", "string"]},
+    },
+}
+
 appSettingsProperties = {
     "launcher": {"type": "string"},
     "script": {"type": "string"},
-    "args": {"type": "array", "items": {"type": "string"}},
-    "examples": {"type": "array", "items": {"type": "string"}},
+    "description": {"type": "string"},
+    "args": {"type": "array", "items": arguments},
+    "examples": {"type": ["array", "string"]},
     "needs": {
         "type": "object",
         "properties": {
@@ -25,10 +36,7 @@ app_schema = {
     "$schema": schema_url,
     "title": "Tunel App Schema",
     "type": "object",
-    "required": [
-        "launcher",
-        "script",
-    ],
+    "required": ["launcher", "script", "description"],
     "properties": appSettingsProperties,
     "additionalProperties": False,
 }

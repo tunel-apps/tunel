@@ -22,7 +22,7 @@ echo "Notebook working directory is ${WORKDIR}"
 {% include "bash/socket/set-socket.sh" %}
 
 # Load modules requested by user
-{% for module in modules %}module load {{ module }} || printf "Could not load {{ module }}\n"
+{% for module in args.modules %}module load {{ module }} || printf "Could not load {{ module }}\n"
 {% endfor %}
 
 # Add variables to PATH

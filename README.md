@@ -16,8 +16,6 @@ In its simplest form this means:
 See our ⭐️ [documentation](https://vsoch.github.io/tunel) ⭐️ to get started. 
 
 ## TODO
-
- - update htcondor to use Python API
   
 Should there be an init/check command that sniffs what is available on a cluster? E.g., singularity, sbatch, sinfo, module load, etc.
 Create "tunel" command over
@@ -28,6 +26,7 @@ Create "tunel" command over
 - so we need metadata for those containers - can they go in shpc?
 - should tunel use shpc to pull / run containers, or just do on the fly?
 - tunel alone should open UI that feels like cloud
+- update htcondor to use Python API
 
 ## Developer Environments
 

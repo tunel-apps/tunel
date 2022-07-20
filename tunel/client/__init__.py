@@ -126,6 +126,15 @@ def get_parser():
         default=False,
         action="store_true",
     )
+    docgen = subparsers.add_parser(
+        "docgen",
+        description="generate docs (markdown) for apps",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    docgen.add_argument(
+        "outdir",
+        help="Output directory to write apps markdown",
+    )
 
     # Issue a command to a server
     execute = subparsers.add_parser(
@@ -230,6 +239,8 @@ def run_tunel():
     # Does the user want a shell?
     if args.command in ["shell", "sh"]:
         from .shell import main
+    if args.command == "docgen":
+        from .apps import docgen as main
     if args.command == "exec":
         from .execute import main
     if args.command == "tunnel":

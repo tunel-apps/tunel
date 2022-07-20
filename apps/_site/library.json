@@ -1,0 +1,36 @@
+[
+    {
+        "name": "htcondor/job",
+        "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/htcondor/job/app.yaml",
+        
+        "versions": []
+  },
+
+    {
+        "name": "singularity/socket/jupyter",
+        "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml",
+        
+        "versions": []
+  },
+
+    {
+        "name": "slurm/port/jupyter",
+        "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/port/jupyter/app.yaml",
+        
+        "versions": []
+  },
+
+    {
+        "name": "slurm/socket/jupyter",
+        "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml",
+        
+        "versions": []
+  },
+
+    {
+        "name": "slurm/socket/singularity-jupyter",
+        "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/app.yaml",
+        
+        "versions": []
+  }
+]
