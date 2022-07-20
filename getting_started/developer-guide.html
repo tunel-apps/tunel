@@ -52,6 +52,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#args">Args</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#includes">Includes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#template-variables">Template Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -94,19 +95,40 @@ apps and launchers. If you haven’t read <a class="reference internal" href="in
 you should do that first.</p>
 <section id="tunel-apps">
 <h2>Tunel Apps<a class="headerlink" href="#tunel-apps" title="Permalink to this heading"></a></h2>
-<section id="args">
-<h3>Args<a class="headerlink" href="#args" title="Permalink to this heading"></a></h3>
 <p>When you write an app, it comes down to putting an <code class="docutils literal notranslate"><span class="pre">app.yaml</span></code> under some nested
 subfolder of the tunel app folders (or a custom one that you’ve created and adding
-to your tunel settings under <code class="docutils literal notranslate"><span class="pre">apps_dirs</span></code>. An app definition looks like this:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">launcher</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">singularity</span><span class="w"></span>
-<span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter.sh</span><span class="w"></span>
+to your tunel settings under <code class="docutils literal notranslate"><span class="pre">apps_dirs</span></code>.  The yaml should have basic metadata
+along with its needs and arguments the user can provide. We require detail (e.g., descriptions)
+to ensure that rendering the app into documentation is useful for users.
+A basic application might look like the following:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">launcher</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slurm</span><span class="w"></span>
+<span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter.sbatch</span><span class="w"></span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">A jupyter notebook (or lab) intended to be run in a Singularity container.</span><span class="w"></span>
 <span class="nt">args</span><span class="p">:</span><span class="w"></span>
-<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container</span><span class="w"></span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyterlab</span><span class="w"></span>
+<span class="w">   </span><span class="nt">description</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Try running jupyterlab instead (e,g. set to true to enable)</span><span class="w"></span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workdir</span><span class="w"></span>
+<span class="w">   </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Working directory for the notebook</span><span class="w"></span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">modules</span><span class="w"></span>
+<span class="w">   </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">comma separated list of modules to load</span><span class="w"></span>
+<span class="w">   </span><span class="nt">split</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="w"></span>
+<span class="nt">needs</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">socket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
-<p>Note that args should be a list of arguments that can be rendered in your template.
-If you need a default, this should be provided on the level of the template.</p>
+<p>Note that all of the fields (except for needs) are required. Args are not required but recommended,
+described next.</p>
+<section id="args">
+<h3>Args<a class="headerlink" href="#args" title="Permalink to this heading"></a></h3>
+<dl class="simple">
+<dt>Args (“args”) should be a list of arguments, each of which contains a name and description,</dt><dd><p>that can be rendered in your template and user documentation. The field “split”
+is not required, but if provided, means that any user provided argument will be split by that
+character. As examples of the above:</p>
+</dd>
+</dl>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-app osg slurm/socket/jupyter --workdir<span class="o">=</span>/usr/username/workdir --modules<span class="o">=</span>python/3.7,py-tensorflow
+</pre></div>
+</div>
 </section>
 <section id="includes">
 <h3>Includes<a class="headerlink" href="#includes" title="Permalink to this heading"></a></h3>
@@ -202,6 +224,19 @@ variables are always available:</p>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>
+<p>Tunel has a special command to generate docs, and they are written to <code class="docutils literal notranslate"><span class="pre">apps</span></code> in the
+present working directory that gets built into “apps” of the website. To generate:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel docgen apps/_library/
+<span class="go">Generating documentation markdown for htcondor/job</span>
+<span class="go">Generating documentation markdown for slurm/socket/singularity-jupyter</span>
+<span class="go">Generating documentation markdown for slurm/socket/jupyter</span>
+<span class="go">Generating documentation markdown for slurm/port/jupyter</span>
+<span class="go">Generating documentation markdown for singularity/socket/jupyter</span>
+</pre></div>
+</div>
 </section>
 </section>
 </section>

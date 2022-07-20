@@ -204,6 +204,15 @@
         <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="n">docgen</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="s2">&quot;docgen&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;generate docs (markdown) for apps&quot;</span><span class="p">,</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">docgen</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;outdir&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output directory to write apps markdown&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># Issue a command to a server</span>
     <span class="n">execute</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
@@ -308,6 +317,8 @@
     <span class="c1"># Does the user want a shell?</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="s2">&quot;sh&quot;</span><span class="p">]:</span>
         <span class="kn">from</span> <span class="nn">.shell</span> <span class="kn">import</span> <span class="n">main</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;docgen&quot;</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">.apps</span> <span class="kn">import</span> <span class="n">docgen</span> <span class="k">as</span> <span class="n">main</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;exec&quot;</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">.execute</span> <span class="kn">import</span> <span class="n">main</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;tunnel&quot;</span><span class="p">:</span>
