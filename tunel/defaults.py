@@ -25,6 +25,5 @@ user_settings_file = os.path.join(os.path.expanduser("~/.tunel"), "settings.yml"
 # variables in config we allow environment substitution
 allowed_envars = ["ssh_config", "ssh_sockets", "tunel_home"]
 
-# TODO soe default lookup of apps?
-# The GitHub repository with recipes
-github_url = "https://github.com/tunel-apps"
+# The GitHub repository with recipes (apps)
+github_url = "https://github.com/vsoch/tunel"

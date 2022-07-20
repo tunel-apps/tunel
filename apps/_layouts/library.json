@@ -1,0 +1,14 @@
+---
+title: Singularity HPC Registry
+layout: none
+---
+
+[{% for entry in site.library %}
+    {
+        "name": "{{ entry.name }}",
+        "github": "{{ entry.github }}",
+        "launcher": "{{ entry.launcher }}",
+        "script": "{{ entry.script_url }}",
+        "config": {{ entry.config | jsonify }}
+  }{% if forloop.last %}{% else %},{% endif %}
+{% endfor %}]

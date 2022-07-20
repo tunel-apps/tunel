@@ -8,26 +8,47 @@ This developer guide includes more complex interactions like contributing
 apps and launchers. If you haven't read :ref:`getting_started-installation`
 you should do that first.
 
-
 Tunel Apps
 ==========
+
+When you write an app, it comes down to putting an ``app.yaml`` under some nested
+subfolder of the tunel app folders (or a custom one that you've created and adding
+to your tunel settings under ``apps_dirs``.  The yaml should have basic metadata
+along with its needs and arguments the user can provide. We require detail (e.g., descriptions)
+to ensure that rendering the app into documentation is useful for users.
+A basic application might look like the following:
+
+.. code-block:: yaml
+
+    launcher: slurm
+    script: jupyter.sbatch
+    description: A jupyter notebook (or lab) intended to be run in a Singularity container.
+    args:
+     - name: jupyterlab
+       description:  Try running jupyterlab instead (e,g. set to true to enable) 
+     - name: workdir
+       description: Working directory for the notebook
+     - name: modules
+       description: comma separated list of modules to load
+       split: ","
+    needs:
+      socket: true
+  
+Note that all of the fields (except for needs) are required. Args are not required but recommended,
+described next.
 
 Args
 ----
 
-When you write an app, it comes down to putting an ``app.yaml`` under some nested
-subfolder of the tunel app folders (or a custom one that you've created and adding
-to your tunel settings under ``apps_dirs``. An app definition looks like this:
+Args ("args") should be a list of arguments, each of which contains a name and description,
+ that can be rendered in your template and user documentation. The field "split"
+ is not required, but if provided, means that any user provided argument will be split by that
+ character. As examples of the above:
 
-.. code-block:: yaml
+.. code-block:: console
 
-    launcher: singularity
-    script: jupyter.sh
-    args:
-     - container
+    $ tunel run-app osg slurm/socket/jupyter --workdir=/usr/username/workdir --modules=python/3.7,py-tensorflow
 
-Note that args should be a list of arguments that can be rendered in your template.
-If you need a default, this should be provided on the level of the template.
 
 Includes
 --------
@@ -109,3 +130,21 @@ variables are always available:
    * - workdir
      - If ``tunel_remote_work`` is defined in settings, this variable first, overridden by --workdir on the command line.
      - As an example, ``/usr/workdir/username/``
+     
+Documentation
+-------------
+
+Tunel has a special command to generate docs, and they are written to ``apps`` in the
+present working directory that gets built into "apps" of the website. To generate:
+
+.. code-block:: console
+
+    $ tunel docgen apps/_library/
+    Generating documentation markdown for htcondor/job
+    Generating documentation markdown for slurm/socket/singularity-jupyter
+    Generating documentation markdown for slurm/socket/jupyter
+    Generating documentation markdown for slurm/port/jupyter
+    Generating documentation markdown for singularity/socket/jupyter
+
+
+    

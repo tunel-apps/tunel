@@ -25,3 +25,17 @@ def list_apps(args, parser, extra, subparser):
         table.add_row(str(i), name, app.launcher)
 
     logger.c.print(table, justify="center")
+
+
+def docgen(args, parser, extra, subparser):
+    """
+    Generate docs for apps (to an output directory)
+    """
+    apps = tunel.apps.list_apps()
+    if not apps:
+        logger.exit("There aren't any applications found in your apps paths.", 0)
+
+    for i, app in enumerate(apps.items()):
+        name, app = app
+        logger.info("Generating documentation markdown for %s" % name)
+        app.docgen(outdir=args.outdir)

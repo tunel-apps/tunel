@@ -19,7 +19,7 @@ echo "Notebook working directory is ${WORKDIR}"
 {% include "bash/socket/set-socket.sh" %}
 
 # Load modules requested by user
-{% for module in modules %}module load {{ module }} || printf "Could not load {{ module }}\n"
+{% for module in args.modules %}module load {{ module }} || printf "Could not load {{ module }}\n"
 {% endfor %}
 
 # Add variables to PATH
@@ -27,4 +27,5 @@ echo "Notebook working directory is ${WORKDIR}"
 {% endfor %}
 
 printf "jupyter notebook --no-browser --sock ${SOCKET}\n"
-jupyter notebook --no-browser --sock ${SOCKET}
+{% if args.jupyterlab %}export JUPYTER_ENABLE_LAB=yes{% endif %}
+jupyter {% if args.jupyterlab %}lab{% else %}notebook{% endif %} --no-browser --sock ${SOCKET}

@@ -1,7 +1,12 @@
 launcher: htcondor
+description: A simple example to launch an HTCondor job (to sleep)
 script: job.sh
 args:
-  - cpus
-  - memory
-  - disk
-  - njobs
+  - name: cpus
+    description: The number of CPUs to allocate for the job (defaults to 1)
+  - name: memory
+    description: The memory (in MB, without writing MB) for the job
+  - name: disk
+    description: The disk space (also in GB, without the GB suffix) for the job
+  - name: njobs
+    description: The number of jobs to launch of this type (defaults to 1)

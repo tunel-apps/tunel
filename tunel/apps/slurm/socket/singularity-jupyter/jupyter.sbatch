@@ -22,7 +22,7 @@ echo "Notebook working directory is ${NOTEBOOK_DIR}"
 {% include "bash/socket/set-socket.sh" %}
 
 # Load modules requested by user
-{% for module in modules %}module load {{ module }} || printf "Could not load {{ module }}\n"
+{% for module in args.modules %}module load {{ module }} || printf "Could not load {{ module }}\n"
 {% endfor %}
 
 # Add variables to PATH
@@ -43,7 +43,7 @@ then
     mkdir -p $HOME/.jupyter
 
     printf "singularity exec --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local ${CONTAINER} jupyter notebook --no-browser --sock ${SOCKET}\n"
-    singularity exec {% if args.jupyterlab %}--env JUPYTER_ENABLE_LAB=yes{% endif %} --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local --bind ${HOME}/.jupyter:/home/jovyan/.jupyter "${CONTAINER}" jupyter notebook --no-browser --sock ${SOCKET}
+    singularity exec {% if args.jupyterlab %}--env JUPYTER_ENABLE_LAB=yes{% endif %} --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local --bind ${HOME}/.jupyter:/home/jovyan/.jupyter "${CONTAINER}" jupyter {% if args.jupyterlab %}lab{% else %}notebook{% endif %} --no-browser --sock ${SOCKET}
 else
     printf "Singularity is not available.\n"
 fi

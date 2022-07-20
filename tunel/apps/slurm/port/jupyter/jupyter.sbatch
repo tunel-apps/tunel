@@ -16,7 +16,7 @@ echo "Notebook working directory is ${WORKDIR}"
 {% include "bash/python/create-local.sh" %}
 
 # Load modules requested by user
-{% for module in modules %}module load {{ module }} || printf "Could not load {{ module }}\n"
+{% for module in args.modules %}module load {{ module }} || printf "Could not load {{ module }}\n"
 {% endfor %}
 
 # Add variables to PATH
@@ -31,10 +31,10 @@ then
     printf "singularity pull docker://jupyter/datascience-notebook\n"
     singularity pull "docker://jupyter/datascience-notebook"
     printf "singularity pull docker://jupyter/datascience-notebook\n"
-    printf "singularity exec --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local docker://jupyter/datascience-notebook jupyter notebook --no-browser --port=$PORT --ip 0.0.0.0\n"
-    singularity exec --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local "docker://jupyter/datascience-notebook" jupyter notebook --no-browser --port=$PORT --ip 0.0.0.0
+    printf "singularity exec --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local docker://jupyter/datascience-notebook jupyter {% if args.jupyterlab %}lab{% else %}notebook{% endif %} --no-browser --port=$PORT --ip 0.0.0.0\n"
+    singularity exec --home ${HOME} --bind ${HOME}/.local:/home/jovyan/.local "docker://jupyter/datascience-notebook" jupyter {% if args.jupyterlab %}lab{% else %}notebook{% endif %} --no-browser --port=$PORT --ip 0.0.0.0
 else
     printf "Singularity not available, trying native jupyter.\n"
     printf "jupyter notebook --no-browser --port=$PORT\n"
-    jupyter notebook --no-browser --port=$PORT
+    jupyter {% if args.jupyterlab %}lab{% else %}notebook{% endif %} --no-browser --port=$PORT
 fi

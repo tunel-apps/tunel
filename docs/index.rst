@@ -21,8 +21,8 @@ In its simplest form this means:
  4. Getting back an address to open up and start working.
 
 The library contains a collection of apps that are ready to go, and you can also use one of our
-templates to create your own!
-To see the code, head over to the `repository <https://github.com/vsoch/tunel/>`_.
+templates to create your own! Head over to see `currently provided applications <_static/apps/>`_
+or to see the code, head over to the `repository <https://github.com/vsoch/tunel/>`_.
 
 
 .. _main-getting-started:
@@ -49,6 +49,8 @@ Resources
 
 `GitHub Repository <https://github.com/vsoch/tunel>`_
     The code on GitHub.
+`Tunel Apps <_static/apps/>`_
+    Current applications and launchers supported by tunel.
 
 
 .. toctree::
