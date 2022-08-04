@@ -147,7 +147,7 @@ def _tunnel_login_node_socket(self, socket):
         "%s@%s" % (self.username, self.server),
     ]
     cmd = "%s" % " ".join(cmd)
-    logger.c.print(cmd)
+    logger.info(cmd)
 
 
 def _tunnel_login_node_port(self, machine):

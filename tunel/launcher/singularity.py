@@ -56,7 +56,7 @@ class Singularity(Launcher):
 
         # Instead of a Singularity command, we run the script
         logger.c.print()
-        logger.c.print("== INSTRUCTIONS WILL BE PRINTED 10 second delay ==")
+        logger.c.print("== INSTRUCTIONS WILL BE PRINTED with a delay ==")
         command = "%s %s %s %s" % (
             self.path,
             self.environ,
@@ -80,5 +80,6 @@ class Singularity(Launcher):
 
 def print_tunnel_instructions(ssh, app, socket):
     time.sleep(10)
-    logger.c.print()
+    ssh.tunnel_login_node(socket=socket, app=app)
+    time.sleep(30)
     ssh.tunnel_login_node(socket=socket, app=app)

@@ -96,7 +96,7 @@ class App:
         out.close()
         return result
 
-    def add_args(self, extra):
+    def add_args(self, extras):
         """
         Extra is a list of args, in either format:
 
@@ -107,11 +107,12 @@ class App:
         """
         args = {x["name"]: x.get("split") for x in self.config.get("args", {})}
         argkeys = ", ".join(list(args.keys()))
-        for extra in extra:
+        for extra in extras:
             if not extra.startswith("--"):
                 continue
+            print(extra)
             arg = extra.lstrip("--").split("=")
-            if arg not in args:
+            if arg[0] not in args:
                 logger.warning(
                     f"{arg} is not a recognized argument, choices are {argkeys}"
                 )
