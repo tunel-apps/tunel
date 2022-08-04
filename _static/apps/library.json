@@ -16,6 +16,14 @@
   },
 
     {
+        "name": "",
+        "github": "",
+        "launcher": "",
+        "script": "",
+        "config": null
+  },
+
+    {
         "name": "slurm/port/jupyter",
         "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/port/jupyter/app.yaml",
         "launcher": "slurm",

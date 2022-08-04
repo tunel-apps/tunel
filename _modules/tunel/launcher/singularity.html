@@ -135,7 +135,7 @@
 
         <span class="c1"># Instead of a Singularity command, we run the script</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;== INSTRUCTIONS WILL BE PRINTED 10 second delay ==&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;== INSTRUCTIONS WILL BE PRINTED with a delay ==&quot;</span><span class="p">)</span>
         <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span>
@@ -159,7 +159,8 @@
 
 <div class="viewcode-block" id="print_tunnel_instructions"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.singularity.print_tunnel_instructions">[docs]</a><span class="k">def</span> <span class="nf">print_tunnel_instructions</span><span class="p">(</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">socket</span><span class="p">):</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+    <span class="n">ssh</span><span class="o">.</span><span class="n">tunnel_login_node</span><span class="p">(</span><span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
     <span class="n">ssh</span><span class="o">.</span><span class="n">tunnel_login_node</span><span class="p">(</span><span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span></div>
 </pre></div>
 
