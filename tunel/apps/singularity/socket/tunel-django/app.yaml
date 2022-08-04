@@ -1,0 +1,22 @@
+launcher: singularity
+script: app.sh
+description: An example Django application run via a Singularity container.
+needs:
+  socket: true
+examples: |
+  # Run app on login node with singularity, custom tag "dev"
+  tunel run-app waffles singularity/socket/tunel-django --tag=dev
+  # Set a custom user/password (note that the UI is only available to you so this isn't for security)
+  tunel run-app waffles singularity/socket/tunel-django --tag=dev --user=hello --pass=moto  
+args:
+ - name: user
+   description: username for logging into Django app (NOT your cluster username), defaults to tunel-user
+ - name: pass
+   description: password for logging in to Django app (NOT your cluster password), defaults to tunel-pass
+ - name: workdir
+   description: Working directory for app (and to show file explorer for)
+ - name: container
+   description: Change the app container used (default is demo ghcr.io/vsoch/tunel-django). Must start with container URI to pull (e.g., docker://)   
+ - name: tag
+   description: Tag of the container to use (defaults to latest)
+
