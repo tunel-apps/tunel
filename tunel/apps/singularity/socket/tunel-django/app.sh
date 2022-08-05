@@ -46,13 +46,13 @@ then
 
     mkdir -p ${DB_DIR}
 
-    # Only pull the container if we do not have it yet
-    if [[ ! -f "${SIF}" ]]; then
-        singularity pull ${SIF} ${CONTAINER}
+    # Only pull the container if we do not have it yet, or the user requests it
+    if [[ ! -f "${SIF}" ]] || [[ "{{ args.pull }}" != "" ]]; then
+        singularity pull --force ${SIF} ${CONTAINER}
     fi
     
     # The false at the end ensures we aren't using nginx, but rather uwsgi just with sockets
-    printf "singularity exec --env TUNELDJANGO_SQLITE_DATABASE=${SQLITE_DB} --env TUNEL_PASS=******** --env TUNEL_USER=${TUNEL_USER} --bind ${DB_DIR}:/code/db --bind ${WORKDIR}:/var/www/data ${SIF} /bin/bash /code/scripts/run_uwsgi.sh ${SOCKET} false\n"
+    printf "singularity exec --bind ${DB_DIR}:/code/db --env TUNEL_PASS=***** --env TUNEL_USER=${TUNEL_USER} --bind ${WORKDIR}:/code/data ${SIF} /bin/bash /code/scripts/run_uwsgi.sh ${SOCKET} false\n"
     # The bind for WORKDIR to /var/www/data ensures the filesystem explorer works
     singularity exec --bind ${DB_DIR}:/code/db --env TUNEL_PASS=${TUNEL_PASS} --env TUNEL_USER=${TUNEL_USER} --bind ${WORKDIR}:/code/data ${SIF} /bin/bash /code/scripts/run_uwsgi.sh ${SOCKET} false
 else

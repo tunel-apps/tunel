@@ -6,6 +6,8 @@ needs:
 examples: |
   # Run app on login node with singularity, custom tag dev
   tunel run-app waffles singularity/socket/tunel-django --tag=dev
+  # Force a new pull
+  tunel run-app waffles singularity/socket/tunel-django --tag=dev --pull
   # Set a custom user/password (note that the UI is only available to you so this is not for security)
   tunel run-app waffles singularity/socket/tunel-django --tag=dev --user=hello --pass=moto  
 args:
@@ -19,3 +21,5 @@ args:
    description: "Change the app container used (default is demo ghcr.io/vsoch/tunel-django). Must start with container URI to pull (e.g., docker://)"
  - name: tag
    description: "Tag of the container to use (defaults to latest)"
+ - name: pull
+   description: force a new pull (even if the container already exists).
