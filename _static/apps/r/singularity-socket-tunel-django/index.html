@@ -108,6 +108,11 @@
    <td>Tag of the container to use (defaults to latest)</td>
    <td>NA</td>
 </tr>
+<tr>
+   <td>pull</td>
+   <td>force a new pull (even if the container already exists).</td>
+   <td>NA</td>
+</tr>
 
 </tbody></table></div>
 
@@ -125,6 +130,8 @@
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Run app on login node with singularity, custom tag dev</span>
 tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</span><span class="o">=</span>dev
+<span class="c"># Force a new pull</span>
+tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</span><span class="o">=</span>dev <span class="nt">--pull</span>
 <span class="c"># Set a custom user/password (note that the UI is only available to you so this is not for security)</span>
 tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</span><span class="o">=</span>dev <span class="nt">--user</span><span class="o">=</span>hello <span class="nt">--pass</span><span class="o">=</span>moto  
 </code></pre></div></div>
@@ -185,13 +192,13 @@ tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</sp
 
     <span class="nb">mkdir</span> <span class="nt">-p</span> <span class="k">${</span><span class="nv">DB_DIR</span><span class="k">}</span>
 
-    <span class="c"># Only pull the container if we do not have it yet</span>
-    <span class="k">if</span> <span class="o">[[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="s2">"</span><span class="k">${</span><span class="nv">SIF</span><span class="k">}</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
-        </span>singularity pull <span class="k">${</span><span class="nv">SIF</span><span class="k">}</span> <span class="k">${</span><span class="nv">CONTAINER</span><span class="k">}</span>
+    <span class="c"># Only pull the container if we do not have it yet, or the user requests it</span>
+    <span class="k">if</span> <span class="o">[[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="s2">"</span><span class="k">${</span><span class="nv">SIF</span><span class="k">}</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">||</span> <span class="o">[[</span> <span class="s2">"{{ args.pull }}"</span> <span class="o">!=</span> <span class="s2">""</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+        </span>singularity pull <span class="nt">--force</span> <span class="k">${</span><span class="nv">SIF</span><span class="k">}</span> <span class="k">${</span><span class="nv">CONTAINER</span><span class="k">}</span>
     <span class="k">fi</span>
     
     <span class="c"># The false at the end ensures we aren't using nginx, but rather uwsgi just with sockets</span>
-    <span class="nb">printf</span> <span class="s2">"singularity exec --env TUNELDJANGO_SQLITE_DATABASE=</span><span class="k">${</span><span class="nv">SQLITE_DB</span><span class="k">}</span><span class="s2"> --env TUNEL_PASS=******** --env TUNEL_USER=</span><span class="k">${</span><span class="nv">TUNEL_USER</span><span class="k">}</span><span class="s2"> --bind </span><span class="k">${</span><span class="nv">DB_DIR</span><span class="k">}</span><span class="s2">:/code/db --bind </span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">:/var/www/data </span><span class="k">${</span><span class="nv">SIF</span><span class="k">}</span><span class="s2"> /bin/bash /code/scripts/run_uwsgi.sh </span><span class="k">${</span><span class="nv">SOCKET</span><span class="k">}</span><span class="s2"> false</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="nb">printf</span> <span class="s2">"singularity exec --bind </span><span class="k">${</span><span class="nv">DB_DIR</span><span class="k">}</span><span class="s2">:/code/db --env TUNEL_PASS=***** --env TUNEL_USER=</span><span class="k">${</span><span class="nv">TUNEL_USER</span><span class="k">}</span><span class="s2"> --bind </span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">:/code/data </span><span class="k">${</span><span class="nv">SIF</span><span class="k">}</span><span class="s2"> /bin/bash /code/scripts/run_uwsgi.sh </span><span class="k">${</span><span class="nv">SOCKET</span><span class="k">}</span><span class="s2"> false</span><span class="se">\n</span><span class="s2">"</span>
     <span class="c"># The bind for WORKDIR to /var/www/data ensures the filesystem explorer works</span>
     singularity <span class="nb">exec</span> <span class="nt">--bind</span> <span class="k">${</span><span class="nv">DB_DIR</span><span class="k">}</span>:/code/db <span class="nt">--env</span> <span class="nv">TUNEL_PASS</span><span class="o">=</span><span class="k">${</span><span class="nv">TUNEL_PASS</span><span class="k">}</span> <span class="nt">--env</span> <span class="nv">TUNEL_USER</span><span class="o">=</span><span class="k">${</span><span class="nv">TUNEL_USER</span><span class="k">}</span> <span class="nt">--bind</span> <span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span>:/code/data <span class="k">${</span><span class="nv">SIF</span><span class="k">}</span> /bin/bash /code/scripts/run_uwsgi.sh <span class="k">${</span><span class="nv">SOCKET</span><span class="k">}</span> <span class="nb">false
 </span><span class="k">else
