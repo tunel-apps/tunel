@@ -1,4 +1,74 @@
-<h3 id="usage">Usage</h3>
+<!DOCTYPE html>
+<html lang="en-us">
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>Tunel Apps</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link rel="stylesheet" href="/tunel/_static/apps/css/normalize.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,600">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/tunel/_static/apps/js/jquery.dlmenu.js"></script>
+    <script src="/tunel/_static/apps/js/modernizr.custom.js"></script>
+    <link href="/tunel/_static/apps/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/tunel/_static/apps/css/fresh-bootstrap-table.css" rel="stylesheet" />
+    <link href="/tunel/_static/apps/css/syntax.css" rel="stylesheet" />
+    <meta name="description" content="Tunel Apps">
+    <meta name="thumbnail" content="https://vsoch.github.io/tunel/img/logo.png">
+    <meta name="name" content="singularity/socket/tunel-django">
+    <meta name="repository" content="https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.yaml">
+    <meta name="pagetype" content="experiment">
+</head>
+
+
+  <body>
+
+    <div class="container">
+
+    <br>
+    <section class="main-content">
+    <a href="https://github.com/vsoch/tunel" 
+       target="_blank"
+       style="float:right;">
+       <i class="fa fa-github fa-2x"></i></a>
+
+    <a href="/tunel/_static/apps/" 
+       style="margin:5px; padding:10px">
+       <i class="fa fa-chevron-left fa-2x"></i></a>
+      <br><br><hr><br>
+      
+      <div class="container">
+    <div class="row">
+        <div style="margin-top:25px" class="col-lg-5 col-lg-offset-1">
+            <div class="spacing"></div>
+            <a href="/tunel/_static/apps"><img src="/tunel/_static/apps/img/logo.png"
+                 style="float:left; width:250px"></span></a>
+        </div>
+        <div class="col-lg-4 col-lg-offset-1">
+            <div class="spacing"></div>
+            <h4>singularity/socket/tunel-django</h4>
+            <div style="padding-bottom:20px" class="hline"></div>
+            <p><b>Launcher</b>: singularity</p>
+            <p>An example Django application run via a Singularity container.</p>
+            <p style="padding-top:15px"><a href="https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.yaml" target="_blank">
+                           <button class="btn btn-sm btn-primary">GITHUB</button></a>
+            <a href="https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.sh" target="_blank"><button class="btn btn-sm btn-primary">SCRIPT</button></a>            
+            </p>
+        </div>
+    </div>
+    <div class="row">
+       <div class="col-md-12">
+            <div style="margin:50px 80px 50px">
+            <a href="#usage" style="font-weight:bold">USAGE</a> | <a href="#arguments" style="font-weight:bold">ARGS</a>  | <a href="#examples" style="font-weight:bold">EXAMPLES</a> | <a href="#script" style="font-weight:bold">SCRIPT</a>
+            </div>
+       </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div style="margin:0px 80px 50px">
+            <h3 id="usage">Usage</h3>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tunel run-app &lt;server&gt; singularity/socket/tunel-django
 </code></pre></div></div>
@@ -53,9 +123,9 @@
 
 <h3 id="examples">Examples</h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Run app on login node with singularity, custom tag "dev"</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Run app on login node with singularity, custom tag dev</span>
 tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</span><span class="o">=</span>dev
-<span class="c"># Set a custom user/password (note that the UI is only available to you so this isn't for security)</span>
+<span class="c"># Set a custom user/password (note that the UI is only available to you so this is not for security)</span>
 tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</span><span class="o">=</span>dev <span class="nt">--user</span><span class="o">=</span>hello <span class="nt">--pass</span><span class="o">=</span>moto  
 </code></pre></div></div>
 
@@ -131,3 +201,26 @@ tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</sp
 </code></pre></div></div>
 
 <p>Have any questions, or want to request a new app or launcher? <a href="https://github.com/vsoch/tunel/issues">Ask us!</a></p>
+
+            </div>
+        </div>
+    </div>
+</div>	 
+
+
+      <br><br><br>
+      <footer class="site-footer" style="margin:30px">
+  <span class="site-footer-owner"><a target="_blank" 
+                                     href="/tunel/_static/apps/">Tunel Apps</a> is maintained by <a href="https://github.com/vsoch">@vsoch</a>.</span>
+  <span class="site-footer-credits">Contribute on <a target="_blank" href="https://github.com/vsoch/tunel">GitHub</a>.</span>
+  <span style="float:right">
+    <a href="https://vsoch.github.io/tunel/" target="_blank"><span class="label label-primary" style="margin-right:5px">Documentation</span></a>
+  </span>
+</footer>
+
+
+    </section>
+    </div>
+
+  </body>
+</html>
