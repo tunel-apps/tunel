@@ -4,9 +4,9 @@
 Tunel
 =====
 
-.. image:: https://img.shields.io/github/stars/vsoch/tunel?style=social
+.. image:: https://img.shields.io/github/stars/tunel-apps/tunel?style=social
     :alt: GitHub stars
-    :target: https://github.com/vsoch/tunel/stargazers
+    :target: https://github.com/tunel-apps/tunel/stargazers
 
 Developer tools for HPC. Because we can't have cloud but we want nice things too.
 
@@ -22,7 +22,7 @@ In its simplest form this means:
 
 The library contains a collection of apps that are ready to go, and you can also use one of our
 templates to create your own! Head over to see `currently provided applications <_static/apps/>`_
-or to see the code, head over to the `repository <https://github.com/vsoch/tunel/>`_.
+or to see the code, head over to the `repository <https://github.com/tunel-apps/tunel/>`_.
 
 
 .. _main-getting-started:
@@ -40,14 +40,14 @@ installation, and then the :ref:`getting-started` section for using the client.
 Support
 -------
 
-* For **bugs and feature requests**, please use the `issue tracker <https://github.com/vsoch/tunel/issues>`_.
-* For **contributions**, visit Caliper on `Github <https://github.com/vsoch/tunel>`_.
+* For **bugs and feature requests**, please use the `issue tracker <https://github.com/tunel-apps/tunel/issues>`_.
+* For **contributions**, visit Caliper on `Github <https://github.com/tunel-apps/tunel>`_.
 
 ---------
 Resources
 ---------
 
-`GitHub Repository <https://github.com/vsoch/tunel>`_
+`GitHub Repository <https://github.com/tunel-apps/tunel>`_
     The code on GitHub.
 `Tunel Apps <_static/apps/>`_
     Current applications and launchers supported by tunel.

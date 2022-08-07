@@ -26,7 +26,7 @@ jobs:
           root=$PWD
           ls
           cd /tmp
-          git clone https://github.com/vsoch/tunel
+          git clone https://github.com/tunel-apps/tunel
           cd tunel
           pip install -e .
           tunel docgen apps/_library

@@ -17,7 +17,7 @@ In its simplest form this means:
  4. Getting back an address to open up and start working.
 
 
-If you have any questions or issues, please `let us know <https://github.com/vsoch/tunel/issues>`_
+If you have any questions or issues, please `let us know <https://github.com/tunel-apps/tunel/issues>`_
 
 .. toctree::
    :maxdepth: 3

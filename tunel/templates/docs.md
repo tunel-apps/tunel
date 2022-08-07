@@ -65,5 +65,5 @@ This app uses the {{ app.launcher }} launcher and the following script:
 {{ script }}
 ```
 
-Have any questions, or want to request a new app or launcher? [Ask us!](https://github.com/vsoch/tunel/issues)
+Have any questions, or want to request a new app or launcher? [Ask us!](https://github.com/tunel-apps/tunel/issues)
 

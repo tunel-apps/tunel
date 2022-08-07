@@ -26,4 +26,4 @@ user_settings_file = os.path.join(os.path.expanduser("~/.tunel"), "settings.yml"
 allowed_envars = ["ssh_config", "ssh_sockets", "tunel_home"]
 
 # The GitHub repository with recipes (apps)
-github_url = "https://github.com/vsoch/tunel"
+github_url = "https://github.com/tunel-apps/tunel"
