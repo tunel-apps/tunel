@@ -100,7 +100,7 @@
 </tr>
 <tr>
    <td>container</td>
-   <td>Change the app container used (default is demo ghcr.io/vsoch/tunel-django). Must start with container URI to pull (e.g., docker://)</td>
+   <td>Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)</td>
    <td>NA</td>
 </tr>
 <tr>
@@ -183,7 +183,7 @@ tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</sp
 
 <span class="c"># Just pull to tmp for now so cleaned up</span>
 <span class="nv">SIF</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">SINGULARITY_CACHEDIR</span><span class="k">}</span><span class="s2">/tunel-django.sif"</span>
-<span class="nv">CONTAINER</span><span class="o">=</span><span class="s2">"{% if args.container %}{{ args.container }}{% else %}docker://ghcr.io/vsoch/tunel-django:{% if args.tag %}{{ args.tag }}{% else %}latest{% endif %}{% endif %}"</span>
+<span class="nv">CONTAINER</span><span class="o">=</span><span class="s2">"{% if args.container %}{{ args.container }}{% else %}docker://ghcr.io/tunel-app/tunel-django:{% if args.tag %}{{ args.tag }}{% else %}latest{% endif %}{% endif %}"</span>
 
 <span class="c"># First effort</span>
 <span class="k">if </span><span class="nb">command</span> <span class="nt">-v</span> singularity &amp;&gt; /dev/null
