@@ -37,7 +37,7 @@ DB_DIR=${SOCKET_DIR}/db
 
 # Just pull to tmp for now so cleaned up
 SIF="${SINGULARITY_CACHEDIR}/tunel-django.sif"
-CONTAINER="{% if args.container %}{{ args.container }}{% else %}docker://ghcr.io/vsoch/tunel-django:{% if args.tag %}{{ args.tag }}{% else %}latest{% endif %}{% endif %}"
+CONTAINER="{% if args.container %}{{ args.container }}{% else %}docker://ghcr.io/tunel-app/tunel-django:{% if args.tag %}{{ args.tag }}{% else %}latest{% endif %}{% endif %}"
 
 # First effort
 if command -v singularity &> /dev/null

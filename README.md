@@ -13,7 +13,7 @@ In its simplest form this means:
  3. Launching it via a ssh tunnel to your cluster resource
  4. Getting back an address to open up and start working.
 
-See our ⭐️ [documentation](https://vsoch.github.io/tunel) ⭐️ to get started. 
+See our ⭐️ [documentation](https://tunel-apps.github.io/tunel) ⭐️ to get started. 
 
 ## TODO
   

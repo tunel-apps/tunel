@@ -18,7 +18,7 @@ args:
  - name: workdir
    description: Working directory for app (and to show file explorer for)
  - name: container
-   description: "Change the app container used (default is demo ghcr.io/vsoch/tunel-django). Must start with container URI to pull (e.g., docker://)"
+   description: "Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)"
  - name: tag
    description: "Tag of the container to use (defaults to latest)"
  - name: pull
