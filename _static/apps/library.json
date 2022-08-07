@@ -1,49 +1,49 @@
 [
     {
         "name": "htcondor/job",
-        "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/htcondor/job/app.yaml",
+        "github": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/htcondor/job/app.yaml",
         "launcher": "htcondor",
-        "script": "https://github.com/vsoch/tunel/blob/main/tunel/apps/htcondor/job/job.sh",
+        "script": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/htcondor/job/job.sh",
         "config": {"launcher":"htcondor","description":"A simple example to launch an HTCondor job (to sleep)","script":"job.sh","args":[{"name":"cpus","description":"The number of CPUs to allocate for the job (defaults to 1)"},{"name":"memory","description":"The memory (in MB, without writing MB) for the job"},{"name":"disk","description":"The disk space (also in GB, without the GB suffix) for the job"},{"name":"njobs","description":"The number of jobs to launch of this type (defaults to 1)"}]}
   },
 
     {
         "name": "singularity/socket/jupyter",
-        "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml",
+        "github": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml",
         "launcher": "singularity",
-        "script": "https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/jupyter/jupyter.sh",
+        "script": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/jupyter/jupyter.sh",
         "config": {"launcher":"singularity","script":"jupyter.sh","description":"A singularity jupyter notebook or lab to run directly on a remote (e.g., head node)","needs":{"socket":true},"examples":"# Run jupyter notebook on login node with custom container\\ntunel run-app waffles singularity/socket/jupyter --container=docker://jupyter/datascience-notebook\\n# Run Jupyterlab login node (via Singularity container) on open science grid\\ntunel run-app osg singularity/socket/jupyter --jupyterlab=true\\n","args":[{"name":"container","description":"Change the jupyter container used (default is datascience notebook). Must start with container URI to pull (e.g., docker://)"},{"name":"jupyterlab","description":"Try running jupyterlab instead (e,g. set to true to enable)"},{"name":"modules","description":"comma separated list of modules to load","split":","}]}
   },
 
     {
         "name": "singularity/socket/tunel-django",
-        "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.yaml",
+        "github": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.yaml",
         "launcher": "singularity",
-        "script": "https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.sh",
+        "script": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.sh",
         "config": {"launcher":"singularity","script":"app.sh","description":"An example Django application run via a Singularity container.","needs":{"socket":true},"examples":"# Run app on login node with singularity, custom tag dev\\ntunel run-app waffles singularity/socket/tunel-django --tag=dev\\n# Force a new pull\\ntunel run-app waffles singularity/socket/tunel-django --tag=dev --pull\\n# Set a custom user/password (note that the UI is only available to you so this is not for security)\\ntunel run-app waffles singularity/socket/tunel-django --tag=dev --user=hello --pass=moto  \\n","args":[{"name":"user","description":"username for logging into Django app (NOT your cluster username), defaults to tunel-user"},{"name":"pass","description":"password for logging in to Django app (NOT your cluster password), defaults to tunel-pass"},{"name":"workdir","description":"Working directory for app (and to show file explorer for)"},{"name":"container","description":"Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)"},{"name":"tag","description":"Tag of the container to use (defaults to latest)"},{"name":"pull","description":"force a new pull (even if the container already exists)."}]}
   },
 
     {
         "name": "slurm/port/jupyter",
-        "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/port/jupyter/app.yaml",
+        "github": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/port/jupyter/app.yaml",
         "launcher": "slurm",
-        "script": "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/port/jupyter/jupyter.sbatch",
+        "script": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/port/jupyter/jupyter.sbatch",
         "config": {"launcher":"slurm","script":"jupyter.sbatch","description":"A Jupyter notebook intended to be run with a slurm job, interactive via a port","args":[{"name":"workdir","description":"Working directory for the notebook"},{"name":"jupyterlab","description":"Try running jupyterlab instead (e,g. set to true to enable)"},{"name":"modules","description":"comma separated list of modules to load","split":","}]}
   },
 
     {
         "name": "slurm/socket/jupyter",
-        "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml",
+        "github": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml",
         "launcher": "slurm",
-        "script": "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/jupyter/jupyter.sbatch",
+        "script": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/jupyter/jupyter.sbatch",
         "config": {"launcher":"slurm","script":"jupyter.sbatch","description":"A Jupyter notebook intended to be run with a slurm job, interactive via a socket.","args":[{"name":"workdir","description":"Working directory for the notebook"},{"name":"jupyterlab","description":"Try running jupyterlab instead (e,g. set to true to enable)"},{"name":"modules","description":"comma separated list of modules to load","split":","}],"needs":{"socket":true}}
   },
 
     {
         "name": "slurm/socket/singularity-jupyter",
-        "github": "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/app.yaml",
+        "github": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/app.yaml",
         "launcher": "slurm",
-        "script": "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/jupyter.sbatch",
+        "script": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/jupyter.sbatch",
         "config": {"launcher":"slurm","script":"jupyter.sbatch","description":"A jupyter notebook (or lab) intended to be run in a Singularity container.","args":[{"name":"jupyterlab","description":"Try running jupyterlab instead (e,g. set to true to enable)"},{"name":"workdir","description":"Working directory for the notebook"},{"name":"modules","description":"comma separated list of modules to load","split":","}],"needs":{"socket":true}}
   }
 ]

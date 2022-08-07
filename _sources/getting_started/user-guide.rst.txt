@@ -83,7 +83,7 @@ As another example, here is a simple setup with a simple Host, Username, and cus
 
 
 If you want to add a configuration file for a different host (or just
-an example) please [open an issue](https://github.com/vsoch/tunel/issues) or pull request.
+an example) please [open an issue](https://github.com/tunel-apps/tunel/issues) or pull request.
 If you don't have a file in the location `~/.ssh/config` then you can generate it programatically:
 
 .. code-block:: console
@@ -184,7 +184,7 @@ or the Singularity launcher. It's also recommended to export your cache director
 
 
 If you have custom logic to use Singularity that isn't encompassed in these
-two use cases, you can [let us know](https://github.com/vsoch/tunel) to ask for help, or write a custom app yourself.
+two use cases, you can [let us know](https://github.com/tunel-apps/tunel) to ask for help, or write a custom app yourself.
 
 Connecting to Apps
 ------------------
