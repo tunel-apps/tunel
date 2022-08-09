@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tunel.apps &mdash; Tunel 0.0.1 documentation</title>
+  <title>tunel.apps &mdash; Tunel 0.0.11 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sphinx-argparse.css" type="text/css" />
@@ -30,7 +30,7 @@
             <a href="../../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.1
+                0.0.11
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -139,6 +139,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
+<div class="viewcode-block" id="App.print_pretty"><a class="viewcode-back" href="../../api_reference/tunel.html#tunel.apps.App.print_pretty">[docs]</a>    <span class="k">def</span> <span class="nf">print_pretty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print the app (and args, etc) pretty to the terminal.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">print_pretty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="App.docgen"><a class="viewcode-back" href="../../api_reference/tunel.html#tunel.apps.App.docgen">[docs]</a>    <span class="k">def</span> <span class="nf">docgen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">outdir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Render documentation for an app.</span>
@@ -224,14 +230,29 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="get_app"><a class="viewcode-back" href="../../api_reference/tunel.html#tunel.apps.get_app">[docs]</a><span class="k">def</span> <span class="nf">get_app</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="get_app"><a class="viewcode-back" href="../../api_reference/tunel.html#tunel.apps.get_app">[docs]</a><span class="k">def</span> <span class="nf">get_app</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given an app name, get the loaded app for it</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">apps</span> <span class="o">=</span> <span class="n">list_apps</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">app</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">apps</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Cannot find app </span><span class="si">%s</span><span class="se">\n</span><span class="s2">Choices are:</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">apps</span><span class="p">)))</span>
-    <span class="n">app</span> <span class="o">=</span> <span class="n">apps</span><span class="p">[</span><span class="n">app</span><span class="p">]</span>
+    <span class="n">apps</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">listing</span> <span class="o">=</span> <span class="n">list_apps</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="n">listing</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">app</span><span class="p">:</span>
+            <span class="n">apps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">apps</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
+            <span class="s2">&quot;Cannot find app </span><span class="si">%s</span><span class="se">\n</span><span class="s2">Choices are:</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">listing</span><span class="p">))</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">apps</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
+            <span class="s2">&quot;Found </span><span class="si">%s</span><span class="s2"> apps:</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s2">Be more specific to disambiguate </span><span class="si">%s</span><span class="s2">!&quot;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">apps</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">apps</span><span class="p">),</span> <span class="n">name</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">app</span> <span class="o">=</span> <span class="n">apps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading app </span><span class="si">{</span><span class="n">app</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">listing</span><span class="p">[</span><span class="n">app</span><span class="p">]</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_args</span><span class="p">(</span><span class="n">extra</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">app</span></div>
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Guide &mdash; Tunel 0.0.1 documentation</title>
+  <title>User Guide &mdash; Tunel 0.0.11 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sphinx-argparse.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.1
+                0.0.11
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -56,8 +56,11 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#list-apps">list-apps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#info">info</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shell">shell</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#exec">exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-get">api-get</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tunnel">tunnel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#launch">launch</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#singularity">singularity</a></li>
@@ -320,6 +323,54 @@ if you find an issue, please open and (ideally) help debug to fix it up.</p>
 <section id="commands">
 <h2>Commands<a class="headerlink" href="#commands" title="Permalink to this heading"></a></h2>
 <p>Tunel is driven by a command line client, and (to be a developed) a web interface that allows the same functionality.</p>
+<section id="list-apps">
+<h3>list-apps<a class="headerlink" href="#list-apps" title="Permalink to this heading"></a></h3>
+<p>The first thing you might want to do is see what apps are available.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel list-apps
+<span class="go">                     Tunel Apps</span>
+<span class="go">|---|----------------------------------|-------------|</span>
+<span class="go">| # | Name                             |   Launcher  |</span>
+<span class="go">|---|----------------------------------|-------------|</span>
+<span class="go">│ 0 │ slurm/socket/singularity-jupyter │       slurm │</span>
+<span class="go">│ 1 │ htcondor/job                     │    htcondor │</span>
+<span class="go">│ 2 │ slurm/socket/jupyter             │       slurm │</span>
+<span class="go">│ 3 │ slurm/port/jupyter               │       slurm │</span>
+<span class="go">│ 4 │ singularity/socket/jupyter       │ singularity │</span>
+<span class="go">│ 5 │ singularity/socket/tunel-django  │ singularity │</span>
+<span class="go">└───┴──────────────────────────────────┴─────────────┘</span>
+</pre></div>
+</div>
+<p>These are located in the <code class="docutils literal notranslate"><span class="pre">tunel/apps</span></code> directory, organized by directory
+organization for uniqueness.</p>
+</section>
+<section id="info">
+<h3>info<a class="headerlink" href="#info" title="Permalink to this heading"></a></h3>
+<p>To get basic info for an app, just ask for it:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel info singularity/socket/tunel-django
+</pre></div>
+</div>
+<p>This should generally show you accepted flags/arguments, along with examples for running.
+Since paths can be long, you are also able to ask for a shortened name, and it must still be
+unique with the set. E.g.,:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel info tunel-django
+</pre></div>
+</div>
+<p>works the same! This convention is true for all subsequent commands.
+You can also ask for json:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel info tunel-django --json
+</pre></div>
+</div>
+<p>If you ask for a shortened name that matches more than one app, you’ll see:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel info singularity
+<span class="go">Found 3 apps:</span>
+<span class="go">slurm/socket/singularity-jupyter</span>
+<span class="go">singularity/socket/jupyter</span>
+<span class="go">singularity/socket/tunel-django</span>
+<span class="go">Be more specific to disambiguate singularity!</span>
+</pre></div>
+</div>
+<p>And you should follow the instruction and be more specific.</p>
+</section>
 <section id="shell">
 <h3>shell<a class="headerlink" href="#shell" title="Permalink to this heading"></a></h3>
 <p>The most basic thing you can do with tunel is to open an ssh tunnel. Arguably, you’d be just as well off using <cite>ssh</cite>, however
@@ -339,6 +390,32 @@ We could do:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel <span class="nb">exec</span> waffles <span class="nb">echo</span> <span class="sb">`</span><span class="nv">$HOME</span><span class="sb">`</span>
 </pre></div>
 </div>
+</section>
+<section id="api-get">
+<h3>api-get<a class="headerlink" href="#api-get" title="Permalink to this heading"></a></h3>
+<p>When you have a tunel app running, if it exposes an API via socket, tunel provides Python functions
+to be able to hit defined points in its API. As an example, if we start with the <a class="reference external" href="https://github.com/vsoch/tunel-django/">Tunel Django Template</a>
+that serves a basic jokes API, we can either go to <cite>http://127.0.0:8000/api/joke/</cite> to see a json response for a joke,
+or we can do either:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel api-get --socket /tmp/test/tunel-django.sock.api.sock /api/joke/ --json
+<span class="go">{</span>
+<span class="go">    &quot;text&quot;: &quot;Two JavaScript developers walked into the variable `bar`. Ouch!&quot;,</span>
+<span class="go">    &quot;author&quot;: &quot;elijahmanor&quot;,</span>
+<span class="go">    &quot;created&quot;: &quot;09/10/2013&quot;,</span>
+<span class="go">    &quot;tags&quot;: [</span>
+<span class="go">        &quot;javascript&quot;</span>
+<span class="go">    ],</span>
+<span class="go">    &quot;rating&quot;: 3</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Or just plain text:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel api-get --socket /tmp/test/tunel-django.sock.api.sock /api/joke/
+<span class="go">{&quot;text&quot;: &quot;q. Why did Jason cover himself with bubble wrap? a. Because he wanted to make a cross-domain JSONP request.&quot;, &quot;question&quot;: &quot;Why did Jason cover himself with bubble wrap?&quot;, &quot;answer&quot;: &quot;Because he wanted to make a cross-domain JSONP request&quot;, &quot;author&quot;: &quot;elijahmanor&quot;, &quot;created&quot;: &quot;09/11/2013&quot;, &quot;tags&quot;: [&quot;javascript&quot;], &quot;rating&quot;: 5}</span>
+</pre></div>
+</div>
+<p>And this is how you would embed (in your Python applications) logic to interact with your Tunel app, either on your host (where the socket is tunneled)
+or the HPC cluster (where the socket is written).</p>
 </section>
 <section id="tunnel">
 <h3>tunnel<a class="headerlink" href="#tunnel" title="Permalink to this heading"></a></h3>
@@ -476,20 +553,7 @@ default apps directory:</p>
 </pre></div>
 </div>
 <p>Notice that apps are organized into being accessible via port (not recommended) vs. socket.
-You can currently list available apps found on these paths as follows:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel list-apps
-<span class="go">                     Tunel Apps</span>
-<span class="go">|---|----------------------------------|-------------|</span>
-<span class="go">| # | Name                             |   Launcher  |</span>
-<span class="go">|---|----------------------------------|-------------|</span>
-<span class="go">│ 0 │ slurm/socket/singularity-jupyter │       slurm │</span>
-<span class="go">│ 1 │ slurm/socket/jupyter             │       slurm │</span>
-<span class="go">│ 2 │ slurm/port/jupyter               │       slurm │</span>
-<span class="go">│ 3 │ singularity/socket/jupyter       │ singularity │</span>
-<span class="go">└───┴──────────────────────────────────┴─────────────┘</span>
-</pre></div>
-</div>
-<p>If you need to use a socket, the app will have needs-&gt;socket-&gt;true. Socket enabled apps will
+If you need to use a socket, the app will have needs-&gt;socket-&gt;true. Socket enabled apps will
 start the job, show you two options for ssh commands to connect when the notebook is ready (e.g., when the output
 shows up with the token) and then you can copy paste that into a separate terminal to start the tunnel.
 This might be possible to do on your behalf, but I like the user having control of when to start / stop it

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tunel.client &mdash; Tunel 0.0.1 documentation</title>
+  <title>tunel.client &mdash; Tunel 0.0.11 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sphinx-argparse.css" type="text/css" />
@@ -30,7 +30,7 @@
             <a href="../../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.1
+                0.0.11
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -136,6 +136,29 @@
 
     <span class="c1"># print version and exit</span>
     <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;show software version&quot;</span><span class="p">)</span>
+
+    <span class="n">info</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Get information about a named app.&quot;</span><span class="p">,</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Tunel api-get means we issue a GET request to an endpoint</span>
+    <span class="n">api_get</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="s2">&quot;api-get&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;interact with the GET api of a tunel app.&quot;</span><span class="p">,</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">api_get</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--socket&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to tunel mapped socket&quot;</span><span class="p">)</span>
+    <span class="n">api_get</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to GET (defaults to /)&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="n">info</span><span class="p">,</span> <span class="n">api_get</span><span class="p">:</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--json&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;provide result as json&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="c1"># Local shell with client loaded</span>
     <span class="n">shell</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
@@ -260,7 +283,7 @@
             <span class="n">help</span><span class="o">=</span><span class="s2">&quot;server identity to interact with (e.g., name in ~/.ssh/config)&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="p">[</span><span class="n">run_app</span><span class="p">,</span> <span class="n">stop_app</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="p">[</span><span class="n">run_app</span><span class="p">,</span> <span class="n">stop_app</span><span class="p">,</span> <span class="n">info</span><span class="p">]:</span>
         <span class="n">command</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;app&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The name of the application.&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">parser</span></div>
 
@@ -317,10 +340,14 @@
     <span class="c1"># Does the user want a shell?</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="s2">&quot;sh&quot;</span><span class="p">]:</span>
         <span class="kn">from</span> <span class="nn">.shell</span> <span class="kn">import</span> <span class="n">main</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;api-get&quot;</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">.api</span> <span class="kn">import</span> <span class="n">api_get</span> <span class="k">as</span> <span class="n">main</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;docgen&quot;</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">.apps</span> <span class="kn">import</span> <span class="n">docgen</span> <span class="k">as</span> <span class="n">main</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;exec&quot;</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">.execute</span> <span class="kn">import</span> <span class="n">main</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;info&quot;</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">.info</span> <span class="kn">import</span> <span class="n">main</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;tunnel&quot;</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">.tunnel</span> <span class="kn">import</span> <span class="n">main</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;run-singularity&quot;</span><span class="p">:</span>
