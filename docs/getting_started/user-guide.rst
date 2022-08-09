@@ -250,6 +250,38 @@ or with an environment variable:
     $ tunel exec waffles echo `$HOME`
 
 
+api-get
+-------
+
+When you have a tunel app running, if it exposes an API via socket, tunel provides Python functions
+to be able to hit defined points in its API. As an example, if we start with the `Tunel Django Template <https://github.com/vsoch/tunel-django/>`_
+that serves a basic jokes API, we can either go to `http://127.0.0:8000/api/joke/` to see a json response for a joke,
+or we can do either:
+
+.. code-block:: console
+
+    $ tunel api-get --socket /tmp/test/tunel-django.sock.api.sock /api/joke/ --json
+    {
+        "text": "Two JavaScript developers walked into the variable `bar`. Ouch!",
+        "author": "elijahmanor",
+        "created": "09/10/2013",
+        "tags": [
+            "javascript"
+        ],
+        "rating": 3
+    }
+
+Or just plain text:
+
+.. code-block:: console
+
+    $ tunel api-get --socket /tmp/test/tunel-django.sock.api.sock /api/joke/
+    {"text": "q. Why did Jason cover himself with bubble wrap? a. Because he wanted to make a cross-domain JSONP request.", "question": "Why did Jason cover himself with bubble wrap?", "answer": "Because he wanted to make a cross-domain JSONP request", "author": "elijahmanor", "created": "09/11/2013", "tags": ["javascript"], "rating": 5}
+
+And this is how you would embed (in your Python applications) logic to interact with your Tunel app, either on your host (where the socket is tunneled)
+or the HPC cluster (where the socket is written).
+
+
 tunnel
 ------
 

@@ -59,6 +59,21 @@ def get_parser():
     # print version and exit
     subparsers.add_parser("version", description="show software version")
 
+    # Tunel api-get means we issue a GET request to an endpoint
+    api_get = subparsers.add_parser(
+        "api-get",
+        description="interact with the GET api of a tunel app.",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    api_get.add_argument("--socket", help="path to tunel mapped socket")
+    api_get.add_argument("path", help="path to GET (defaults to /)")
+    api_get.add_argument(
+        "--json",
+        help="load response as json",
+        default=False,
+        action="store_true",
+    )
+
     # Local shell with client loaded
     shell = subparsers.add_parser(
         "shell",
@@ -239,6 +254,8 @@ def run_tunel():
     # Does the user want a shell?
     if args.command in ["shell", "sh"]:
         from .shell import main
+    if args.command == "api-get":
+        from .api import api_get as main
     if args.command == "docgen":
         from .apps import docgen as main
     if args.command == "exec":
