@@ -23,6 +23,7 @@ echo "App working directory is ${WORKDIR}"
 
 # Bind the database
 DB_DIR=${SOCKET_DIR}/db
+STATIC_DIR=${SOCKET_DIR}/static
 
 # username and password for django to create
 {% include "bash/set-user-pass.sh" %}
@@ -37,14 +38,14 @@ DB_DIR=${SOCKET_DIR}/db
 
 # Just pull to tmp for now so cleaned up
 SIF="${SINGULARITY_CACHEDIR}/tunel-django.sif"
-CONTAINER="{% if args.container %}{{ args.container }}{% else %}docker://ghcr.io/tunel-app/tunel-django:{% if args.tag %}{{ args.tag }}{% else %}latest{% endif %}{% endif %}"
+CONTAINER="{% if args.container %}{{ args.container }}{% else %}docker://ghcr.io/tunel-apps/tunel-django:{% if args.tag %}{{ args.tag }}{% else %}latest{% endif %}{% endif %}"
 
 # First effort
 if command -v singularity &> /dev/null
 then
     printf "singularity pull ${CONTAINER}\n"
 
-    mkdir -p ${DB_DIR}
+    mkdir -p ${DB_DIR} ${STATIC_DIR}
 
     # Only pull the container if we do not have it yet, or the user requests it
     if [[ ! -f "${SIF}" ]] || [[ "{{ args.pull }}" != "" ]]; then
@@ -54,7 +55,7 @@ then
     # The false at the end ensures we aren't using nginx, but rather uwsgi just with sockets
     printf "singularity exec --bind ${DB_DIR}:/code/db --env TUNEL_PASS=***** --env TUNEL_USER=${TUNEL_USER} --bind ${WORKDIR}:/code/data ${SIF} /bin/bash /code/scripts/run_uwsgi.sh ${SOCKET} false\n"
     # The bind for WORKDIR to /var/www/data ensures the filesystem explorer works
-    singularity exec --bind ${DB_DIR}:/code/db --env TUNEL_PASS=${TUNEL_PASS} --env TUNEL_USER=${TUNEL_USER} --bind ${WORKDIR}:/code/data ${SIF} /bin/bash /code/scripts/run_uwsgi.sh ${SOCKET} false
+    singularity exec --bind ${DB_DIR}:/code/db --env TUNEL_PASS=${TUNEL_PASS} --env TUNEL_USER=${TUNEL_USER} --bind ${WORKDIR}:/code/static --bind ${WORKDIR}:/code/data ${SIF} /bin/bash /code/scripts/run_uwsgi.sh ${SOCKET} false
 else
     printf "Singularity is not available.\n"
 fi

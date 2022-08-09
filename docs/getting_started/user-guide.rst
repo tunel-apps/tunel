@@ -220,6 +220,68 @@ Commands
 
 Tunel is driven by a command line client, and (to be a developed) a web interface that allows the same functionality.
 
+list-apps
+---------
+
+The first thing you might want to do is see what apps are available.
+
+.. code-block:: console
+
+    $ tunel list-apps
+                         Tunel Apps                                                                                      
+    |---|----------------------------------|-------------|
+    | # | Name                             |   Launcher  |                                                               
+    |---|----------------------------------|-------------|                                                               
+    │ 0 │ slurm/socket/singularity-jupyter │       slurm │                                                                
+    │ 1 │ htcondor/job                     │    htcondor │                                                                
+    │ 2 │ slurm/socket/jupyter             │       slurm │                                                                
+    │ 3 │ slurm/port/jupyter               │       slurm │                                                                
+    │ 4 │ singularity/socket/jupyter       │ singularity │                                                                
+    │ 5 │ singularity/socket/tunel-django  │ singularity │                                                                
+    └───┴──────────────────────────────────┴─────────────┘    
+   
+These are located in the ``tunel/apps`` directory, organized by directory
+organization for uniqueness. 
+
+
+info
+----
+
+To get basic info for an app, just ask for it:
+
+.. code-block:: console
+
+    $ tunel info singularity/socket/tunel-django
+
+This should generally show you accepted flags/arguments, along with examples for running.
+Since paths can be long, you are also able to ask for a shortened name, and it must still be
+unique with the set. E.g.,:
+
+.. code-block:: console
+
+    $ tunel info tunel-django
+
+works the same! This convention is true for all subsequent commands.
+You can also ask for json:
+
+.. code-block:: console
+
+    $ tunel info tunel-django --json
+
+
+If you ask for a shortened name that matches more than one app, you'll see:
+
+.. code-block:: console
+
+    $ tunel info singularity
+    Found 3 apps:
+    slurm/socket/singularity-jupyter
+    singularity/socket/jupyter
+    singularity/socket/tunel-django
+    Be more specific to disambiguate singularity!
+
+And you should follow the instruction and be more specific.
+
 shell
 -----
 
@@ -248,6 +310,38 @@ or with an environment variable:
 .. code-block:: console
 
     $ tunel exec waffles echo `$HOME`
+
+
+api-get
+-------
+
+When you have a tunel app running, if it exposes an API via socket, tunel provides Python functions
+to be able to hit defined points in its API. As an example, if we start with the `Tunel Django Template <https://github.com/vsoch/tunel-django/>`_
+that serves a basic jokes API, we can either go to `http://127.0.0:8000/api/joke/` to see a json response for a joke,
+or we can do either:
+
+.. code-block:: console
+
+    $ tunel api-get --socket /tmp/test/tunel-django.sock.api.sock /api/joke/ --json
+    {
+        "text": "Two JavaScript developers walked into the variable `bar`. Ouch!",
+        "author": "elijahmanor",
+        "created": "09/10/2013",
+        "tags": [
+            "javascript"
+        ],
+        "rating": 3
+    }
+
+Or just plain text:
+
+.. code-block:: console
+
+    $ tunel api-get --socket /tmp/test/tunel-django.sock.api.sock /api/joke/
+    {"text": "q. Why did Jason cover himself with bubble wrap? a. Because he wanted to make a cross-domain JSONP request.", "question": "Why did Jason cover himself with bubble wrap?", "answer": "Because he wanted to make a cross-domain JSONP request", "author": "elijahmanor", "created": "09/11/2013", "tags": ["javascript"], "rating": 5}
+
+And this is how you would embed (in your Python applications) logic to interact with your Tunel app, either on your host (where the socket is tunneled)
+or the HPC cluster (where the socket is written).
 
 
 tunnel
@@ -437,22 +531,6 @@ This defaults to ``tunel/apps`` and although it is under development, it looks s
             └── jupyter.sbatch
     
 Notice that apps are organized into being accessible via port (not recommended) vs. socket.
-You can currently list available apps found on these paths as follows:
-
-.. code-block:: console
-
-    $ tunel list-apps
-                         Tunel Apps                                                                                      
-    |---|----------------------------------|-------------|
-    | # | Name                             |   Launcher  |                                                               
-    |---|----------------------------------|-------------|                                                               
-    │ 0 │ slurm/socket/singularity-jupyter │       slurm │                                                                
-    │ 1 │ slurm/socket/jupyter             │       slurm │                                                                
-    │ 2 │ slurm/port/jupyter               │       slurm │                                                                
-    │ 3 │ singularity/socket/jupyter       │ singularity │                                                                
-    └───┴──────────────────────────────────┴─────────────┘    
-   
-
 If you need to use a socket, the app will have needs->socket->true. Socket enabled apps will
 start the job, show you two options for ssh commands to connect when the notebook is ready (e.g., when the output
 shows up with the token) and then you can copy paste that into a separate terminal to start the tunnel.

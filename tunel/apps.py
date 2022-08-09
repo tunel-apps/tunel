@@ -61,6 +61,12 @@ class App:
         """
         return self.get(key)
 
+    def print_pretty(self):
+        """
+        Print the app (and args, etc) pretty to the terminal.
+        """
+        logger.print_pretty(self.config)
+
     def docgen(self, out=None, outdir=None):
         """
         Render documentation for an app.
@@ -146,14 +152,29 @@ class App:
             self.validate()
 
 
-def get_app(app, extra=None):
+def get_app(name, extra=None):
     """
     Given an app name, get the loaded app for it
     """
-    apps = list_apps()
-    if app not in apps:
-        logger.exit("Cannot find app %s\nChoices are:\n%s" % (app, "\n  ".join(apps)))
-    app = apps[app]
+    apps = []
+    listing = list_apps()
+    for app in listing:
+        if name in app:
+            apps.append(app)
+
+    if not apps:
+        logger.exit(
+            "Cannot find app %s\nChoices are:\n%s" % (name, "\n  ".join(listing))
+        )
+    if len(apps) > 1:
+        logger.exit(
+            "Found %s apps:\n%s\nBe more specific to disambiguate %s!"
+            % (len(apps), "\n".join(apps), name)
+        )
+
+    app = apps[0]
+    logger.info(f"Loading app {app}...")
+    app = listing[app]
     app.add_args(extra)
     return app
 

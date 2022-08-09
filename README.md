@@ -20,13 +20,8 @@ See our ⭐️ [documentation](https://tunel-apps.github.io/tunel) ⭐️ to get
 Should there be an init/check command that sniffs what is available on a cluster? E.g., singularity, sbatch, sinfo, module load, etc.
 Create "tunel" command over
 
-- applications - how to define a set we can run? E.g., to launch a container on a node and expose the port TODO NEXT
 - should be able to interact with whatever APIs available on the cluster (and detect what is there?)
-- should have suite of applications you can install (e.g., pull containers)
-- so we need metadata for those containers - can they go in shpc?
-- should tunel use shpc to pull / run containers, or just do on the fly?
 - tunel alone should open UI that feels like cloud
-- update htcondor to use Python API
 
 ## Developer Environments
 

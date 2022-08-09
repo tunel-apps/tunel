@@ -59,6 +59,29 @@ def get_parser():
     # print version and exit
     subparsers.add_parser("version", description="show software version")
 
+    info = subparsers.add_parser(
+        "info",
+        description="Get information about a named app.",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
+    # Tunel api-get means we issue a GET request to an endpoint
+    api_get = subparsers.add_parser(
+        "api-get",
+        description="interact with the GET api of a tunel app.",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    api_get.add_argument("--socket", help="path to tunel mapped socket")
+    api_get.add_argument("path", help="path to GET (defaults to /)")
+
+    for command in info, api_get:
+        command.add_argument(
+            "--json",
+            help="provide result as json",
+            default=False,
+            action="store_true",
+        )
+
     # Local shell with client loaded
     shell = subparsers.add_parser(
         "shell",
@@ -182,7 +205,7 @@ def get_parser():
             help="server identity to interact with (e.g., name in ~/.ssh/config)",
         )
 
-    for command in [run_app, stop_app]:
+    for command in [run_app, stop_app, info]:
         command.add_argument("app", help="The name of the application.")
     return parser
 
@@ -239,10 +262,14 @@ def run_tunel():
     # Does the user want a shell?
     if args.command in ["shell", "sh"]:
         from .shell import main
+    if args.command == "api-get":
+        from .api import api_get as main
     if args.command == "docgen":
         from .apps import docgen as main
     if args.command == "exec":
         from .execute import main
+    if args.command == "info":
+        from .info import main
     if args.command == "tunnel":
         from .tunnel import main
     if args.command == "run-singularity":
