@@ -9,6 +9,10 @@ import os
 import threading
 import inspect
 
+from rich.panel import Panel
+from rich.syntax import Syntax
+from rich.table import Table
+from rich.rule import Rule
 from rich.console import Console
 from rich import print
 from rich.console import Group
@@ -146,9 +150,45 @@ class Logger:
             msg = dict(level="shellcmd", msg=msg)
             self.handler(msg)
 
+    def print_pretty(self, obj):
+        """
+        Print a dict (and nested content) pretty.
+        """
+        for field, content in obj.items():
+
+            self.c.print(Rule(field, style="blue"))
+            # If we have a dict, make key value pairs
+            if isinstance(content, dict):
+                panel = ""
+                for k, v in content.items():
+                    panel += f"{k}: {v}"
+                self.c.print(Panel(panel))
+            # List of dicts, assumes same keys
+            elif isinstance(content, list) and content and isinstance(content[0], dict):
+                table = Table()
+                fields = content[0]
+                for i, key in enumerate(fields):
+                    color = "magenta"
+                    if i == 0:
+                        color = "cyan"
+                    table.add_column(key, style=color)
+                count = 0
+                for item in content:
+                    row = []
+                    for k in fields:
+                        if k in item:
+                            row.append(item[k])
+                    table.add_row(*row)
+                    count += 1
+                self.c.print(table)
+            elif field == "examples":
+                self.c.print(Panel(Syntax(content, "bash")))
+            else:
+                self.c.print(Panel(content))
+
     def text_handler(self, msg):
-        """The default snakemake log handler.
-        Prints the output to the console.
+        """
+        The default handler prints output to the console.
         Args:
             msg (dict):     the log message dictionary
         """
