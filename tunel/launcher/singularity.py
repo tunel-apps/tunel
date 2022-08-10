@@ -2,14 +2,13 @@ __author__ = "Vanessa Sochat"
 __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
-from tunel.logger import logger
-import tunel.utils as utils
-
+import os
 import threading
 import time
-import os
 
+import tunel.utils as utils
 from tunel.launcher.base import Launcher
+from tunel.logger import logger
 
 
 class Singularity(Launcher):

@@ -4,8 +4,9 @@ __license__ = "MPL 2.0"
 
 # Get info for an app
 
-import tunel.apps
 import json
+
+import tunel.apps
 
 
 def main(args, parser, extra, subparser):

@@ -2,15 +2,12 @@ __author__ = "Vanessa Sochat"
 __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
-from tunel.logger import logger
-from tunel.launcher.base import Launcher
-import tunel.utils as utils
+import os
+
 import tunel.ssh
 import tunel.template
-
-import threading
-import time
-import os
+from tunel.launcher.base import Launcher
+from tunel.logger import logger
 
 here = os.path.dirname(os.path.abspath(__file__))
 

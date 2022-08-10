@@ -4,11 +4,12 @@ __author__ = "Vanessa Sochat"
 __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
+import argparse
+import os
+import sys
+
 import tunel
 from tunel.logger import setup_logger
-import argparse
-import sys
-import os
 
 
 def get_parser():

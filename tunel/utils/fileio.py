@@ -2,15 +2,16 @@ __author__ = "Vanessa Sochat"
 __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
-import hashlib
 import errno
+import hashlib
+import json
 import os
 import re
 import shutil
 import tempfile
+
 import yaml
 
-import json
 from tunel.logger import logger
 
 

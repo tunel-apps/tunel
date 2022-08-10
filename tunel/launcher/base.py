@@ -2,9 +2,10 @@ __author__ = "Vanessa Sochat"
 __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
-import tunel.utils as utils
-import tunel.ssh
 import os
+
+import tunel.ssh
+import tunel.utils as utils
 
 here = os.path.dirname(os.path.abspath(__file__))
 

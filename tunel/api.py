@@ -5,12 +5,11 @@ __license__ = "MPL 2.0"
 # Original example used to derive this is provided under the MIT License
 # https://github.com/akx/uwsgi-socket-example/commit/e5e1df3cdc4a860434b7655663133d8e5103e431
 
-import os
 import json
-import sys
+import os
 import socket
 import struct
-from binascii import hexlify
+import sys
 
 
 def force_bytes(value):

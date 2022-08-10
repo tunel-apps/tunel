@@ -2,21 +2,19 @@ __author__ = "Vanessa Sochat"
 __copyright__ = "Copyright 2021, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
+import inspect
 import logging as _logging
+import os
 import platform
 import sys
-import os
 import threading
-import inspect
 
+from rich import print
+from rich.console import Console, Group
 from rich.panel import Panel
+from rich.rule import Rule
 from rich.syntax import Syntax
 from rich.table import Table
-from rich.rule import Rule
-from rich.console import Console
-from rich import print
-from rich.console import Group
-from rich.panel import Panel
 
 
 class ColorizingStreamHandler(_logging.StreamHandler):
