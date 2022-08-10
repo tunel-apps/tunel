@@ -1,7 +1,7 @@
 from .base import Launcher
 from .htcondor import HTCondor
-from .slurm import Slurm
 from .singularity import Singularity
+from .slurm import Slurm
 
 
 def get_launcher(app):

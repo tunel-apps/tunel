@@ -2,14 +2,13 @@ __author__ = "Vanessa Sochat"
 __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
-from tunel.logger import logger
-from tunel.launcher.base import Launcher
-import tunel.utils as utils
-import tunel.ssh
-
+import os
 import threading
 import time
-import os
+
+import tunel.utils
+from tunel.launcher.base import Launcher
+from tunel.logger import logger
 
 here = os.path.dirname(os.path.abspath(__file__))
 
@@ -90,6 +89,7 @@ class Slurm(Launcher):
 
         # Prepare dictionary with content to render into recipes
         render = self.prepare_render(app, paths)
+        remote_script = render["script"]
 
         # Clean up previous sockets
         self.ssh.execute(["rm", "-rf", "%s/*.sock" % render["scriptdir"]])

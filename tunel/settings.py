@@ -2,14 +2,15 @@ __author__ = "Vanessa Sochat"
 __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
-from tunel.logger import logger
-import tunel.defaults as defaults
-import tunel.schemas
+import os
+from datetime import datetime
+
+import jsonschema
 import yaml
 
-from datetime import datetime
-import jsonschema
-import os
+import tunel.defaults as defaults
+import tunel.schemas
+from tunel.logger import logger
 
 
 class SettingsBase:

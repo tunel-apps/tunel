@@ -30,7 +30,11 @@ def get_reqs(lookup=None, key="INSTALL_REQUIRES"):
                     dependency = module_name
                 else:
                     sign = ">=" if key == "min_version" else "<="
-                    dependency = "%s%s%s" % (module_name, sign, module_meta["min_version"])
+                    dependency = "%s%s%s" % (
+                        module_name,
+                        sign,
+                        module_meta["min_version"],
+                    )
                 install_requires.append(dependency)
     return install_requires
 

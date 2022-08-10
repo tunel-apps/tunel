@@ -3,14 +3,15 @@ __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
 
-from tunel.settings import Settings
+import os
+import random
+import shlex
+
 import tunel.defaults as defaults
 import tunel.ssh.commands as commands
-from tunel.logger import logger
 import tunel.utils
-import random
-import os
-import shlex
+from tunel.logger import logger
+from tunel.settings import Settings
 
 
 class Tunnel:

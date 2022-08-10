@@ -2,9 +2,10 @@ __author__ = "Vanessa Sochat"
 __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
+from rich.table import Table
+
 import tunel.apps
 from tunel.logger import logger
-from rich.table import Table
 
 
 def list_apps(args, parser, extra, subparser):
