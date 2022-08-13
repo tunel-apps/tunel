@@ -1,6 +1,6 @@
 launcher: singularity
 script: app.sh
-description: Run a code server to edit files on your remote machine
+description: Work on files on your remote machine via VS Code in the browser, all via unix sockets
 needs:
   socket: true
 examples: |
