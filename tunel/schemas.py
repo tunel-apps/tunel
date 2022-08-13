@@ -19,6 +19,7 @@ arguments = {
 
 appSettingsProperties = {
     "launcher": {"type": "string"},
+    "launchers_supported": {"type": "array", "items": {"type": "string"}},
     "script": {"type": "string"},
     "description": {"type": "string"},
     "args": {"type": "array", "items": arguments},

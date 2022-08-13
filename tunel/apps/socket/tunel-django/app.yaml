@@ -1,4 +1,7 @@
 launcher: singularity
+launchers_supported:
+ - singularity
+ - slurm
 script: app.sh
 description: An example Django application run via a Singularity container.
 needs:

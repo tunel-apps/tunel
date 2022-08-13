@@ -29,6 +29,8 @@ jobs:
           git clone https://github.com/tunel-apps/tunel
           cd tunel
           pip install -e .
+          # Clear out old apps (names change)
+          rm -rf apps/_library/*.md          
           tunel docgen apps/_library
           cd apps
           bundle install

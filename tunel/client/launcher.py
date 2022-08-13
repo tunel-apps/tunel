@@ -11,7 +11,7 @@ import tunel.launcher
 
 def run_app(args, parser, extra, subparser):
     app = tunel.apps.get_app(args.app, extra)
-    launcher = tunel.launcher.get_launcher(app)(
+    launcher = tunel.launcher.get_launcher(app, args.launcher)(
         args.server, remote_port=args.port, local_port=args.local_port
     )
     launcher.run_app(app)
@@ -19,7 +19,7 @@ def run_app(args, parser, extra, subparser):
 
 def stop_app(args, parser, extra, subparser):
     app = tunel.apps.get_app(args.app, extra)
-    launcher = tunel.launcher.get_launcher(app)(
+    launcher = tunel.launcher.get_launcher(app, args.launcher)(
         args.server, remote_port=args.port, local_port=args.local_port
     )
     launcher.stop_app(app)

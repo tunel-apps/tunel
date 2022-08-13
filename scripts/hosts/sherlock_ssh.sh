@@ -4,10 +4,10 @@
 # Prints an ssh configuration for the user, selecting a login node at random
 # Sample usage: bash sherlock_ssh.sh
 echo
-read -p "Sherlock username > "  FORWARD_USERNAME
+read -p "Sherlock username > "  TUNEL_USERNAME
 
 echo "Host sherlock
-    User ${FORWARD_USERNAME}
+    User ${TUNEL_USERNAME}
     Hostname login.sherlock.stanford.edu
     GSSAPIDelegateCredentials yes
     GSSAPIAuthentication yes
