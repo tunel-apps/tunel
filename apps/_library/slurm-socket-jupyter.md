@@ -4,9 +4,9 @@ name:  "slurm/socket/jupyter"
 launcher: "slurm"
 script: "jupyter.sbatch"
 maintainer: "@vsoch"
-github: "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml"
-script_url: "https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/jupyter/jupyter.sbatch"
-updated_at: "2022-07-20 14:32:01.511234"
+github: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml"
+script_url: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/jupyter/jupyter.sbatch"
+updated_at: "2022-08-13 13:14:24.688282"
 description: "A Jupyter notebook intended to be run with a slurm job, interactive via a socket."
 config: {'launcher': 'slurm', 'script': 'jupyter.sbatch', 'description': 'A Jupyter notebook intended to be run with a slurm job, interactive via a socket.', 'args': [{'name': 'workdir', 'description': 'Working directory for the notebook'}, {'name': 'jupyterlab', 'description': 'Try running jupyterlab instead (e,g. set to true to enable)'}, {'name': 'modules', 'description': 'comma separated list of modules to load', 'split': ','}], 'needs': {'socket': True}}
 ---
@@ -101,4 +101,4 @@ jupyter {% if args.jupyterlab %}lab{% else %}notebook{% endif %} --no-browser --
 {% endraw %}
 ```
 
-Have any questions, or want to request a new app or launcher? [Ask us!](https://github.com/vsoch/tunel/issues)
+Have any questions, or want to request a new app or launcher? [Ask us!](https://github.com/tunel-apps/tunel/issues)

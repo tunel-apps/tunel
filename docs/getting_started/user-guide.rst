@@ -316,7 +316,7 @@ api-get
 -------
 
 When you have a tunel app running, if it exposes an API via socket, tunel provides Python functions
-to be able to hit defined points in its API. As an example, if we start with the `Tunel Django Template <https://github.com/vsoch/tunel-django/>`_
+to be able to hit defined points in its API. As an example, if we start with the `Tunel Django Template <https://github.com/tunel-apps/tunel-django/>`_
 that serves a basic jokes API, we can either go to `http://127.0.0:8000/api/joke/` to see a json response for a joke,
 or we can do either:
 

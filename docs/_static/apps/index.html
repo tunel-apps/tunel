@@ -16,7 +16,7 @@
     <link href="/tunel/_static/apps/css/fresh-bootstrap-table.css" rel="stylesheet" />
     <link href="/tunel/_static/apps/css/syntax.css" rel="stylesheet" />
     <meta name="description" content="Tunel Apps">
-    <meta name="thumbnail" content="https://vsoch.github.io/tunel/img/logo.png">
+    <meta name="thumbnail" content="https://tunel-apps.github.io/tunel/img/logo.png">
     <meta name="name" content="index.md">
     
 </head>
@@ -35,7 +35,7 @@
                 <img src="img/logo.png" style="width:50px; margin-right:30px;float:left" /></a></span>
             <button id="docsBtn" class="btn btn-default">Documentation</button>
             <button id="apiBtn" class="btn btn-default"><i class="fa fa-code"></i></button>
-            <span style="color:white;margin-left:100px" id="message">5 apps.</span>
+            <span style="color:white;margin-left:100px" id="message">7 apps.</span>
         </div>
         <table id="fresh-table" class="table">
            <thead>
@@ -46,9 +46,9 @@
           </thead>
               <tbody>
                 
-                  <tr data-name="htcondor/job" data-github="https://github.com/vsoch/tunel/blob/main/tunel/apps/htcondor/job/app.yaml">
+                  <tr data-name="htcondor/job" data-github="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/htcondor/job/app.yaml">
                     <td>
-                        <a href="https://github.com/vsoch/tunel/blob/main/tunel/apps/htcondor/job/app.yaml" target="_blank">
+                        <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/htcondor/job/app.yaml" target="_blank">
                            <span class="btn btn-xs btn-primary">GITHUB</span></a>
                     </td>
                     <td>htcondor</td>
@@ -56,9 +56,19 @@
                     <td>A simple example to launch an HTCondor job (to sleep)</td>
                 </tr>
                 
-                  <tr data-name="singularity/socket/jupyter" data-github="https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml">
+                  <tr data-name="singularity/socket/code-server" data-github="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/code-server/app.yaml">
                     <td>
-                        <a href="https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml" target="_blank">
+                        <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/code-server/app.yaml" target="_blank">
+                           <span class="btn btn-xs btn-primary">GITHUB</span></a>
+                    </td>
+                    <td>singularity</td>
+                    <td><a href="/tunel/_static/apps/r/singularity-socket-code-server/">singularity/socket/code-server</a></td>
+                    <td>Work on files on your remote machine via VS Code in the browser, all via unix sockets</td>
+                </tr>
+                
+                  <tr data-name="singularity/socket/jupyter" data-github="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml">
+                    <td>
+                        <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml" target="_blank">
                            <span class="btn btn-xs btn-primary">GITHUB</span></a>
                     </td>
                     <td>singularity</td>
@@ -66,9 +76,19 @@
                     <td>A singularity jupyter notebook or lab to run directly on a remote (e.g., head node)</td>
                 </tr>
                 
-                  <tr data-name="slurm/port/jupyter" data-github="https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/port/jupyter/app.yaml">
+                  <tr data-name="singularity/socket/tunel-django" data-github="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.yaml">
                     <td>
-                        <a href="https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/port/jupyter/app.yaml" target="_blank">
+                        <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.yaml" target="_blank">
+                           <span class="btn btn-xs btn-primary">GITHUB</span></a>
+                    </td>
+                    <td>singularity</td>
+                    <td><a href="/tunel/_static/apps/r/singularity-socket-tunel-django/">singularity/socket/tunel-django</a></td>
+                    <td>An example Django application run via a Singularity container.</td>
+                </tr>
+                
+                  <tr data-name="slurm/port/jupyter" data-github="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/port/jupyter/app.yaml">
+                    <td>
+                        <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/port/jupyter/app.yaml" target="_blank">
                            <span class="btn btn-xs btn-primary">GITHUB</span></a>
                     </td>
                     <td>slurm</td>
@@ -76,9 +96,9 @@
                     <td>A Jupyter notebook intended to be run with a slurm job, interactive via a port</td>
                 </tr>
                 
-                  <tr data-name="slurm/socket/jupyter" data-github="https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml">
+                  <tr data-name="slurm/socket/jupyter" data-github="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml">
                     <td>
-                        <a href="https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml" target="_blank">
+                        <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml" target="_blank">
                            <span class="btn btn-xs btn-primary">GITHUB</span></a>
                     </td>
                     <td>slurm</td>
@@ -86,9 +106,9 @@
                     <td>A Jupyter notebook intended to be run with a slurm job, interactive via a socket.</td>
                 </tr>
                 
-                  <tr data-name="slurm/socket/singularity-jupyter" data-github="https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/app.yaml">
+                  <tr data-name="slurm/socket/singularity-jupyter" data-github="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/app.yaml">
                     <td>
-                        <a href="https://github.com/vsoch/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/app.yaml" target="_blank">
+                        <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/app.yaml" target="_blank">
                            <span class="btn btn-xs btn-primary">GITHUB</span></a>
                     </td>
                     <td>slurm</td>

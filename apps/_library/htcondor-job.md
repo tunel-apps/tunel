@@ -4,9 +4,9 @@ name:  "htcondor/job"
 launcher: "htcondor"
 script: "job.sh"
 maintainer: "@vsoch"
-github: "https://github.com/vsoch/tunel/blob/main/tunel/apps/htcondor/job/app.yaml"
-script_url: "https://github.com/vsoch/tunel/blob/main/tunel/apps/htcondor/job/job.sh"
-updated_at: "2022-07-20 14:32:01.503643"
+github: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/htcondor/job/app.yaml"
+script_url: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/htcondor/job/job.sh"
+updated_at: "2022-08-13 13:14:24.680710"
 description: "A simple example to launch an HTCondor job (to sleep)"
 config: {'launcher': 'htcondor', 'description': 'A simple example to launch an HTCondor job (to sleep)', 'script': 'job.sh', 'args': [{'name': 'cpus', 'description': 'The number of CPUs to allocate for the job (defaults to 1)'}, {'name': 'memory', 'description': 'The memory (in MB, without writing MB) for the job'}, {'name': 'disk', 'description': 'The disk space (also in GB, without the GB suffix) for the job'}, {'name': 'njobs', 'description': 'The number of jobs to launch of this type (defaults to 1)'}]}
 ---
@@ -82,4 +82,4 @@ echo "Science complete!"
 {% endraw %}
 ```
 
-Have any questions, or want to request a new app or launcher? [Ask us!](https://github.com/vsoch/tunel/issues)
+Have any questions, or want to request a new app or launcher? [Ask us!](https://github.com/tunel-apps/tunel/issues)
