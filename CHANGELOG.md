@@ -14,6 +14,7 @@ and **Merged pull requests**. Critical items to know are:
 The versions coincide with releases on pip. Only major versions will be released as tags on Github.
 
 ## [0.0.x](https://github.com/tunel-apps/tunel/tree/main) (0.0.x)
+ - adding code server app and commands for apps (0.0.13)
  - quick bug fixes and cleaning up imports (0.0.12)
  - support for socket API, info, and short name references (0.0.11)
  - updated release with new domain at tunel-apps (0.0.1)

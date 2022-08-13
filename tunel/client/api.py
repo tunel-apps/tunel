@@ -10,6 +10,8 @@ from tunel.logger import logger
 
 
 def api_get(args, parser, extra, subparser):
+    if not args.socket:
+        logger.exit("Socket for tunel must be provided with --socket")
     if not os.path.exists(args.socket):
         logger.exit("Socket for tunel %s does not exist." % args.socket)
     api = tunel.api.ApiConnection(args.socket)

@@ -49,6 +49,23 @@ Args ("args") should be a list of arguments, each of which contains a name and d
 
     $ tunel run-app osg slurm/socket/jupyter --workdir=/usr/username/workdir --modules=python/3.7,py-tensorflow
 
+Commands
+--------
+
+Commands (in the app.yaml, ``commands:`` might be wanted if, for example, your app generates a login credential
+that you want to cat to the terminal for the user. It's recommended to design your app to have an artificial home
+in the ``$SOCKET_DIR`` and then to designate it as home (e.g., ``--home`` with singularity. Currently, tunel supports
+a post command (for Singularity only) that might look like this:
+
+.. code-block:: yaml
+
+    commands:
+      post: cat $socket_dir/home/.config/code-server/config.yaml
+
+The above will substitute ``$socket_dir`` with the socket directory on the cluster,
+and you will have made the ``$socket_dir/home`` folder and designated it as ``--home``
+to singularity. See the singularity/socket/code-server app for an example.
+
 
 Includes
 --------

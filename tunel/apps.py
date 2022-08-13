@@ -135,6 +135,16 @@ class App:
             else:
                 logger.warning(f"Unexpected argument: {extra}, skipping.")
 
+    @property
+    def post_command(self):
+        """
+        Get a post command, if it exists
+        """
+        commands = self.get("commands")
+        if not commands:
+            return
+        return commands.get("post")
+
     def load_template(self):
         """
         Given an app, load the template script for it.

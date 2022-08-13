@@ -3,6 +3,7 @@ __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
 import os
+import shlex
 import threading
 import time
 
@@ -70,15 +71,19 @@ class Singularity(Launcher):
         Start a separate thread to print connection details.
         """
         thread = threading.Thread(
-            target=print_tunnel_instructions,
+            target=post_commands,
             name="Logger",
             args=[self.ssh, app, socket],
         )
         thread.start()
 
 
-def print_tunnel_instructions(ssh, app, socket):
+def post_commands(ssh, app, socket):
     time.sleep(10)
     ssh.tunnel_login_node(socket=socket, app=app)
+    if app.post_command:
+        logger.info("Found post command %s" % app.post_command)
+        post = app.post_command.replace("$socket_dir", os.path.dirname(socket))
+        ssh.execute(shlex.split(post), stream=True)
     time.sleep(30)
     ssh.tunnel_login_node(socket=socket, app=app)

@@ -23,6 +23,12 @@ appSettingsProperties = {
     "description": {"type": "string"},
     "args": {"type": "array", "items": arguments},
     "examples": {"type": ["array", "string"]},
+    "commands": {
+        "type": "object",
+        "properties": {
+            "post": {"type": "string"},
+        },
+    },
     "needs": {
         "type": "object",
         "properties": {
