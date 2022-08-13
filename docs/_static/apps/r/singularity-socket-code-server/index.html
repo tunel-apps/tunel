@@ -17,8 +17,8 @@
     <link href="/tunel/_static/apps/css/syntax.css" rel="stylesheet" />
     <meta name="description" content="Tunel Apps">
     <meta name="thumbnail" content="https://tunel-apps.github.io/tunel/img/logo.png">
-    <meta name="name" content="slurm/socket/jupyter">
-    <meta name="repository" content="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml">
+    <meta name="name" content="singularity/socket/code-server">
+    <meta name="repository" content="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/code-server/app.yaml">
     <meta name="pagetype" content="experiment">
 </head>
 
@@ -48,20 +48,20 @@
         </div>
         <div class="col-lg-4 col-lg-offset-1">
             <div class="spacing"></div>
-            <h4>slurm/socket/jupyter</h4>
+            <h4>singularity/socket/code-server</h4>
             <div style="padding-bottom:20px" class="hline"></div>
-            <p><b>Launcher</b>: slurm</p>
-            <p>A Jupyter notebook intended to be run with a slurm job, interactive via a socket.</p>
-            <p style="padding-top:15px"><a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml" target="_blank">
+            <p><b>Launcher</b>: singularity</p>
+            <p>Work on files on your remote machine via VS Code in the browser, all via unix sockets</p>
+            <p style="padding-top:15px"><a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/code-server/app.yaml" target="_blank">
                            <button class="btn btn-sm btn-primary">GITHUB</button></a>
-            <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/jupyter/jupyter.sbatch" target="_blank"><button class="btn btn-sm btn-primary">SCRIPT</button></a>            
+            <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/code-server/app.sh" target="_blank"><button class="btn btn-sm btn-primary">SCRIPT</button></a>            
             </p>
         </div>
     </div>
     <div class="row">
        <div class="col-md-12">
             <div style="margin:50px 80px 50px">
-            <a href="#usage" style="font-weight:bold">USAGE</a> | <a href="#arguments" style="font-weight:bold">ARGS</a>  <a href="#script" style="font-weight:bold">SCRIPT</a>
+            <a href="#usage" style="font-weight:bold">USAGE</a> | <a href="#arguments" style="font-weight:bold">ARGS</a>  | <a href="#examples" style="font-weight:bold">EXAMPLES</a> | <a href="#script" style="font-weight:bold">SCRIPT</a>
             </div>
        </div>
     </div>
@@ -70,7 +70,7 @@
             <div style="margin:0px 80px 50px">
             <h3 id="usage">Usage</h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tunel run-app &lt;server&gt; slurm/socket/jupyter
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tunel run-app &lt;server&gt; singularity/socket/code-server
 </code></pre></div></div>
 
 <h4 id="arguments">Arguments</h4>
@@ -85,18 +85,23 @@
 <tbody>
 <tr>
    <td>workdir</td>
-   <td>Working directory for the notebook</td>
+   <td>Working directory for app (and to show file explorer for)</td>
    <td>NA</td>
 </tr>
 <tr>
-   <td>jupyterlab</td>
-   <td>Try running jupyterlab instead (e,g. set to true to enable)</td>
+   <td>container</td>
+   <td>Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)</td>
    <td>NA</td>
 </tr>
 <tr>
-   <td>modules</td>
-   <td>comma separated list of modules to load</td>
-   <td>,</td>
+   <td>tag</td>
+   <td>Tag of the container to use (defaults to latest)</td>
+   <td>NA</td>
+</tr>
+<tr>
+   <td>pull</td>
+   <td>force a new pull (even if the container already exists).</td>
+   <td>NA</td>
 </tr>
 
 </tbody></table></div>
@@ -111,13 +116,20 @@
   <li>socket</li>
 </ul>
 
+<h3 id="examples">Examples</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Run app on login node with singularity, shorter pattern match</span>
+tunel run-app waffles code-server
+tunel run-app waffles singularity/socket/code-server
+</code></pre></div></div>
+
 <h3 id="scripts">Scripts</h3>
 
 <blockquote>
-  <p>jupyter.sbatch</p>
+  <p>app.sh</p>
 </blockquote>
 
-<p>This app uses the slurm launcher and the following script:</p>
+<p>This app uses the singularity launcher and the following script:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 
@@ -125,16 +137,16 @@
 <span class="nv">SOCKET_DIR</span><span class="o">=</span><span class="s2">"{{ scriptdir }}"</span>
 <span class="nb">mkdir</span> <span class="nt">-p</span> <span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span>
 
+<span class="c"># Include Singularity cachedir if not set</span>
+<span class="o">{</span>% include <span class="s2">"bash/singularity/set-cache-tmp.sh"</span> %<span class="o">}</span>
+
 <span class="c"># Set WORKDIR, first to args.workdir, then settings.yml workdir, then $HOME</span>
 <span class="o">{</span>% include <span class="s2">"bash/set-workdir.sh"</span> %<span class="o">}</span>
 <span class="nb">cd</span> <span class="nv">$WORKDIR</span>
 
 <span class="nb">echo</span> <span class="s2">"Job is </span><span class="k">${</span><span class="nv">JOB_NAME</span><span class="k">}</span><span class="s2">"</span>
 <span class="nb">echo</span> <span class="s2">"Socket directory is </span><span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span><span class="s2">"</span>
-<span class="nb">echo</span> <span class="s2">"Notebook working directory is </span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">"</span>
-
-<span class="c"># Create .local folder for default modules, if doesn't exist</span>
-<span class="o">{</span>% include <span class="s2">"bash/python/create-local.sh"</span> %<span class="o">}</span>
+<span class="nb">echo</span> <span class="s2">"App working directory is </span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">"</span>
 
 <span class="c"># Remove socket if exists</span>
 <span class="o">{</span>% include <span class="s2">"bash/socket/set-socket.sh"</span> %<span class="o">}</span>
@@ -147,9 +159,26 @@
 <span class="o">{</span>% <span class="k">for </span>path <span class="k">in </span>paths %<span class="o">}</span><span class="nb">export </span><span class="nv">PATH</span><span class="o">={{</span> path <span class="o">}}</span>:<span class="k">${</span><span class="nv">PATH</span><span class="k">}</span>
 <span class="o">{</span>% endfor %<span class="o">}</span>
 
-<span class="nb">printf</span> <span class="s2">"jupyter notebook --no-browser --sock </span><span class="k">${</span><span class="nv">SOCKET</span><span class="k">}</span><span class="se">\n</span><span class="s2">"</span>
-<span class="o">{</span>% <span class="k">if </span>args.jupyterlab %<span class="o">}</span><span class="nb">export </span><span class="nv">JUPYTER_ENABLE_LAB</span><span class="o">=</span><span class="nb">yes</span><span class="o">{</span>% endif %<span class="o">}</span>
-jupyter <span class="o">{</span>% <span class="k">if </span>args.jupyterlab %<span class="o">}</span>lab<span class="o">{</span>% <span class="k">else</span> %<span class="o">}</span>notebook<span class="o">{</span>% endif %<span class="o">}</span> <span class="nt">--no-browser</span> <span class="nt">--sock</span> <span class="k">${</span><span class="nv">SOCKET</span><span class="k">}</span>
+<span class="c"># Just pull to tmp for now so cleaned up</span>
+<span class="nv">SIF</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">SINGULARITY_CACHEDIR</span><span class="k">}</span><span class="s2">/code-server.sif"</span>
+<span class="nv">CONTAINER</span><span class="o">=</span><span class="s2">"docker://codercom/code-server:{% if args.tag %}{{ args.tag }}{% else %}latest{% endif %}"</span>
+
+<span class="c"># First effort</span>
+<span class="k">if </span><span class="nb">command</span> <span class="nt">-v</span> singularity &amp;&gt; /dev/null
+<span class="k">then
+    </span><span class="nb">printf</span> <span class="s2">"singularity pull </span><span class="k">${</span><span class="nv">CONTAINER</span><span class="k">}</span><span class="se">\n</span><span class="s2">"</span>
+
+    <span class="nb">mkdir</span> <span class="nt">-p</span> <span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span>/home
+
+    <span class="c"># Only pull the container if we do not have it yet, or the user requests it</span>
+    <span class="k">if</span> <span class="o">[[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="s2">"</span><span class="k">${</span><span class="nv">SIF</span><span class="k">}</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">||</span> <span class="o">[[</span> <span class="s2">"{{ args.pull }}"</span> <span class="o">!=</span> <span class="s2">""</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+        </span>singularity pull <span class="nt">--force</span> <span class="k">${</span><span class="nv">SIF</span><span class="k">}</span> <span class="k">${</span><span class="nv">CONTAINER</span><span class="k">}</span>
+    <span class="k">fi    
+    </span><span class="nb">printf</span> <span class="s2">"singularity run --home </span><span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span><span class="s2">/home --bind </span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">:/home/coder/project </span><span class="k">${</span><span class="nv">SIF</span><span class="k">}</span><span class="s2"> --socket </span><span class="k">${</span><span class="nv">SOCKET</span><span class="k">}</span><span class="se">\n</span><span class="s2">"</span>
+    singularity run <span class="nt">--home</span> <span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span>/home <span class="nt">--bind</span> <span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span>:/home/coder/project <span class="k">${</span><span class="nv">SIF</span><span class="k">}</span> <span class="nt">--socket</span> <span class="k">${</span><span class="nv">SOCKET</span><span class="k">}</span>
+<span class="k">else
+    </span><span class="nb">printf</span> <span class="s2">"Singularity is not available.</span><span class="se">\n</span><span class="s2">"</span>
+<span class="k">fi</span>
 
 </code></pre></div></div>
 

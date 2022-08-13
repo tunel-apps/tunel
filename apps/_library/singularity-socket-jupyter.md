@@ -4,9 +4,9 @@ name:  "singularity/socket/jupyter"
 launcher: "singularity"
 script: "jupyter.sh"
 maintainer: "@vsoch"
-github: "https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml"
-script_url: "https://github.com/vsoch/tunel/blob/main/tunel/apps/singularity/socket/jupyter/jupyter.sh"
-updated_at: "2022-07-20 14:32:01.519095"
+github: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml"
+script_url: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/jupyter/jupyter.sh"
+updated_at: "2022-08-13 13:14:24.699659"
 description: "A singularity jupyter notebook or lab to run directly on a remote (e.g., head node)"
 config: {'launcher': 'singularity', 'script': 'jupyter.sh', 'description': 'A singularity jupyter notebook or lab to run directly on a remote (e.g., head node)', 'needs': {'socket': True}, 'examples': '# Run jupyter notebook on login node with custom container\ntunel run-app waffles singularity/socket/jupyter --container=docker://jupyter/datascience-notebook\n# Run Jupyterlab login node (via Singularity container) on open science grid\ntunel run-app osg singularity/socket/jupyter --jupyterlab=true\n', 'args': [{'name': 'container', 'description': 'Change the jupyter container used (default is datascience notebook). Must start with container URI to pull (e.g., docker://)'}, {'name': 'jupyterlab', 'description': 'Try running jupyterlab instead (e,g. set to true to enable)'}, {'name': 'modules', 'description': 'comma separated list of modules to load', 'split': ','}]}
 ---
@@ -132,4 +132,4 @@ fi
 {% endraw %}
 ```
 
-Have any questions, or want to request a new app or launcher? [Ask us!](https://github.com/vsoch/tunel/issues)
+Have any questions, or want to request a new app or launcher? [Ask us!](https://github.com/tunel-apps/tunel/issues)

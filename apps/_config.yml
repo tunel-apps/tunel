@@ -5,7 +5,7 @@ title: Tunel Apps
 description: "Tunel Apps"
 baseurl: "/tunel/_static/apps" #important: start with /
 url: ""
-docs: https://vsoch.github.io/tunel/
+docs: https://tunel-apps.github.io/tunel/
 
 # Build settings
 markdown: kramdown
@@ -36,11 +36,11 @@ defaults:
       layout: "page"
 
 # Social networks usernames. Many more available: google-plus, flickr, linkedin, etc). Shown in footer.
-github: https://github.com/vsoch
-repo: https://github.com/vsoch/tunel
-docs: https://vsoch.github.io/tunel/
+github: https://github.com/tunel-apps
+repo: https://github.com/tunel-apps/tunel
+docs: https://tunel-apps.github.io/tunel/
 maintainer: "@vsoch"
-maintainer_url: https://github.com/vsoch
+maintainer_url: https://github.com/tunel-apps
 social:
   - title: twitter
     url: https://twitter.com/vsoch

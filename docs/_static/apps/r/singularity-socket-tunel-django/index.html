@@ -17,8 +17,8 @@
     <link href="/tunel/_static/apps/css/syntax.css" rel="stylesheet" />
     <meta name="description" content="Tunel Apps">
     <meta name="thumbnail" content="https://tunel-apps.github.io/tunel/img/logo.png">
-    <meta name="name" content="singularity/socket/jupyter">
-    <meta name="repository" content="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml">
+    <meta name="name" content="singularity/socket/tunel-django">
+    <meta name="repository" content="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.yaml">
     <meta name="pagetype" content="experiment">
 </head>
 
@@ -48,13 +48,13 @@
         </div>
         <div class="col-lg-4 col-lg-offset-1">
             <div class="spacing"></div>
-            <h4>singularity/socket/jupyter</h4>
+            <h4>singularity/socket/tunel-django</h4>
             <div style="padding-bottom:20px" class="hline"></div>
             <p><b>Launcher</b>: singularity</p>
-            <p>A singularity jupyter notebook or lab to run directly on a remote (e.g., head node)</p>
-            <p style="padding-top:15px"><a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml" target="_blank">
+            <p>An example Django application run via a Singularity container.</p>
+            <p style="padding-top:15px"><a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.yaml" target="_blank">
                            <button class="btn btn-sm btn-primary">GITHUB</button></a>
-            <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/jupyter/jupyter.sh" target="_blank"><button class="btn btn-sm btn-primary">SCRIPT</button></a>            
+            <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.sh" target="_blank"><button class="btn btn-sm btn-primary">SCRIPT</button></a>            
             </p>
         </div>
     </div>
@@ -70,7 +70,7 @@
             <div style="margin:0px 80px 50px">
             <h3 id="usage">Usage</h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tunel run-app &lt;server&gt; singularity/socket/jupyter
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tunel run-app &lt;server&gt; singularity/socket/tunel-django
 </code></pre></div></div>
 
 <h4 id="arguments">Arguments</h4>
@@ -84,19 +84,34 @@
 </thead>
 <tbody>
 <tr>
+   <td>user</td>
+   <td>username for logging into Django app (NOT your cluster username), defaults to tunel-user</td>
+   <td>NA</td>
+</tr>
+<tr>
+   <td>pass</td>
+   <td>password for logging in to Django app (NOT your cluster password), defaults to tunel-pass</td>
+   <td>NA</td>
+</tr>
+<tr>
+   <td>workdir</td>
+   <td>Working directory for app (and to show file explorer for)</td>
+   <td>NA</td>
+</tr>
+<tr>
    <td>container</td>
-   <td>Change the jupyter container used (default is datascience notebook). Must start with container URI to pull (e.g., docker://)</td>
+   <td>Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)</td>
    <td>NA</td>
 </tr>
 <tr>
-   <td>jupyterlab</td>
-   <td>Try running jupyterlab instead (e,g. set to true to enable)</td>
+   <td>tag</td>
+   <td>Tag of the container to use (defaults to latest)</td>
    <td>NA</td>
 </tr>
 <tr>
-   <td>modules</td>
-   <td>comma separated list of modules to load</td>
-   <td>,</td>
+   <td>pull</td>
+   <td>force a new pull (even if the container already exists).</td>
+   <td>NA</td>
 </tr>
 
 </tbody></table></div>
@@ -113,16 +128,18 @@
 
 <h3 id="examples">Examples</h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Run jupyter notebook on login node with custom container</span>
-tunel run-app waffles singularity/socket/jupyter <span class="nt">--container</span><span class="o">=</span>docker://jupyter/datascience-notebook
-<span class="c"># Run Jupyterlab login node (via Singularity container) on open science grid</span>
-tunel run-app osg singularity/socket/jupyter <span class="nt">--jupyterlab</span><span class="o">=</span><span class="nb">true</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Run app on login node with singularity, custom tag dev</span>
+tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</span><span class="o">=</span>dev
+<span class="c"># Force a new pull</span>
+tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</span><span class="o">=</span>dev <span class="nt">--pull</span>
+<span class="c"># Set a custom user/password (note that the UI is only available to you so this is not for security)</span>
+tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</span><span class="o">=</span>dev <span class="nt">--user</span><span class="o">=</span>hello <span class="nt">--pass</span><span class="o">=</span>moto  
 </code></pre></div></div>
 
 <h3 id="scripts">Scripts</h3>
 
 <blockquote>
-  <p>jupyter.sh</p>
+  <p>app.sh</p>
 </blockquote>
 
 <p>This app uses the singularity launcher and the following script:</p>
@@ -142,13 +159,20 @@ tunel run-app osg singularity/socket/jupyter <span class="nt">--jupyterlab</span
 
 <span class="nb">echo</span> <span class="s2">"Job is </span><span class="k">${</span><span class="nv">JOB_NAME</span><span class="k">}</span><span class="s2">"</span>
 <span class="nb">echo</span> <span class="s2">"Socket directory is </span><span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span><span class="s2">"</span>
-<span class="nb">echo</span> <span class="s2">"Notebook working directory is </span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"App working directory is </span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">"</span>
 
 <span class="c"># Create .local folder for default modules, if doesn't exist</span>
 <span class="o">{</span>% include <span class="s2">"bash/python/create-local.sh"</span> %<span class="o">}</span>
 
 <span class="c"># Remove socket if exists</span>
 <span class="o">{</span>% include <span class="s2">"bash/socket/set-socket.sh"</span> %<span class="o">}</span>
+
+<span class="c"># Bind the database</span>
+<span class="nv">DB_DIR</span><span class="o">=</span><span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span>/db
+<span class="nv">STATIC_DIR</span><span class="o">=</span><span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span>/static
+
+<span class="c"># username and password for django to create</span>
+<span class="o">{</span>% include <span class="s2">"bash/set-user-pass.sh"</span> %<span class="o">}</span>
 
 <span class="c"># Load modules requested by user</span>
 <span class="o">{</span>% <span class="k">for </span>module <span class="k">in </span>args.modules %<span class="o">}</span>module load <span class="o">{{</span> module <span class="o">}}</span> <span class="o">||</span> <span class="nb">printf</span> <span class="s2">"Could not load {{ module }}</span><span class="se">\n</span><span class="s2">"</span>
@@ -159,25 +183,26 @@ tunel run-app osg singularity/socket/jupyter <span class="nt">--jupyterlab</span
 <span class="o">{</span>% endfor %<span class="o">}</span>
 
 <span class="c"># Just pull to tmp for now so cleaned up</span>
-<span class="nv">SIF</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">SINGULARITY_CACHEDIR</span><span class="k">}</span><span class="s2">/jupyter-notebook.sif"</span>
-<span class="nv">CONTAINER</span><span class="o">=</span><span class="s2">"{% if args.container %}{{ args.container }}{% else %}docker://jupyter/datascience-notebook{% endif %}"</span>
+<span class="nv">SIF</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">SINGULARITY_CACHEDIR</span><span class="k">}</span><span class="s2">/tunel-django.sif"</span>
+<span class="nv">CONTAINER</span><span class="o">=</span><span class="s2">"{% if args.container %}{{ args.container }}{% else %}docker://ghcr.io/tunel-apps/tunel-django:{% if args.tag %}{{ args.tag }}{% else %}latest{% endif %}{% endif %}"</span>
 
 <span class="c"># First effort</span>
 <span class="k">if </span><span class="nb">command</span> <span class="nt">-v</span> singularity &amp;&gt; /dev/null
 <span class="k">then
     </span><span class="nb">printf</span> <span class="s2">"singularity pull </span><span class="k">${</span><span class="nv">CONTAINER</span><span class="k">}</span><span class="se">\n</span><span class="s2">"</span>
 
-    <span class="c"># Only pull the container if we do not have it yet</span>
-    <span class="k">if</span> <span class="o">[[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="s2">"</span><span class="k">${</span><span class="nv">SIF</span><span class="k">}</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
-        </span>singularity pull <span class="k">${</span><span class="nv">SIF</span><span class="k">}</span> <span class="k">${</span><span class="nv">CONTAINER</span><span class="k">}</span>
+    <span class="nb">mkdir</span> <span class="nt">-p</span> <span class="k">${</span><span class="nv">DB_DIR</span><span class="k">}</span> <span class="k">${</span><span class="nv">STATIC_DIR</span><span class="k">}</span>
+
+    <span class="c"># Only pull the container if we do not have it yet, or the user requests it</span>
+    <span class="k">if</span> <span class="o">[[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="s2">"</span><span class="k">${</span><span class="nv">SIF</span><span class="k">}</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">||</span> <span class="o">[[</span> <span class="s2">"{{ args.pull }}"</span> <span class="o">!=</span> <span class="s2">""</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+        </span>singularity pull <span class="nt">--force</span> <span class="k">${</span><span class="nv">SIF</span><span class="k">}</span> <span class="k">${</span><span class="nv">CONTAINER</span><span class="k">}</span>
     <span class="k">fi</span>
-
-    <span class="c"># In case they don't exist yet</span>
-    <span class="nb">mkdir</span> <span class="nt">-p</span> <span class="nv">$HOME</span>/.jupyter
-
-    <span class="nb">printf</span> <span class="s2">"singularity exec {% if args.jupyterlab %}--env JUPYTER_ENABLE_LAB=yes{% endif %} --home </span><span class="k">${</span><span class="nv">HOME</span><span class="k">}</span><span class="s2"> --bind </span><span class="k">${</span><span class="nv">HOME</span><span class="k">}</span><span class="s2">/.local:/home/jovyan/.local </span><span class="k">${</span><span class="nv">CONTAINER</span><span class="k">}</span><span class="s2"> jupyter {% if args.jupyterlab %}lab{% else %}notebook{% endif %} --no-browser --sock </span><span class="k">${</span><span class="nv">SOCKET</span><span class="k">}</span><span class="se">\n</span><span class="s2">"</span>
-    singularity <span class="nb">exec</span> <span class="o">{</span>% <span class="k">if </span>args.jupyterlab %<span class="o">}</span><span class="nt">--env</span> <span class="nv">JUPYTER_ENABLE_LAB</span><span class="o">=</span><span class="nb">yes</span><span class="o">{</span>% endif %<span class="o">}</span> <span class="nt">--home</span> <span class="k">${</span><span class="nv">HOME</span><span class="k">}</span> <span class="nt">--bind</span> <span class="k">${</span><span class="nv">HOME</span><span class="k">}</span>/.local:/home/jovyan/.local <span class="nt">--bind</span> <span class="k">${</span><span class="nv">HOME</span><span class="k">}</span>/.jupyter:/home/jovyan/.jupyter <span class="s2">"</span><span class="k">${</span><span class="nv">SIF</span><span class="k">}</span><span class="s2">"</span> jupyter <span class="o">{</span>% <span class="k">if </span>args.jupyterlab %<span class="o">}</span>lab<span class="o">{</span>% <span class="k">else</span> %<span class="o">}</span>notebook<span class="o">{</span>% endif %<span class="o">}</span> <span class="nt">--no-browser</span> <span class="nt">--sock</span> <span class="k">${</span><span class="nv">SOCKET</span><span class="k">}</span>
-<span class="k">else
+    
+    <span class="c"># The false at the end ensures we aren't using nginx, but rather uwsgi just with sockets</span>
+    <span class="nb">printf</span> <span class="s2">"singularity exec --bind </span><span class="k">${</span><span class="nv">DB_DIR</span><span class="k">}</span><span class="s2">:/code/db --env TUNEL_PASS=***** --env TUNEL_USER=</span><span class="k">${</span><span class="nv">TUNEL_USER</span><span class="k">}</span><span class="s2"> --bind </span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">:/code/data </span><span class="k">${</span><span class="nv">SIF</span><span class="k">}</span><span class="s2"> /bin/bash /code/scripts/run_uwsgi.sh </span><span class="k">${</span><span class="nv">SOCKET</span><span class="k">}</span><span class="s2"> false</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="c"># The bind for WORKDIR to /var/www/data ensures the filesystem explorer works</span>
+    singularity <span class="nb">exec</span> <span class="nt">--bind</span> <span class="k">${</span><span class="nv">DB_DIR</span><span class="k">}</span>:/code/db <span class="nt">--env</span> <span class="nv">TUNEL_PASS</span><span class="o">=</span><span class="k">${</span><span class="nv">TUNEL_PASS</span><span class="k">}</span> <span class="nt">--env</span> <span class="nv">TUNEL_USER</span><span class="o">=</span><span class="k">${</span><span class="nv">TUNEL_USER</span><span class="k">}</span> <span class="nt">--bind</span> <span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span>:/code/static <span class="nt">--bind</span> <span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span>:/code/data <span class="k">${</span><span class="nv">SIF</span><span class="k">}</span> /bin/bash /code/scripts/run_uwsgi.sh <span class="k">${</span><span class="nv">SOCKET</span><span class="k">}</span> <span class="nb">false
+</span><span class="k">else
     </span><span class="nb">printf</span> <span class="s2">"Singularity is not available.</span><span class="se">\n</span><span class="s2">"</span>
 <span class="k">fi</span>
 
