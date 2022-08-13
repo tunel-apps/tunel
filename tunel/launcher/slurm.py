@@ -272,7 +272,7 @@ class Slurm(Launcher):
 
 
 def print_logs(ssh, logs_prefix):
-
+    # TODO need to add app with post command here
     # Output and error commands
     output_command = "ssh %s tail -3 %s.out" % (ssh.server, logs_prefix)
     error_command = "ssh %s tail -3 %s.err" % (ssh.server, logs_prefix)

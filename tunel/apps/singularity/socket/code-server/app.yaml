@@ -1,0 +1,20 @@
+launcher: singularity
+script: app.sh
+description: Work on files on your remote machine via VS Code in the browser, all via unix sockets
+needs:
+  socket: true
+examples: |
+  # Run app on login node with singularity, shorter pattern match
+  tunel run-app waffles code-server
+  tunel run-app waffles singularity/socket/code-server
+commands:
+  post: cat $socket_dir/home/.config/code-server/config.yaml
+args:
+ - name: workdir
+   description: Working directory for app (and to show file explorer for)
+ - name: container
+   description: "Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)"
+ - name: tag
+   description: "Tag of the container to use (defaults to latest)"
+ - name: pull
+   description: force a new pull (even if the container already exists).
