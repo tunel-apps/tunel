@@ -394,7 +394,7 @@ We could do:</p>
 <section id="api-get">
 <h3>api-get<a class="headerlink" href="#api-get" title="Permalink to this heading"></a></h3>
 <p>When you have a tunel app running, if it exposes an API via socket, tunel provides Python functions
-to be able to hit defined points in its API. As an example, if we start with the <a class="reference external" href="https://github.com/vsoch/tunel-django/">Tunel Django Template</a>
+to be able to hit defined points in its API. As an example, if we start with the <a class="reference external" href="https://github.com/tunel-apps/tunel-django/">Tunel Django Template</a>
 that serves a basic jokes API, we can either go to <cite>http://127.0.0:8000/api/joke/</cite> to see a json response for a joke,
 or we can do either:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel api-get --socket /tmp/test/tunel-django.sock.api.sock /api/joke/ --json
