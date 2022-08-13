@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tunel.launcher.singularity &mdash; Tunel 0.0.12 documentation</title>
+  <title>tunel.launcher.singularity &mdash; Tunel 0.0.13 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/sphinx-argparse.css" type="text/css" />
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.12
+                0.0.13
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -82,6 +82,7 @@
 <span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;MPL 2.0&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shlex</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
@@ -149,16 +150,20 @@
 <span class="sd">        Start a separate thread to print connection details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span>
-            <span class="n">target</span><span class="o">=</span><span class="n">print_tunnel_instructions</span><span class="p">,</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">post_commands</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Logger&quot;</span><span class="p">,</span>
             <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">socket</span><span class="p">],</span>
         <span class="p">)</span>
         <span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="print_tunnel_instructions"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.singularity.print_tunnel_instructions">[docs]</a><span class="k">def</span> <span class="nf">print_tunnel_instructions</span><span class="p">(</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">socket</span><span class="p">):</span>
+<div class="viewcode-block" id="post_commands"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.singularity.post_commands">[docs]</a><span class="k">def</span> <span class="nf">post_commands</span><span class="p">(</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">socket</span><span class="p">):</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
     <span class="n">ssh</span><span class="o">.</span><span class="n">tunnel_login_node</span><span class="p">(</span><span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">post_command</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found post command </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">app</span><span class="o">.</span><span class="n">post_command</span><span class="p">)</span>
+        <span class="n">post</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">post_command</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;$socket_dir&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">socket</span><span class="p">))</span>
+        <span class="n">ssh</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">post</span><span class="p">),</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
     <span class="n">ssh</span><span class="o">.</span><span class="n">tunnel_login_node</span><span class="p">(</span><span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span></div>
 </pre></div>
