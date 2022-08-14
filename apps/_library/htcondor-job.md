@@ -6,7 +6,7 @@ script: "job.sh"
 maintainer: "@vsoch"
 github: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/htcondor/job/app.yaml"
 script_url: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/htcondor/job/job.sh"
-updated_at: "2022-08-13 13:14:24.680710"
+updated_at: "2022-08-14 12:59:18.898600"
 description: "A simple example to launch an HTCondor job (to sleep)"
 config: {'launcher': 'htcondor', 'description': 'A simple example to launch an HTCondor job (to sleep)', 'script': 'job.sh', 'args': [{'name': 'cpus', 'description': 'The number of CPUs to allocate for the job (defaults to 1)'}, {'name': 'memory', 'description': 'The memory (in MB, without writing MB) for the job'}, {'name': 'disk', 'description': 'The disk space (also in GB, without the GB suffix) for the job'}, {'name': 'njobs', 'description': 'The number of jobs to launch of this type (defaults to 1)'}]}
 ---
@@ -65,7 +65,7 @@ If split by is provided, this means the argument takes a list, and you should us
 
 > job.sh
 
-This app uses the htcondor launcher and the following script:
+This app uses the htcondor launcher by default.
 
 ```bash
 {% raw %}#!/bin/bash 

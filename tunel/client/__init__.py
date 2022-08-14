@@ -191,6 +191,10 @@ def get_parser():
         stop_condor,
     ]
 
+    # Run app can take a --launcher preference
+    for command in run_app, stop_app:
+        command.add_argument("--launcher", help="specify a non-default launcher to use")
+
     for command in [tunnel] + launchers:
         command.add_argument("--port", help="remote port to connect to.")
         command.add_argument("--local-port", help="local port to connect to.")

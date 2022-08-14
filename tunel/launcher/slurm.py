@@ -109,8 +109,8 @@ class Slurm(Launcher):
         command = [
             "sbatch",
             "--job-name=%s" % app.job_name,
-            "--output=%s.out" % render["log_output"],
-            "--error=%s.err" % render["log_error"],
+            "--output=%s" % render["log_output"],
+            "--error=%s" % render["log_error"],
             remote_script,
         ]
 
@@ -210,12 +210,12 @@ class Slurm(Launcher):
         logger.info("ssh %s cat %s.err" % (self.ssh.server, logs_prefix))
         print()
 
-    def print_updated_logs(self, logs_prefix):
+    def print_updated_logs(self, logs_prefix, app):
         """
         Start a separate thread that regularly checks and prints logs (when there is an updated line)
         """
         logs_thread = threading.Thread(
-            target=print_logs, name="Logger", args=[self.ssh, logs_prefix]
+            target=post_commands, name="Logger", args=[self.ssh, app, logs_prefix]
         )
         logs_thread.start()
 
@@ -267,23 +267,32 @@ class Slurm(Launcher):
                 )
                 # Create another process to check logs?
                 if logs_prefix:
-                    self.print_updated_logs(logs_prefix)
+                    self.print_updated_logs(logs_prefix, app)
                 self.ssh.tunnel(machine, socket=socket, app=app)
 
 
-def print_logs(ssh, logs_prefix):
-    # TODO need to add app with post command here
-    # Output and error commands
+def post_commands(ssh, app, logs_prefix):
+    """
+    Post commands to show logs and any commands->post defined by the app
+    """
     output_command = "ssh %s tail -3 %s.out" % (ssh.server, logs_prefix)
     error_command = "ssh %s tail -3 %s.err" % (ssh.server, logs_prefix)
 
     last_out = ""
     last_err = ""
+    post_command = False
     while True:
         time.sleep(5)
         new_out = ssh.execute_or_fail(output_command, quiet=True)
         new_err = ssh.execute_or_fail(error_command, quiet=True)
         panels = {}
+
+        # Show a post command (once), if defined
+        if not post_command and app.post_command:
+            logger.info("Found post command %s" % app.post_command)
+            post = app.post_command.replace("$socket_dir", os.path.dirname(socket))
+            ssh.execute(shlex.split(post), stream=True)
+            post_command = True
 
         if new_out and new_out != last_out:
             panels["cyan"] = output_command + "\n" + new_out

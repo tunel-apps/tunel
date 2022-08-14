@@ -54,6 +54,12 @@ class App:
     def get(self, key, default=None):
         return self.config.get(key, default)
 
+    @property
+    def launchers(self):
+        if not self.launchers_supported:
+            return [self.launcher]
+        return list(set(self.launchers_supported + [self.launcher]))
+
     def get_script(self):
         return os.path.join(self.app_dir, self.script)
 
@@ -118,7 +124,6 @@ class App:
         for extra in extras:
             if not extra.startswith("--"):
                 continue
-            print(extra)
             arg = extra.lstrip("--").split("=")
             if arg[0] not in args:
                 logger.warning(

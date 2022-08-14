@@ -59,7 +59,10 @@ If split by is provided, this means the argument takes a list, and you should us
 
 > {{ app.script }}
 
-This app uses the {{ app.launcher }} launcher and the following script:
+This app uses the {{ app.launcher }} launcher by default{% if app.launchers | length > 1 %}, and supports the following:
+
+{% for launcher in app.launchers %}
+  - {{ launcher }}{% endfor %}{% else %}.{% endif %}
 
 ```bash
 {{ script }}

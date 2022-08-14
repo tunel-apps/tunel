@@ -184,13 +184,14 @@ or the Singularity launcher. It's also recommended to export your cache director
 
 
 If you have custom logic to use Singularity that isn't encompassed in these
-two use cases, you can [let us know](https://github.com/tunel-apps/tunel) to ask for help, or write a custom app yourself.
+two use cases, you can `let us know <https://github.com/tunel-apps/tunel>`_ to ask for help, or write a custom app yourself.
+
 
 Connecting to Apps
 ------------------
 
 Since we cannot reliably always have access to an exposed port, the main (suggested) way to run an app is using
-a socket. Apps are organized according to using sockets or ports, e.g:
+a socket. Apps are organized according to using sockets or ports, and optionally launchers, e.g:
 
 
 .. code-block:: console
@@ -229,19 +230,21 @@ The first thing you might want to do is see what apps are available.
 
     $ tunel list-apps
                          Tunel Apps                                                                                      
-    |---|----------------------------------|-------------|
-    | # | Name                             |   Launcher  |                                                               
-    |---|----------------------------------|-------------|                                                               
-    │ 0 │ slurm/socket/singularity-jupyter │       slurm │                                                                
-    │ 1 │ htcondor/job                     │    htcondor │                                                                
-    │ 2 │ slurm/socket/jupyter             │       slurm │                                                                
-    │ 3 │ slurm/port/jupyter               │       slurm │                                                                
-    │ 4 │ singularity/socket/jupyter       │ singularity │                                                                
-    │ 5 │ singularity/socket/tunel-django  │ singularity │                                                                
-    └───┴──────────────────────────────────┴─────────────┘    
-   
+    |---|----------------------------------|---------------------------------|
+    | # | Name                             | Launcher    |     Supported     |                                                         
+    |---|----------------------------------|---------------------------------|                                                               
+    │ 0 │ socket/tunel-django              │ singularity │ slurm|singularity │   
+    │ 1 │ htcondor/job                     │ htcondor    │          htcondor │   
+    │ 2 │ slurm/socket/singularity-jupyter │ slurm       │             slurm │   
+    │ 3 │ slurm/socket/jupyter             │ slurm       │             slurm │   
+    │ 4 │ slurm/port/jupyter               │ slurm       │             slurm │   
+    │ 5 │ singularity/socket/code-server   │ singularity │       singularity │   
+    │ 6 │ singularity/socket/jupyter       │ singularity │       singularity │   
+    └───┴──────────────────────────────────┴─────────────┴───────────────────┘   
+
 These are located in the ``tunel/apps`` directory, organized by directory
-organization for uniqueness. 
+organization for uniqueness. As of version 0.0.14 of tunel, apps have support
+for multiple launchers, with a default (shown above).
 
 
 info
@@ -251,7 +254,7 @@ To get basic info for an app, just ask for it:
 
 .. code-block:: console
 
-    $ tunel info singularity/socket/tunel-django
+    $ tunel info socket/tunel-django
 
 This should generally show you accepted flags/arguments, along with examples for running.
 Since paths can be long, you are also able to ask for a shortened name, and it must still be
@@ -281,6 +284,35 @@ If you ask for a shortened name that matches more than one app, you'll see:
     Be more specific to disambiguate singularity!
 
 And you should follow the instruction and be more specific.
+
+run-app
+-------
+
+The most common command that likely you'll run (after you use info and list-apps to find an app) is run-app!
+That might look like this:
+
+.. code-block:: console
+
+    $ tunel run-app waffles code-server
+
+Additionally, if an app supports multiple launchers, you can ask for one that isn't the default:
+
+
+.. code-block:: console
+
+    $ tunel run-app waffles tunel-django --launcher slurm
+
+If you ask for a launcher that isn't supported (typically meaning it has not been tested)
+you'll see:
+
+.. code-block:: console
+
+    $ tunel run-app osg code-server --launcher slurm
+    Loading app singularity/socket/code-server...
+    Launcher slurm has not been tested for app singularity/socket/code-server
+
+This doesn't mean the launcher cannot be supported, but you should open an issue so @vsoch can test it out,
+or add the launcher to the ``launchers_supported`` in the app.yaml and test and open a pull request with your results.
 
 shell
 -----
@@ -343,36 +375,6 @@ Or just plain text:
 And this is how you would embed (in your Python applications) logic to interact with your Tunel app, either on your host (where the socket is tunneled)
 or the HPC cluster (where the socket is written).
 
-
-tunnel
-------
-
-.. ::note
-
-    **Note** this was originally developed and needs more work to function with sockets!
-    @vsoch is planning to provide simple app templates that will come ready to go with either
-    a port or a socket so you might not need this command.
-
-If you are able to open ports, the simplest thing tunnel can do is if you already have a service running on your cluster or server (e.g., let's say we ssh in and start a web server) in one terminal:
-
-
-.. code-block:: console
-
-    $ tunel shell waffles
-    $ echo "<h1>Hello World</h1>" > index.html
-    $ python -m http.server 9999
-    
-    
-We might want to open a tunel to this node from our local machine. That would look like this:
-
-
-.. code-block:: console
-
-    $ tunel tunnel waffles --port 9999
-
-
-If we don't provide a ``--local-port`` it will default to 4000 (or the port you've added to your settings.yml).
-Once you've done this, you should be able to open your local browser to 4000 and see the file from your server!
 
 launch
 ------
@@ -502,8 +504,41 @@ And then to stop a job:
     test interactive apps! If you can help here, please do! Additionally, we plan to update
     this launcher to take advantage of the HTCondor Python API (if reasonable to do).
 
-apps
-----
+
+tunnel
+------
+
+.. ::note
+
+    **Note** this was originally developed and needs more work to function with sockets!
+    @vsoch is planning to provide simple app templates that will come ready to go with either
+    a port or a socket so you might not need this command. If you have a use case that warrants
+    this command, please open an issue so @vsoch can work on it.
+
+If you are able to open ports, the simplest thing tunnel can do is if you already have a service running on your cluster or server (e.g., let's say we ssh in and start a web server) in one terminal:
+
+
+.. code-block:: console
+
+    $ tunel shell waffles
+    $ echo "<h1>Hello World</h1>" > index.html
+    $ python -m http.server 9999
+    
+    
+We might want to open a tunel to this node from our local machine. That would look like this:
+
+
+.. code-block:: console
+
+    $ tunel tunnel waffles --port 9999
+
+
+If we don't provide a ``--local-port`` it will default to 4000 (or the port you've added to your settings.yml).
+Once you've done this, you should be able to open your local browser to 4000 and see the file from your server!
+
+
+Apps
+====
 
 A tunel app is identified by a yaml file, app.yaml, in an install directory (which it is suggested
 you namespace to make it easy to identify). By default in the tunel settings.yml, you'll notice one
@@ -515,7 +550,7 @@ default apps directory:
       - $default_apps
 
 
-This defaults to ``tunel/apps`` and although it is under development, it looks something like this:
+This defaults to ``tunel/apps`` and it looks something like this:
 
 .. code-block:: console
 
@@ -573,3 +608,64 @@ launch a job with an interactive notebook and return the connection information.
 a Singularity container will likely need to be pulled, and then converted to SIF, which unfortunately isn't quick. 
 When it's ready, try connecting. This command generally works by finding the app.yaml under apps/slurm/jupyter in the default directory,
 an each app.yaml will define it's own launcher and other needs for running.
+
+
+Troubleshooting
+===============
+
+Error Messages
+--------------
+
+If you have extra configuration that can output an error (e.g., "X11 request not supported" this could cause an issue as tunel
+is parsing output from ssh. To fix this, you can typically remove the offending setting (e.g., tunel does not need X11 forwarding to work!)
+However if you find there is some printed command that is breaking tunel, please open an issue and we can find a fix.
+
+My Slurm Job Isn't Being Allocated!
+-----------------------------------
+
+This happened to me once! I was trying to launch a slurm + singularity app on a cluster that didn't have Singularity.
+The best thing to check is the error and output logs, and there is typically a command printed to the console for how you can do that:
+
+
+.. code-block:: console
+
+    ssh brainhack cat /home/opc/tunel/slurm/socket/tunel-django/app.sh.out
+    ssh brainhack cat /home/opc/tunel/slurm/socket/tunel-django/app.sh.err
+    
+
+Custom Path Logic
+-----------------
+
+For most apps, we assume that you can either add a module to load to your settings modules, or it's available  on your
+cluster without loading. For clusters where this isn't the case, most apps that run on a login node (meaning the bash profile won't be sourced by
+default) will source either ``~/.bash_profile`` or  ``~/.profile`` for you. If you find a case where this isn't done, or isn't done to your
+needs, please open an issue.
+
+Open Failed Error
+-----------------
+
+If you see:
+
+.. code-block:: console
+
+    open failed: administratively prohibited: open failed
+ 
+This typically means your cluster doesn't allow forwarding (most that I've encountered do, and the only time I hit this case was
+when I had set up my own cluster and didn't know I needed to do this!) You can read `more about the error here <https://unix.stackexchange.com/questions/14160/ssh-tunneling-error-channel-1-open-failed-administratively-prohibited-open>`_.
+
+TLDR: to fix you need to set
+
+.. code-block:: console
+
+        ForwardX11Trusted yes
+        ForwardAgent yes
+        ForwardX11 yes
+        GSSAPIAuthentication            yes
+    
+In your ``/etc/ssh/sshd_config`` on the login and worker nodes. And don't forget to restart!
+
+.. code-block:: console
+
+    sudo systemctl restart ssh
+    
+

@@ -158,9 +158,22 @@ class Logger:
             # If we have a dict, make key value pairs
             if isinstance(content, dict):
                 panel = ""
-                for k, v in content.items():
+                for i, k in enumerate(content):
+                    v = content[k]
                     panel += f"{k}: {v}"
+                    if i != len(content) - 1:
+                        panel += "\n"
                 self.c.print(Panel(panel))
+
+            # If we have a dict, make key value pairs
+            elif isinstance(content, list) and isinstance(content[0], str):
+                panel = ""
+                for i, item in enumerate(content):
+                    panel += f"- {item}"
+                    if i != len(content) - 1:
+                        panel += "\n"
+                self.c.print(Panel(panel))
+
             # List of dicts, assumes same keys
             elif isinstance(content, list) and content and isinstance(content[0], dict):
                 table = Table()

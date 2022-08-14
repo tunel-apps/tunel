@@ -19,11 +19,12 @@ def list_apps(args, parser, extra, subparser):
     table = Table(title="Tunel Apps")
     table.add_column("#", style="cyan", no_wrap=True)
     table.add_column("Name", style="magenta")
-    table.add_column("Launcher", justify="right", style="green")
+    table.add_column("Launcher", style="magenta")
+    table.add_column("Supported", justify="right", style="green")
 
     for i, app in enumerate(apps.items()):
         name, app = app
-        table.add_row(str(i), name, app.launcher)
+        table.add_row(str(i), name, app.launcher, "|".join(app.launchers))
 
     logger.c.print(table, justify="center")
 
