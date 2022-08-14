@@ -124,7 +124,6 @@ class App:
         for extra in extras:
             if not extra.startswith("--"):
                 continue
-            print(extra)
             arg = extra.lstrip("--").split("=")
             if arg[0] not in args:
                 logger.warning(

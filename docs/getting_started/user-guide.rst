@@ -632,6 +632,15 @@ The best thing to check is the error and output logs, and there is typically a c
     ssh brainhack cat /home/opc/tunel/slurm/socket/tunel-django/app.sh.out
     ssh brainhack cat /home/opc/tunel/slurm/socket/tunel-django/app.sh.err
     
+
+Custom Path Logic
+-----------------
+
+For most apps, we assume that you can either add a module to load to your settings modules, or it's available  on your
+cluster without loading. For clusters where this isn't the case, most apps that run on a login node (meaning the bash profile won't be sourced by
+default) will source either ``~/.bash_profile`` or  ``~/.profile`` for you. If you find a case where this isn't done, or isn't done to your
+needs, please open an issue.
+
 Open Failed Error
 -----------------
 
@@ -658,3 +667,5 @@ In your ``/etc/ssh/sshd_config`` on the login and worker nodes. And don't forget
 .. code-block:: console
 
     sudo systemctl restart ssh
+    
+

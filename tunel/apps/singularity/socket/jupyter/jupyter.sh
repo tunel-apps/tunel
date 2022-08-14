@@ -7,6 +7,9 @@ mkdir -p ${SOCKET_DIR}
 # Include Singularity cachedir if not set
 {% include "bash/singularity/set-cache-tmp.sh" %}
 
+# Source ~/bash_profile or ~/.profile
+{% include "bash/source-profile.sh" %}
+
 # Set WORKDIR, first to args.workdir, then settings.yml workdir, then $HOME
 {% include "bash/set-workdir.sh" %}
 cd $WORKDIR
