@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tunel.launcher.slurm &mdash; Tunel 0.0.13 documentation</title>
+  <title>tunel.launcher.slurm &mdash; Tunel 0.0.14 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/sphinx-argparse.css" type="text/css" />
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.13
+                0.0.14
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -188,8 +188,8 @@
         <span class="n">command</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;sbatch&quot;</span><span class="p">,</span>
             <span class="s2">&quot;--job-name=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">app</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span>
-            <span class="s2">&quot;--output=</span><span class="si">%s</span><span class="s2">.out&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_output&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;--error=</span><span class="si">%s</span><span class="s2">.err&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_error&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;--output=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_output&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;--error=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_error&quot;</span><span class="p">],</span>
             <span class="n">remote_script</span><span class="p">,</span>
         <span class="p">]</span>
 
@@ -289,12 +289,12 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;ssh </span><span class="si">%s</span><span class="s2"> cat </span><span class="si">%s</span><span class="s2">.err&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Slurm.print_updated_logs"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.print_updated_logs">[docs]</a>    <span class="k">def</span> <span class="nf">print_updated_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">):</span>
+<div class="viewcode-block" id="Slurm.print_updated_logs"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.print_updated_logs">[docs]</a>    <span class="k">def</span> <span class="nf">print_updated_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">,</span> <span class="n">app</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Start a separate thread that regularly checks and prints logs (when there is an updated line)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logs_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span>
-            <span class="n">target</span><span class="o">=</span><span class="n">print_logs</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Logger&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">]</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">post_commands</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Logger&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">]</span>
         <span class="p">)</span>
         <span class="n">logs_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
 
@@ -346,23 +346,32 @@
                 <span class="p">)</span>
                 <span class="c1"># Create another process to check logs?</span>
                 <span class="k">if</span> <span class="n">logs_prefix</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">print_updated_logs</span><span class="p">(</span><span class="n">logs_prefix</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">print_updated_logs</span><span class="p">(</span><span class="n">logs_prefix</span><span class="p">,</span> <span class="n">app</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">tunnel</span><span class="p">(</span><span class="n">machine</span><span class="p">,</span> <span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="print_logs"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.print_logs">[docs]</a><span class="k">def</span> <span class="nf">print_logs</span><span class="p">(</span><span class="n">ssh</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">):</span>
-    <span class="c1"># TODO need to add app with post command here</span>
-    <span class="c1"># Output and error commands</span>
+<div class="viewcode-block" id="post_commands"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.post_commands">[docs]</a><span class="k">def</span> <span class="nf">post_commands</span><span class="p">(</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Post commands to show logs and any commands-&gt;post defined by the app</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">output_command</span> <span class="o">=</span> <span class="s2">&quot;ssh </span><span class="si">%s</span><span class="s2"> tail -3 </span><span class="si">%s</span><span class="s2">.out&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">)</span>
     <span class="n">error_command</span> <span class="o">=</span> <span class="s2">&quot;ssh </span><span class="si">%s</span><span class="s2"> tail -3 </span><span class="si">%s</span><span class="s2">.err&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">)</span>
 
     <span class="n">last_out</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="n">last_err</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">post_command</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
         <span class="n">new_out</span> <span class="o">=</span> <span class="n">ssh</span><span class="o">.</span><span class="n">execute_or_fail</span><span class="p">(</span><span class="n">output_command</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">new_err</span> <span class="o">=</span> <span class="n">ssh</span><span class="o">.</span><span class="n">execute_or_fail</span><span class="p">(</span><span class="n">error_command</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">panels</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Show a post command (once), if defined</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">post_command</span> <span class="ow">and</span> <span class="n">app</span><span class="o">.</span><span class="n">post_command</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found post command </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">app</span><span class="o">.</span><span class="n">post_command</span><span class="p">)</span>
+            <span class="n">post</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">post_command</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;$socket_dir&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">socket</span><span class="p">))</span>
+            <span class="n">ssh</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">post</span><span class="p">),</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">post_command</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="n">new_out</span> <span class="ow">and</span> <span class="n">new_out</span> <span class="o">!=</span> <span class="n">last_out</span><span class="p">:</span>
             <span class="n">panels</span><span class="p">[</span><span class="s2">&quot;cyan&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_command</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">new_out</span>

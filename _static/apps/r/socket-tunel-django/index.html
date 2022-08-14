@@ -17,8 +17,8 @@
     <link href="/tunel/_static/apps/css/syntax.css" rel="stylesheet" />
     <meta name="description" content="Tunel Apps">
     <meta name="thumbnail" content="https://tunel-apps.github.io/tunel/img/logo.png">
-    <meta name="name" content="singularity/socket/tunel-django">
-    <meta name="repository" content="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.yaml">
+    <meta name="name" content="socket/tunel-django">
+    <meta name="repository" content="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/socket/tunel-django/app.yaml">
     <meta name="pagetype" content="experiment">
 </head>
 
@@ -48,13 +48,13 @@
         </div>
         <div class="col-lg-4 col-lg-offset-1">
             <div class="spacing"></div>
-            <h4>singularity/socket/tunel-django</h4>
+            <h4>socket/tunel-django</h4>
             <div style="padding-bottom:20px" class="hline"></div>
             <p><b>Launcher</b>: singularity</p>
             <p>An example Django application run via a Singularity container.</p>
-            <p style="padding-top:15px"><a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.yaml" target="_blank">
+            <p style="padding-top:15px"><a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/socket/tunel-django/app.yaml" target="_blank">
                            <button class="btn btn-sm btn-primary">GITHUB</button></a>
-            <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.sh" target="_blank"><button class="btn btn-sm btn-primary">SCRIPT</button></a>            
+            <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/socket/tunel-django/app.sh" target="_blank"><button class="btn btn-sm btn-primary">SCRIPT</button></a>            
             </p>
         </div>
     </div>
@@ -70,7 +70,7 @@
             <div style="margin:0px 80px 50px">
             <h3 id="usage">Usage</h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tunel run-app &lt;server&gt; singularity/socket/tunel-django
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tunel run-app &lt;server&gt; socket/tunel-django
 </code></pre></div></div>
 
 <h4 id="arguments">Arguments</h4>
@@ -142,7 +142,12 @@ tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</sp
   <p>app.sh</p>
 </blockquote>
 
-<p>This app uses the singularity launcher and the following script:</p>
+<p>This app uses the singularity launcher by default, and supports the following:</p>
+
+<ul>
+  <li>singularity</li>
+  <li>slurm</li>
+</ul>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 
@@ -152,6 +157,9 @@ tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</sp
 
 <span class="c"># Include Singularity cachedir if not set</span>
 <span class="o">{</span>% include <span class="s2">"bash/singularity/set-cache-tmp.sh"</span> %<span class="o">}</span>
+
+<span class="c"># Source ~/bash_profile or ~/.profile</span>
+<span class="o">{</span>% include <span class="s2">"bash/source-profile.sh"</span> %<span class="o">}</span>
 
 <span class="c"># Set WORKDIR, first to args.workdir, then settings.yml workdir, then $HOME</span>
 <span class="o">{</span>% include <span class="s2">"bash/set-workdir.sh"</span> %<span class="o">}</span>

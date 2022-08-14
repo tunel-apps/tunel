@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tunel.launcher package &mdash; Tunel 0.0.13 documentation</title>
+  <title>tunel.launcher package &mdash; Tunel 0.0.14 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sphinx-argparse.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.13
+                0.0.14
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -303,7 +303,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tunel.launcher.slurm.Slurm.print_updated_logs">
-<span class="sig-name descname"><span class="pre">print_updated_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logs_prefix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.print_updated_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.print_updated_logs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print_updated_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logs_prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#Slurm.print_updated_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.Slurm.print_updated_logs" title="Permalink to this definition"></a></dt>
 <dd><p>Start a separate thread that regularly checks and prints logs (when there is an updated line)</p>
 </dd></dl>
 
@@ -345,16 +345,17 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tunel.launcher.slurm.print_logs">
-<span class="sig-prename descclassname"><span class="pre">tunel.launcher.slurm.</span></span><span class="sig-name descname"><span class="pre">print_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs_prefix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#print_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.print_logs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="tunel.launcher.slurm.post_commands">
+<span class="sig-prename descclassname"><span class="pre">tunel.launcher.slurm.</span></span><span class="sig-name descname"><span class="pre">post_commands</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs_prefix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher/slurm.html#post_commands"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.slurm.post_commands" title="Permalink to this definition"></a></dt>
+<dd><p>Post commands to show logs and any commands-&gt;post defined by the app</p>
+</dd></dl>
 
 </section>
 <section id="module-tunel.launcher">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tunel.launcher" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="tunel.launcher.get_launcher">
-<span class="sig-prename descclassname"><span class="pre">tunel.launcher.</span></span><span class="sig-name descname"><span class="pre">get_launcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher.html#get_launcher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.get_launcher" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">tunel.launcher.</span></span><span class="sig-name descname"><span class="pre">get_launcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">launcher</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tunel/launcher.html#get_launcher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tunel.launcher.get_launcher" title="Permalink to this definition"></a></dt>
 <dd><p>Get a launcher for a loaded app</p>
 </dd></dl>
 

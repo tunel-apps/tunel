@@ -24,14 +24,6 @@
   },
 
     {
-        "name": "singularity/socket/tunel-django",
-        "github": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.yaml",
-        "launcher": "singularity",
-        "script": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/tunel-django/app.sh",
-        "config": {"launcher":"singularity","script":"app.sh","description":"An example Django application run via a Singularity container.","needs":{"socket":true},"examples":"# Run app on login node with singularity, custom tag dev\\ntunel run-app waffles singularity/socket/tunel-django --tag=dev\\n# Force a new pull\\ntunel run-app waffles singularity/socket/tunel-django --tag=dev --pull\\n# Set a custom user/password (note that the UI is only available to you so this is not for security)\\ntunel run-app waffles singularity/socket/tunel-django --tag=dev --user=hello --pass=moto  \\n","args":[{"name":"user","description":"username for logging into Django app (NOT your cluster username), defaults to tunel-user"},{"name":"pass","description":"password for logging in to Django app (NOT your cluster password), defaults to tunel-pass"},{"name":"workdir","description":"Working directory for app (and to show file explorer for)"},{"name":"container","description":"Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)"},{"name":"tag","description":"Tag of the container to use (defaults to latest)"},{"name":"pull","description":"force a new pull (even if the container already exists)."}]}
-  },
-
-    {
         "name": "slurm/port/jupyter",
         "github": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/port/jupyter/app.yaml",
         "launcher": "slurm",
@@ -53,5 +45,13 @@
         "launcher": "slurm",
         "script": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/jupyter.sbatch",
         "config": {"launcher":"slurm","script":"jupyter.sbatch","description":"A jupyter notebook (or lab) intended to be run in a Singularity container.","args":[{"name":"jupyterlab","description":"Try running jupyterlab instead (e,g. set to true to enable)"},{"name":"workdir","description":"Working directory for the notebook"},{"name":"modules","description":"comma separated list of modules to load","split":","}],"needs":{"socket":true}}
+  },
+
+    {
+        "name": "socket/tunel-django",
+        "github": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/socket/tunel-django/app.yaml",
+        "launcher": "singularity",
+        "script": "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/socket/tunel-django/app.sh",
+        "config": {"launcher":"singularity","launchers_supported":["singularity","slurm"],"script":"app.sh","description":"An example Django application run via a Singularity container.","needs":{"socket":true},"examples":"# Run app on login node with singularity, custom tag dev\\ntunel run-app waffles singularity/socket/tunel-django --tag=dev\\n# Force a new pull\\ntunel run-app waffles singularity/socket/tunel-django --tag=dev --pull\\n# Set a custom user/password (note that the UI is only available to you so this is not for security)\\ntunel run-app waffles singularity/socket/tunel-django --tag=dev --user=hello --pass=moto  \\n","args":[{"name":"user","description":"username for logging into Django app (NOT your cluster username), defaults to tunel-user"},{"name":"pass","description":"password for logging in to Django app (NOT your cluster password), defaults to tunel-pass"},{"name":"workdir","description":"Working directory for app (and to show file explorer for)"},{"name":"container","description":"Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)"},{"name":"tag","description":"Tag of the container to use (defaults to latest)"},{"name":"pull","description":"force a new pull (even if the container already exists)."}]}
   }
 ]

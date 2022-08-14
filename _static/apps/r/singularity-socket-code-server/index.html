@@ -129,7 +129,7 @@ tunel run-app waffles singularity/socket/code-server
   <p>app.sh</p>
 </blockquote>
 
-<p>This app uses the singularity launcher and the following script:</p>
+<p>This app uses the singularity launcher by default.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 
@@ -139,6 +139,9 @@ tunel run-app waffles singularity/socket/code-server
 
 <span class="c"># Include Singularity cachedir if not set</span>
 <span class="o">{</span>% include <span class="s2">"bash/singularity/set-cache-tmp.sh"</span> %<span class="o">}</span>
+
+<span class="c"># Source ~/bash_profile or ~/.profile</span>
+<span class="o">{</span>% include <span class="s2">"bash/source-profile.sh"</span> %<span class="o">}</span>
 
 <span class="c"># Set WORKDIR, first to args.workdir, then settings.yml workdir, then $HOME</span>
 <span class="o">{</span>% include <span class="s2">"bash/set-workdir.sh"</span> %<span class="o">}</span>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tunel.launcher &mdash; Tunel 0.0.13 documentation</title>
+  <title>tunel.launcher &mdash; Tunel 0.0.14 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sphinx-argparse.css" type="text/css" />
@@ -30,7 +30,7 @@
             <a href="../../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.13
+                0.0.14
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -76,16 +76,26 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tunel.launcher</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Launcher</span>
+<span></span><span class="kn">from</span> <span class="nn">tunel.logger</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Launcher</span>
 <span class="kn">from</span> <span class="nn">.htcondor</span> <span class="kn">import</span> <span class="n">HTCondor</span>
 <span class="kn">from</span> <span class="nn">.singularity</span> <span class="kn">import</span> <span class="n">Singularity</span>
 <span class="kn">from</span> <span class="nn">.slurm</span> <span class="kn">import</span> <span class="n">Slurm</span>
 
 
-<div class="viewcode-block" id="get_launcher"><a class="viewcode-back" href="../../api_reference/tunel.launcher.html#tunel.launcher.get_launcher">[docs]</a><span class="k">def</span> <span class="nf">get_launcher</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+<div class="viewcode-block" id="get_launcher"><a class="viewcode-back" href="../../api_reference/tunel.launcher.html#tunel.launcher.get_launcher">[docs]</a><span class="k">def</span> <span class="nf">get_launcher</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">launcher</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get a launcher for a loaded app</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># No go if the launcher is defined and not tested for the app</span>
+    <span class="k">if</span> <span class="n">launcher</span> <span class="ow">and</span> <span class="n">launcher</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">app</span><span class="o">.</span><span class="n">launchers</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Launcher </span><span class="si">{</span><span class="n">launcher</span><span class="si">}</span><span class="s2"> has not been tested for app </span><span class="si">{</span><span class="n">app</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Otherwise, should be ok!</span>
+    <span class="k">if</span> <span class="n">launcher</span><span class="p">:</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">launcher</span> <span class="o">=</span> <span class="n">launcher</span>
+
     <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">launcher</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;htcondor&quot;</span><span class="p">,</span> <span class="s2">&quot;condor&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">HTCondor</span>
     <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">launcher</span> <span class="o">==</span> <span class="s2">&quot;slurm&quot;</span><span class="p">:</span>
