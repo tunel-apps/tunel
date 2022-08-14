@@ -1,4 +1,5 @@
 from tunel.logger import logger
+
 from .base import Launcher
 from .htcondor import HTCondor
 from .singularity import Singularity
