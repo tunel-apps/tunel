@@ -230,17 +230,17 @@ The first thing you might want to do is see what apps are available.
 
     $ tunel list-apps
                          Tunel Apps                                                                                      
-    |---|----------------------------------|---------------------------------|
-    | # | Name                             | Launcher    |     Supported     |                                                         
-    |---|----------------------------------|---------------------------------|                                                               
-    │ 0 │ socket/tunel-django              │ singularity │ slurm|singularity │   
-    │ 1 │ htcondor/job                     │ htcondor    │          htcondor │   
-    │ 2 │ slurm/socket/singularity-jupyter │ slurm       │             slurm │   
-    │ 3 │ slurm/socket/jupyter             │ slurm       │             slurm │   
-    │ 4 │ slurm/port/jupyter               │ slurm       │             slurm │   
-    │ 5 │ singularity/socket/code-server   │ singularity │       singularity │   
-    │ 6 │ singularity/socket/jupyter       │ singularity │       singularity │   
-    └───┴──────────────────────────────────┴─────────────┴───────────────────┘   
+    |---|----------------------------------|----------------------------------------|
+    | # | Name                             | Launcher    |     Supported            |                                                         
+    |---|----------------------------------|----------------------------------------|                                                               
+    │ 0 │ socket/tunel-django              │ singularity │ docker|slurm|singularity │   
+    │ 1 │ htcondor/job                     │ htcondor    │                 htcondor │   
+    │ 2 │ slurm/socket/singularity-jupyter │ slurm       │                    slurm │   
+    │ 3 │ slurm/socket/jupyter             │ slurm       │                    slurm │   
+    │ 4 │ slurm/port/jupyter               │ slurm       │                    slurm │   
+    │ 5 │ singularity/socket/code-server   │ singularity │              singularity │   
+    │ 6 │ singularity/socket/jupyter       │ singularity │              singularity │   
+    └───┴──────────────────────────────────┴─────────────┴──────────────────────────┘   
 
 These are located in the ``tunel/apps`` directory, organized by directory
 organization for uniqueness. As of version 0.0.14 of tunel, apps have support
@@ -297,10 +297,11 @@ That might look like this:
 
 Additionally, if an app supports multiple launchers, you can ask for one that isn't the default:
 
-
 .. code-block:: console
 
     $ tunel run-app waffles tunel-django --launcher slurm
+    $ tunel run-app bh tunel-django --launcher docker
+
 
 If you ask for a launcher that isn't supported (typically meaning it has not been tested)
 you'll see:

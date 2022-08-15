@@ -1,6 +1,8 @@
 from tunel.logger import logger
 
 from .base import Launcher
+from .docker import Docker
+from .podman import Podman
 from .htcondor import HTCondor
 from .singularity import Singularity
 from .slurm import Slurm
@@ -22,6 +24,10 @@ def get_launcher(app, launcher=None):
         return HTCondor
     if app.launcher == "slurm":
         return Slurm
+    if app.launcher == "podman":
+        return Podman
+    if app.launcher == "docker":
+        return Docker
     elif app.launcher == "singularity":
         return Singularity
     return Launcher
