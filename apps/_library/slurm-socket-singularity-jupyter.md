@@ -6,7 +6,7 @@ script: "jupyter.sbatch"
 maintainer: "@vsoch"
 github: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/app.yaml"
 script_url: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/singularity-jupyter/jupyter.sbatch"
-updated_at: "2022-08-14 12:59:18.903350"
+updated_at: "2022-08-15 17:56:48.527485"
 description: "A jupyter notebook (or lab) intended to be run in a Singularity container."
 config: {'launcher': 'slurm', 'script': 'jupyter.sbatch', 'description': 'A jupyter notebook (or lab) intended to be run in a Singularity container.', 'args': [{'name': 'jupyterlab', 'description': 'Try running jupyterlab instead (e,g. set to true to enable)'}, {'name': 'workdir', 'description': 'Working directory for the notebook'}, {'name': 'modules', 'description': 'comma separated list of modules to load', 'split': ','}], 'needs': {'socket': True}}
 ---

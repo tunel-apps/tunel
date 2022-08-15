@@ -14,6 +14,7 @@ and **Merged pull requests**. Critical items to know are:
 The versions coincide with releases on pip. Only major versions will be released as tags on Github.
 
 ## [0.0.x](https://github.com/tunel-apps/tunel/tree/main) (0.0.x)
+ - bugfix template generation (0.0.16)
  - support for docker launcher (and intending to test podman) (0.0.15)
  - adding support for an app to have multiple launchers (0.0.14)
  - adding code server app and commands for apps (0.0.13)
