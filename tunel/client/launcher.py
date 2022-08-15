@@ -44,8 +44,14 @@ def stop_condor(args, parser, extra, subparser):
 
 
 def run_singularity(args, parser, extra, subparser):
-
     launcher = tunel.launcher.Singularity(
+        args.server, remote_port=args.port, local_port=args.local_port
+    )
+    launcher.run(extra)
+
+
+def run_docker(args, parser, extra, subparser):
+    launcher = tunel.launcher.Docker(
         args.server, remote_port=args.port, local_port=args.local_port
     )
     launcher.run(extra)

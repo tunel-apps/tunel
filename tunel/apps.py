@@ -153,9 +153,11 @@ class App:
     def load_template(self):
         """
         Given an app, load the template script for it.
+
+        This also provides the app directory for any relative template scripts.
         """
         template = Template()
-        return template.load(self.get_script())
+        return template.load(self.get_script(), self.app_dir)
 
     def validate(self):
         """

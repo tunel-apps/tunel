@@ -37,6 +37,30 @@ A basic application might look like the following:
 Note that all of the fields (except for needs) are required. Args are not required but recommended,
 described next.
 
+Launchers
+---------
+
+Launchers include:
+
+
+ - **singularity** run a singularity container on the server directly.
+ - **docker** run a docker container on the server directly.
+ - **slurm**: submit jobs (or applications) via SLURM, either a job or a service on a node to forward back.
+ - **condor**: submit jobs (or apps) to an HTCondor cluster.
+
+And currently it's up to you to handle your application script logic. E.g., if you are using the singularity launcher
+and calling singularity in your script, you should check that it's installed and write a clear error message if not.
+The exception is docker, which we have a template variable to check for, e.g.,:
+
+.. code-block:: console
+
+    {% if docker %}
+    # do docker stuff here
+    {% else %}
+    # do something else
+    {% endif %}
+
+
 Args
 ----
 
@@ -148,6 +172,10 @@ variables are always available:
      - If ``tunel_remote_work`` is defined in settings, this variable first, overridden by --workdir on the command line.
      - As an example, ``/usr/workdir/username/``
      
+Finally, you can use the set of included templates under ``tunel/templates`` to include common functionality like
+sourcing the user bash profile. You can also add any template file (or subfolder) in your app directory
+and it can be discovered and included. E.g., ``templates/run_docker.sh`` can be included like ``{% include "templates/run_docker.sh" %}.
+
 Documentation
 -------------
 
