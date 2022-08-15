@@ -104,6 +104,12 @@ def get_parser():
         description="launch a singularity container.",
         formatter_class=argparse.RawTextHelpFormatter,
     )
+    run_docker = subparsers.add_parser(
+        "run-docker",
+        description="launch an interactive docker container.",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
     run_slurm = subparsers.add_parser(
         "run-slurm",
         description="launch a slurm job or session.",
@@ -182,6 +188,7 @@ def get_parser():
     )
 
     launchers = [
+        run_docker,
         run_singularity,
         run_slurm,
         run_app,
@@ -277,6 +284,8 @@ def run_tunel():
         from .info import main
     if args.command == "tunnel":
         from .tunnel import main
+    if args.command == "run-docker":
+        from .launcher import run_docker as main
     if args.command == "run-singularity":
         from .launcher import run_singularity as main
     if args.command == "run-slurm":

@@ -17,22 +17,22 @@ class Docker(Launcher):
 
     def run(self, *args, **kwargs):
         """
-        Run handles some command to docker
+        Run handles some command to docker (this can be expanded in functionality)
         """
-        print("RUN DOCKERs")
-        import IPython
-
-        IPython.embed()
-        sys.exit()
-
-        command = "docker run -it %s PATH=%s %s" % (self.env_command, self.path)
-
-        # If the user wants a shell, give to them!
-        if "shell" in args[0]:
-            self.ssh.shell(command, interactive=True)
+        if self.path:
+            command = "docker run -d --rm -i %s PATH=%s %s" % (
+                self.env_command,
+                self.path,
+                " ".join(args[0]),
+            )
         else:
-            res = self.ssh.execute(command)
-            self.ssh.print_output(res)
+            command = "docker run -d --rm -i %s %s" % (
+                self.env_command,
+                " ".join(args[0]),
+            )
+
+        res = self.ssh.execute(command)
+        self.ssh.print_output(res)
 
     @property
     def env_command(self):

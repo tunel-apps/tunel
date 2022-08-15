@@ -433,6 +433,17 @@ to customize. Finally, you can even start an interactive shell directly into a c
     Singularity> 
 
 
+docker
+^^^^^^
+
+To run a docker container on your remote (likely a VM):
+
+.. code-block:: console
+
+    $ tunel run-docker waffles ubuntu
+
+
+
 slurm
 ^^^^^
 
