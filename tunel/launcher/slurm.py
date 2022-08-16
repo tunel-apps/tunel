@@ -136,6 +136,7 @@ class Slurm(Launcher):
         Stop one or more named jobs
         """
         for name in names:
+            name = name.replace("/", "-")
             logger.purple("Killing %s slurm job on %s" % (name, self.ssh.server))
             self.ssh.execute_or_fail(
                 "squeue --name %s --user %s" % (name, self.username)
