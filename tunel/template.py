@@ -11,7 +11,6 @@ here = os.path.dirname(os.path.abspath(__file__))
 
 # Allow includes from this directory OR providing strings
 shared_templates_dir = os.path.join(here, "templates")
-env = Environment(loader=FileSystemLoader(shared_templates_dir))
 
 
 class Template:
@@ -41,5 +40,7 @@ class Template:
                 env = Environment(
                     loader=FileSystemLoader([shared_templates_dir, template_dir])
                 )
+            else:
+                env = Environment(loader=FileSystemLoader(shared_templates_dir))
             template = env.from_string(temp.read())
         return template

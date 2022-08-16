@@ -3,6 +3,7 @@ __copyright__ = "Copyright 2021-2022, Vanessa Sochat"
 __license__ = "MPL 2.0"
 
 import os
+import shlex
 import threading
 import time
 
@@ -210,12 +211,14 @@ class Slurm(Launcher):
         logger.info("ssh %s cat %s.err" % (self.ssh.server, logs_prefix))
         print()
 
-    def print_updated_logs(self, logs_prefix, app):
+    def print_updated_logs(self, logs_prefix, app, socket):
         """
         Start a separate thread that regularly checks and prints logs (when there is an updated line)
         """
         logs_thread = threading.Thread(
-            target=post_commands, name="Logger", args=[self.ssh, app, logs_prefix]
+            target=post_commands,
+            name="Logger",
+            args=[self.ssh, app, logs_prefix, socket],
         )
         logs_thread.start()
 
@@ -267,11 +270,11 @@ class Slurm(Launcher):
                 )
                 # Create another process to check logs?
                 if logs_prefix:
-                    self.print_updated_logs(logs_prefix, app)
+                    self.print_updated_logs(logs_prefix, app, socket=socket)
                 self.ssh.tunnel(machine, socket=socket, app=app)
 
 
-def post_commands(ssh, app, logs_prefix):
+def post_commands(ssh, app, logs_prefix, socket):
     """
     Post commands to show logs and any commands->post defined by the app
     """

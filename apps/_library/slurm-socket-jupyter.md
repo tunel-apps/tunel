@@ -6,7 +6,7 @@ script: "jupyter.sbatch"
 maintainer: "@vsoch"
 github: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/jupyter/app.yaml"
 script_url: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/slurm/socket/jupyter/jupyter.sbatch"
-updated_at: "2022-08-14 12:59:18.907929"
+updated_at: "2022-08-15 17:56:48.532073"
 description: "A Jupyter notebook intended to be run with a slurm job, interactive via a socket."
 config: {'launcher': 'slurm', 'script': 'jupyter.sbatch', 'description': 'A Jupyter notebook intended to be run with a slurm job, interactive via a socket.', 'args': [{'name': 'workdir', 'description': 'Working directory for the notebook'}, {'name': 'jupyterlab', 'description': 'Try running jupyterlab instead (e,g. set to true to enable)'}, {'name': 'modules', 'description': 'comma separated list of modules to load', 'split': ','}], 'needs': {'socket': True}}
 ---

@@ -6,7 +6,7 @@ script: "jupyter.sh"
 maintainer: "@vsoch"
 github: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/jupyter/app.yaml"
 script_url: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/jupyter/jupyter.sh"
-updated_at: "2022-08-14 12:59:18.922122"
+updated_at: "2022-08-15 17:56:48.547041"
 description: "A singularity jupyter notebook or lab to run directly on a remote (e.g., head node)"
 config: {'launcher': 'singularity', 'script': 'jupyter.sh', 'description': 'A singularity jupyter notebook or lab to run directly on a remote (e.g., head node)', 'needs': {'socket': True}, 'examples': '# Run jupyter notebook on login node with custom container\ntunel run-app waffles singularity/socket/jupyter --container=docker://jupyter/datascience-notebook\n# Run Jupyterlab login node (via Singularity container) on open science grid\ntunel run-app osg singularity/socket/jupyter --jupyterlab=true\n', 'args': [{'name': 'container', 'description': 'Change the jupyter container used (default is datascience notebook). Must start with container URI to pull (e.g., docker://)'}, {'name': 'jupyterlab', 'description': 'Try running jupyterlab instead (e,g. set to true to enable)'}, {'name': 'modules', 'description': 'comma separated list of modules to load', 'split': ','}]}
 ---

@@ -6,9 +6,9 @@ script: "app.sh"
 maintainer: "@vsoch"
 github: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/socket/tunel-django/app.yaml"
 script_url: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/socket/tunel-django/app.sh"
-updated_at: "2022-08-14 12:59:18.893928"
+updated_at: "2022-08-15 17:56:48.518220"
 description: "An example Django application run via a Singularity container."
-config: {'launcher': 'singularity', 'launchers_supported': ['singularity', 'slurm'], 'script': 'app.sh', 'description': 'An example Django application run via a Singularity container.', 'needs': {'socket': True}, 'examples': '# Run app on login node with singularity, custom tag dev\ntunel run-app waffles singularity/socket/tunel-django --tag=dev\n# Force a new pull\ntunel run-app waffles singularity/socket/tunel-django --tag=dev --pull\n# Set a custom user/password (note that the UI is only available to you so this is not for security)\ntunel run-app waffles singularity/socket/tunel-django --tag=dev --user=hello --pass=moto  \n', 'args': [{'name': 'user', 'description': 'username for logging into Django app (NOT your cluster username), defaults to tunel-user'}, {'name': 'pass', 'description': 'password for logging in to Django app (NOT your cluster password), defaults to tunel-pass'}, {'name': 'workdir', 'description': 'Working directory for app (and to show file explorer for)'}, {'name': 'container', 'description': 'Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)'}, {'name': 'tag', 'description': 'Tag of the container to use (defaults to latest)'}, {'name': 'pull', 'description': 'force a new pull (even if the container already exists).'}]}
+config: {'launcher': 'singularity', 'launchers_supported': ['singularity', 'slurm', 'docker', 'podman'], 'script': 'app.sh', 'description': 'An example Django application run via a Singularity container.', 'needs': {'socket': True}, 'examples': '# Run app on login node with singularity, custom tag dev\ntunel run-app waffles singularity/socket/tunel-django --tag=dev\n# Force a new pull\ntunel run-app waffles singularity/socket/tunel-django --tag=dev --pull\n# Set a custom user/password (note that the UI is only available to you so this is not for security)\ntunel run-app waffles singularity/socket/tunel-django --tag=dev --user=hello --pass=moto  \n', 'args': [{'name': 'user', 'description': 'username for logging into Django app (NOT your cluster username), defaults to tunel-user'}, {'name': 'pass', 'description': 'password for logging in to Django app (NOT your cluster password), defaults to tunel-pass'}, {'name': 'workdir', 'description': 'Working directory for app (and to show file explorer for)'}, {'name': 'container', 'description': 'Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)'}, {'name': 'tag', 'description': 'Tag of the container to use (defaults to latest)'}, {'name': 'pull', 'description': 'force a new pull (even if the container already exists).'}]}
 ---
 
 ### Usage
@@ -93,8 +93,10 @@ tunel run-app waffles singularity/socket/tunel-django --tag=dev --user=hello --p
 This app uses the singularity launcher by default, and supports the following:
 
 
-  - singularity
   - slurm
+  - singularity
+  - docker
+  - podman
 
 ```bash
 {% raw %}#!/bin/bash
@@ -138,29 +140,7 @@ STATIC_DIR=${SOCKET_DIR}/static
 {% for path in paths %}export PATH={{ path }}:${PATH}
 {% endfor %}
 
-# Just pull to tmp for now so cleaned up
-SIF="${SINGULARITY_CACHEDIR}/tunel-django.sif"
-CONTAINER="{% if args.container %}{{ args.container }}{% else %}docker://ghcr.io/tunel-apps/tunel-django:{% if args.tag %}{{ args.tag }}{% else %}latest{% endif %}{% endif %}"
-
-# First effort
-if command -v singularity &> /dev/null
-then
-    printf "singularity pull ${CONTAINER}\n"
-
-    mkdir -p ${DB_DIR} ${STATIC_DIR}
-
-    # Only pull the container if we do not have it yet, or the user requests it
-    if [[ ! -f "${SIF}" ]] || [[ "{{ args.pull }}" != "" ]]; then
-        singularity pull --force ${SIF} ${CONTAINER}
-    fi
-    
-    # The false at the end ensures we aren't using nginx, but rather uwsgi just with sockets
-    printf "singularity exec --bind ${DB_DIR}:/code/db --env TUNEL_PASS=***** --env TUNEL_USER=${TUNEL_USER} --bind ${WORKDIR}:/code/data ${SIF} /bin/bash /code/scripts/run_uwsgi.sh ${SOCKET} false\n"
-    # The bind for WORKDIR to /var/www/data ensures the filesystem explorer works
-    singularity exec --bind ${DB_DIR}:/code/db --env TUNEL_PASS=${TUNEL_PASS} --env TUNEL_USER=${TUNEL_USER} --bind ${WORKDIR}:/code/static --bind ${WORKDIR}:/code/data ${SIF} /bin/bash /code/scripts/run_uwsgi.sh ${SOCKET} false
-else
-    printf "Singularity is not available.\n"
-fi
+{% if docker %}{% include "templates/run_docker.sh" %}{% else %}{% include "templates/run_singularity.sh" %}{% endif %}
 {% endraw %}
 ```
 

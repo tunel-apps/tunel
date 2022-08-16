@@ -6,7 +6,7 @@ script: "app.sh"
 maintainer: "@vsoch"
 github: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/code-server/app.yaml"
 script_url: "https://github.com/tunel-apps/tunel/blob/main/tunel/apps/singularity/socket/code-server/app.sh"
-updated_at: "2022-08-14 12:59:18.917422"
+updated_at: "2022-08-15 17:56:48.541716"
 description: "Work on files on your remote machine via VS Code in the browser, all via unix sockets"
 config: {'launcher': 'singularity', 'script': 'app.sh', 'description': 'Work on files on your remote machine via VS Code in the browser, all via unix sockets', 'needs': {'socket': True}, 'examples': '# Run app on login node with singularity, shorter pattern match\ntunel run-app waffles code-server\ntunel run-app waffles singularity/socket/code-server\n', 'commands': {'post': 'cat $socket_dir/home/.config/code-server/config.yaml'}, 'args': [{'name': 'workdir', 'description': 'Working directory for app (and to show file explorer for)'}, {'name': 'container', 'description': 'Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)'}, {'name': 'tag', 'description': 'Tag of the container to use (defaults to latest)'}, {'name': 'pull', 'description': 'force a new pull (even if the container already exists).'}]}
 ---
