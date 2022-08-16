@@ -669,11 +669,16 @@ TLDR: to fix you need to set
 
 .. code-block:: console
 
-        ForwardX11Trusted yes
-        ForwardAgent yes
-        ForwardX11 yes
-        GSSAPIAuthentication            yes
-    
+    sudo vi /etc/ssh/sshd_config
+
+    AllowAgentForwarding yes
+    AllowTcpForwarding yes
+    X11Forwarding yes
+    X11UseLocalhost no
+
+    sudo systemctl restart sshd
+
+
 In your ``/etc/ssh/sshd_config`` on the login and worker nodes. And don't forget to restart!
 
 .. code-block:: console
