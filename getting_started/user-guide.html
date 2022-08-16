@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Guide &mdash; Tunel 0.0.16 documentation</title>
+  <title>User Guide &mdash; Tunel 0.0.17 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sphinx-argparse.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.16
+                0.0.17
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -650,10 +650,14 @@ needs, please open an issue.</p>
 <p>This typically means your cluster doesn’t allow forwarding (most that I’ve encountered do, and the only time I hit this case was
 when I had set up my own cluster and didn’t know I needed to do this!) You can read <a class="reference external" href="https://unix.stackexchange.com/questions/14160/ssh-tunneling-error-channel-1-open-failed-administratively-prohibited-open">more about the error here</a>.</p>
 <p>TLDR: to fix you need to set</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ForwardX11Trusted yes</span>
-<span class="go">ForwardAgent yes</span>
-<span class="go">ForwardX11 yes</span>
-<span class="go">GSSAPIAuthentication            yes</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo vi /etc/ssh/sshd_config</span>
+
+<span class="go">AllowAgentForwarding yes</span>
+<span class="go">AllowTcpForwarding yes</span>
+<span class="go">X11Forwarding yes</span>
+<span class="go">X11UseLocalhost no</span>
+
+<span class="go">sudo systemctl restart sshd</span>
 </pre></div>
 </div>
 <p>In your <code class="docutils literal notranslate"><span class="pre">/etc/ssh/sshd_config</span></code> on the login and worker nodes. And don’t forget to restart!</p>
