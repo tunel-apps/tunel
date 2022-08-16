@@ -305,11 +305,11 @@ def run_tunel():
 
     # Pass on to the correct parser
     return_code = 0
-    #    try:
-    main(args=args, parser=parser, extra=extra, subparser=helper)
-    sys.exit(return_code)
-    #   except UnboundLocalError:
-    #       return_code = 1
+    try:
+        main(args=args, parser=parser, extra=extra, subparser=helper)
+        sys.exit(return_code)
+    except UnboundLocalError:
+        return_code = 1
 
     help(return_code)
 
