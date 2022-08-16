@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tunel.launcher.slurm &mdash; Tunel 0.0.14 documentation</title>
+  <title>tunel.launcher.slurm &mdash; Tunel 0.0.16 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/sphinx-argparse.css" type="text/css" />
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.14
+                0.0.16
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -82,6 +82,7 @@
 <span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;MPL 2.0&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shlex</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
@@ -289,12 +290,14 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;ssh </span><span class="si">%s</span><span class="s2"> cat </span><span class="si">%s</span><span class="s2">.err&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Slurm.print_updated_logs"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.print_updated_logs">[docs]</a>    <span class="k">def</span> <span class="nf">print_updated_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">,</span> <span class="n">app</span><span class="p">):</span>
+<div class="viewcode-block" id="Slurm.print_updated_logs"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.print_updated_logs">[docs]</a>    <span class="k">def</span> <span class="nf">print_updated_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">socket</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Start a separate thread that regularly checks and prints logs (when there is an updated line)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logs_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span>
-            <span class="n">target</span><span class="o">=</span><span class="n">post_commands</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Logger&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">]</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">post_commands</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Logger&quot;</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">,</span> <span class="n">socket</span><span class="p">],</span>
         <span class="p">)</span>
         <span class="n">logs_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
 
@@ -346,11 +349,11 @@
                 <span class="p">)</span>
                 <span class="c1"># Create another process to check logs?</span>
                 <span class="k">if</span> <span class="n">logs_prefix</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">print_updated_logs</span><span class="p">(</span><span class="n">logs_prefix</span><span class="p">,</span> <span class="n">app</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">print_updated_logs</span><span class="p">(</span><span class="n">logs_prefix</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">tunnel</span><span class="p">(</span><span class="n">machine</span><span class="p">,</span> <span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="post_commands"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.post_commands">[docs]</a><span class="k">def</span> <span class="nf">post_commands</span><span class="p">(</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">):</span>
+<div class="viewcode-block" id="post_commands"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.post_commands">[docs]</a><span class="k">def</span> <span class="nf">post_commands</span><span class="p">(</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">,</span> <span class="n">socket</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Post commands to show logs and any commands-&gt;post defined by the app</span>
 <span class="sd">    &quot;&quot;&quot;</span>

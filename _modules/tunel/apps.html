@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tunel.apps &mdash; Tunel 0.0.14 documentation</title>
+  <title>tunel.apps &mdash; Tunel 0.0.16 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sphinx-argparse.css" type="text/css" />
@@ -30,7 +30,7 @@
             <a href="../../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.14
+                0.0.16
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -231,9 +231,11 @@
 <div class="viewcode-block" id="App.load_template"><a class="viewcode-back" href="../../api_reference/tunel.html#tunel.apps.App.load_template">[docs]</a>    <span class="k">def</span> <span class="nf">load_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given an app, load the template script for it.</span>
+
+<span class="sd">        This also provides the app directory for any relative template scripts.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_script</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_script</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_dir</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="App.validate"><a class="viewcode-back" href="../../api_reference/tunel.html#tunel.apps.App.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

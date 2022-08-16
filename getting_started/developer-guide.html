@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Developer Guide &mdash; Tunel 0.0.14 documentation</title>
+  <title>Developer Guide &mdash; Tunel 0.0.16 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sphinx-argparse.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.14
+                0.0.16
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -49,6 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Developer Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#tunel-apps">Tunel Apps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#launchers">Launchers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#args">Args</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commands">Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#includes">Includes</a></li>
@@ -119,6 +120,28 @@ A basic application might look like the following:</p>
 </div>
 <p>Note that all of the fields (except for needs) are required. Args are not required but recommended,
 described next.</p>
+<section id="launchers">
+<h3>Launchers<a class="headerlink" href="#launchers" title="Permalink to this heading"></a></h3>
+<p>Launchers include:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>singularity</strong> run a singularity container on the server directly.</p></li>
+<li><p><strong>docker</strong> run a docker container on the server directly.</p></li>
+<li><p><strong>slurm</strong>: submit jobs (or applications) via SLURM, either a job or a service on a node to forward back.</p></li>
+<li><p><strong>condor</strong>: submit jobs (or apps) to an HTCondor cluster.</p></li>
+</ul>
+</div></blockquote>
+<p>And currently it’s up to you to handle your application script logic. E.g., if you are using the singularity launcher
+and calling singularity in your script, you should check that it’s installed and write a clear error message if not.
+The exception is docker, which we have a template variable to check for, e.g.,:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">{% if docker %}</span>
+<span class="gp"># </span><span class="k">do</span> docker stuff here
+<span class="go">{% else %}</span>
+<span class="gp"># </span><span class="k">do</span> something <span class="k">else</span>
+<span class="go">{% endif %}</span>
+</pre></div>
+</div>
+</section>
 <section id="args">
 <h3>Args<a class="headerlink" href="#args" title="Permalink to this heading"></a></h3>
 <dl class="simple">
@@ -171,8 +194,8 @@ logically (e.g., by language or other relevant context).</p>
 <p>If you write a job file or template, in addition to arguments that the user might
 provide on the command line (and you should always set a default for) the following
 variables are always available:</p>
-<table class="docutils align-default" id="id5">
-<caption><span class="caption-text">Template Variables</span><a class="headerlink" href="#id5" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id7">
+<caption><span class="caption-text">Template Variables</span><a class="headerlink" href="#id7" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 25.0%" />
 <col style="width: 65.0%" />
@@ -239,6 +262,9 @@ variables are always available:</p>
 </tr>
 </tbody>
 </table>
+<p>Finally, you can use the set of included templates under <code class="docutils literal notranslate"><span class="pre">tunel/templates</span></code> to include common functionality like
+sourcing the user bash profile. You can also add any template file (or subfolder) in your app directory
+and it can be discovered and included. E.g., <code class="docutils literal notranslate"><span class="pre">templates/run_docker.sh</span></code> can be included like <a href="#id5"><span class="problematic" id="id6">``</span></a>{% include “templates/run_docker.sh” %}.</p>
 </section>
 <section id="documentation">
 <h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>

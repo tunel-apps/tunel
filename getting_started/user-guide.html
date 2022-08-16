@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Guide &mdash; Tunel 0.0.14 documentation</title>
+  <title>User Guide &mdash; Tunel 0.0.16 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sphinx-argparse.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.14
+                0.0.16
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -64,6 +64,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#api-get">api-get</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#launch">launch</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#singularity">singularity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#docker">docker</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#slurm">slurm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#htcondor">HTCondor</a></li>
 </ul>
@@ -331,17 +332,17 @@ if you find an issue, please open and (ideally) help debug to fix it up.</p>
 <p>The first thing you might want to do is see what apps are available.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel list-apps
 <span class="go">                     Tunel Apps</span>
-<span class="go">|---|----------------------------------|---------------------------------|</span>
-<span class="go">| # | Name                             | Launcher    |     Supported     |</span>
-<span class="go">|---|----------------------------------|---------------------------------|</span>
-<span class="go">│ 0 │ socket/tunel-django              │ singularity │ slurm|singularity │</span>
-<span class="go">│ 1 │ htcondor/job                     │ htcondor    │          htcondor │</span>
-<span class="go">│ 2 │ slurm/socket/singularity-jupyter │ slurm       │             slurm │</span>
-<span class="go">│ 3 │ slurm/socket/jupyter             │ slurm       │             slurm │</span>
-<span class="go">│ 4 │ slurm/port/jupyter               │ slurm       │             slurm │</span>
-<span class="go">│ 5 │ singularity/socket/code-server   │ singularity │       singularity │</span>
-<span class="go">│ 6 │ singularity/socket/jupyter       │ singularity │       singularity │</span>
-<span class="go">└───┴──────────────────────────────────┴─────────────┴───────────────────┘</span>
+<span class="go">|---|----------------------------------|----------------------------------------|</span>
+<span class="go">| # | Name                             | Launcher    |     Supported            |</span>
+<span class="go">|---|----------------------------------|----------------------------------------|</span>
+<span class="go">│ 0 │ socket/tunel-django              │ singularity │ docker|slurm|singularity │</span>
+<span class="go">│ 1 │ htcondor/job                     │ htcondor    │                 htcondor │</span>
+<span class="go">│ 2 │ slurm/socket/singularity-jupyter │ slurm       │                    slurm │</span>
+<span class="go">│ 3 │ slurm/socket/jupyter             │ slurm       │                    slurm │</span>
+<span class="go">│ 4 │ slurm/port/jupyter               │ slurm       │                    slurm │</span>
+<span class="go">│ 5 │ singularity/socket/code-server   │ singularity │              singularity │</span>
+<span class="go">│ 6 │ singularity/socket/jupyter       │ singularity │              singularity │</span>
+<span class="go">└───┴──────────────────────────────────┴─────────────┴──────────────────────────┘</span>
 </pre></div>
 </div>
 <p>These are located in the <code class="docutils literal notranslate"><span class="pre">tunel/apps</span></code> directory, organized by directory
@@ -385,6 +386,7 @@ That might look like this:</p>
 </div>
 <p>Additionally, if an app supports multiple launchers, you can ask for one that isn’t the default:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-app waffles tunel-django --launcher slurm
+<span class="gp">$ </span>tunel run-app bh tunel-django --launcher docker
 </pre></div>
 </div>
 <p>If you ask for a launcher that isn’t supported (typically meaning it has not been tested)
@@ -486,6 +488,13 @@ to customize. Finally, you can even start an interactive shell directly into a c
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-singularity waffles shell docker://busybox
 <span class="go">INFO:    Using cached SIF image</span>
 <span class="go">Singularity&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="docker">
+<h4>docker<a class="headerlink" href="#docker" title="Permalink to this heading"></a></h4>
+<p>To run a docker container on your remote (likely a VM):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tunel run-docker waffles ubuntu
 </pre></div>
 </div>
 </section>
