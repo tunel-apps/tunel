@@ -342,7 +342,7 @@ or with an environment variable:
 
 .. code-block:: console
 
-    $ tunel exec waffles echo `$HOME`
+    $ tunel exec waffles echo '$HOME'
 
 
 api-get
