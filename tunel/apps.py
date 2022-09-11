@@ -60,6 +60,15 @@ class App:
             return [self.launcher]
         return list(set(self.launchers_supported + [self.launcher]))
 
+    @property
+    def has_xserver(self):
+        """
+        Boolean to indicate if an application has an xserver
+        """
+        if self.needs and self.needs.get("xserver", False):
+            return True
+        return False
+
     def get_script(self):
         return os.path.join(self.app_dir, self.script)
 

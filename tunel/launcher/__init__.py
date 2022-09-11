@@ -2,8 +2,8 @@ from tunel.logger import logger
 
 from .base import Launcher
 from .docker import Docker
-from .podman import Podman
 from .htcondor import HTCondor
+from .podman import Podman
 from .singularity import Singularity
 from .slurm import Slurm
 

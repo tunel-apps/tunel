@@ -35,6 +35,7 @@ appSettingsProperties = {
         "properties": {
             "modules": {"type": "array", "items": {"type": "string"}},
             "socket": {"type": "boolean"},
+            "xserver": {"type": "boolean"},
         },
     },
 }

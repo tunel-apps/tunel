@@ -254,25 +254,31 @@ class Slurm(Launcher):
                 machine = self.get_machine(job_name)
                 logger.info("%s is running on %s!" % (job_name, machine))
 
-                # Setup port forwarding
+                # An xserver launches the app directly
                 time.sleep(10)
-                logger.c.print("== Connecting to %s ==" % job_name)
-                logger.c.print("== Instructions ==")
-                logger.c.print(
-                    "1. Password, output, and error will print to this - [bold]make sure application is ready before interaction."
-                )
-                logger.c.print(
-                    "2. Browser: http://%s:%s/ -> http://localhost:%s/..."
-                    % (machine, self.ssh.remote_port, self.ssh.local_port)
-                )
-                logger.c.print(
-                    "3. To end session: tunel stop-slurm %s %s"
-                    % (self.ssh.server, job_name)
-                )
+                if not app.has_xserver:
+                    self.print_session_instructions(job_name)
+
                 # Create another process to check logs?
                 if logs_prefix:
                     self.print_updated_logs(logs_prefix, app, socket=socket)
-                self.ssh.tunnel(machine, socket=socket, app=app)
+                self.ssh.tunnel(
+                    machine, socket=socket, app=app, xserver=app.has_xserver
+                )
+
+    def print_session_instructions(self, job_name):
+        """
+        Print extra sessions with forward instructions.
+        """
+        # Setup port forwarding
+        logger.c.print("== Connecting to %s ==" % job_name)
+        logger.c.print("== Instructions ==")
+        logger.c.print(
+            "1. Password, output, and error will print to this - [bold]make sure application is ready before interaction."
+        )
+        logger.c.print(
+            "3. To end session: tunel stop-slurm %s %s" % (self.ssh.server, job_name)
+        )
 
 
 def post_commands(ssh, app, logs_prefix, socket):
