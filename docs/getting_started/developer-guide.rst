@@ -73,7 +73,7 @@ A specification might look like the following in your ``app.yaml``:
       xserver: true
       socket: false
 
-If something is false, it's not required to incldue.
+If something is false, it's not required to include.
 
 socket
 ^^^^^^
