@@ -107,13 +107,22 @@ class Slurm(Launcher):
         os.remove(tmpfile)
 
         # Assemble the command
-        command = [
-            "sbatch",
-            "--job-name=%s" % app.job_name,
-            "--output=%s" % render["log_output"],
-            "--error=%s" % render["log_error"],
-            remote_script,
-        ]
+        if app.has_xserver:
+            command = [
+                "srun",
+                "--job-name=%s" % app.job_name,
+                "--pty",
+                "/bin/bash",
+                remote_script,
+            ]
+        else:
+            command = [
+                "sbatch",
+                "--job-name=%s" % app.job_name,
+                "--output=%s" % render["log_output"],
+                "--error=%s" % render["log_error"],
+                remote_script,
+            ]
 
         # Launch with command
         if not self.previous_job_exists(app.job_name):
@@ -239,13 +248,11 @@ class Slurm(Launcher):
             self.ssh.shell("srun --pty bash", interactive=True)
 
         else:
-            if "sbatch" not in cmd:
-                cmd = ["sbatch"] + cmd
-            res = self.ssh.execute(" ".join(cmd))
+            res = self.ssh.execute(" ".join(cmd), xserver=app.has_xserver)
             self.ssh.print_output(res)
 
             # A successful submission should:
-            if res["return_code"] == 0:
+            if res["return_code"] == 0 and not app.has_xserver:
 
                 # 1. Show the user how to quickly get logs (if logs_prefix provided)
                 if logs_prefix:
@@ -256,15 +263,13 @@ class Slurm(Launcher):
 
                 # An xserver launches the app directly
                 time.sleep(10)
-                if not app.has_xserver:
-                    self.print_session_instructions(job_name)
+                self.print_session_instructions(job_name)
 
                 # Create another process to check logs?
                 if logs_prefix:
                     self.print_updated_logs(logs_prefix, app, socket=socket)
-                self.ssh.tunnel(
-                    machine, socket=socket, app=app, xserver=app.has_xserver
-                )
+
+                self.ssh.tunnel(machine, socket=socket, app=app)
 
     def print_session_instructions(self, job_name):
         """

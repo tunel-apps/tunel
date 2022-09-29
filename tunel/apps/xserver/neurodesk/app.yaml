@@ -1,13 +1,16 @@
 launcher: singularity
 launchers_supported:
  - singularity
+ - slurm
 script: app.sh
 description: Launch neurodesk (or an associated application)
 needs:
   xserver: true
 examples: |
-  # Run app on login node with singularity, custom tag dev
+  # Run app on login node with singularity
   tunel run-app waffles neurodocker
+  # Run app on an interactive node (also with singularity)
+  tunel run-app waffles neurodocker --launcher slurm
   # Force a new pull
   tunel run-app waffles neurodocker --pull
 args:

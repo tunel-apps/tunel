@@ -63,12 +63,11 @@ class Tunnel:
             cmd = shlex.split(cmd)
         if stream:
             command = ["ssh", "-t", self.server]
+        elif xserver:
+            command = ["ssh", "-XY", "-o", "ForwardX11=yes", self.server]
         else:
             command = ["ssh", self.server]
 
-        # Do we want an xserver?
-        if xserver:
-            command.append("-X")
         cmd = command + cmd
         return tunel.utils.run_command(cmd, quiet=quiet, stream=stream)
 
@@ -133,7 +132,6 @@ class Tunnel:
         remote_port=None,
         socket=None,
         app=None,
-        xserver=False,
     ):
         """
         Given a remote and local port, open a tunnel. If an isolated node ssh is
@@ -141,17 +139,13 @@ class Tunnel:
         """
         # If no machine, we have to do a login node
         if not machine:
-            return self._tunnel_login(xserver)
+            return self._tunnel_login()
 
         # The app requires a socket
         if app.needs.get("socket", False):
             if not socket:
                 logger.exit("A socket path is required.")
             return self._tunnel_isolated_socket(machine, socket=socket)
-
-        # If we are using an xserver
-        if xserver:
-            return self._tunnel_xserver(machine)
 
         port = port or self.local_port
         remote_port = remote_port or self.remote_port
@@ -201,7 +195,6 @@ Tunnel._tunnel_isolated_socket = commands._tunnel_isolated_socket
 Tunnel._tunnel_isolated_sockets = commands._tunnel_isolated_sockets
 Tunnel._tunnel_isolated_proxyjump_sockets = commands._tunnel_isolated_proxyjump_sockets
 Tunnel._tunnel_isolated_port = commands._tunnel_isolated_port
-Tunnel._tunnel_xserver = commands._tunnel_xserver
 Tunnel._tunnel_login = commands._tunnel_login
 Tunnel._tunnel_login_node_port = commands._tunnel_login_node_port
 Tunnel._tunnel_login_node_socket = commands._tunnel_login_node_socket

@@ -110,49 +110,18 @@ def _tunnel_isolated_port(self, machine):
     self._tunnel_wait()
 
 
-def _tunnel_xserver(self, machine):
-    """
-    Create a tunnel with an xserver
-    """
-    # TODO do we need to close up connections on login node?
-    connection = "%s:localhost:%s" % (self.local_port, self.remote_port)
-    cmd = [
-        "-f",
-        "-X",
-        "-o",
-        "ForwardX11=yes",
-        "-L",
-        connection,
-        self.server,
-        "ssh",
-        "-L",
-        connection,
-        "-X",
-        "-o",
-        "ForwardX11=yes",
-        "-N",
-        machine,
-    ]
-    self.execute(cmd)
-    self._tunnel_wait()
-
-
 # Tunnels to login node
 
 
-def _tunnel_login(self, xserver=False):
+def _tunnel_login(self):
     """
     Create a simple tunnel to the login node (assumes not isolated nodes)
     """
     socket_file = self._get_socket_path()
     cmd = ["-K", "-f", "-M"]
-    if xserver:
-        cmd += ["-X", "-o", "ForwardX11=yes"]
 
     # Add the socket file
     cmd += ["-S", socket_file, "-L"]
-    if xserver:
-        cmd += ["-X", "-o", "ForwardX11=yes"]
     cmd += ["%s:%s:%s" % (self.local_port, self.server, self.remote_port), "-N"]
     self.execute(cmd)
     self._tunnel_wait(socket_file)
