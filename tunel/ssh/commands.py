@@ -93,14 +93,10 @@ def _tunnel_isolated_port(self, machine):
     """
     Create a tunnel to an isolated node (not tested yet)
     """
-    socket_path = self._get_socket_path()
-
     # TODO do we need to close up connections on login node?
     connection = "%s:localhost:%s" % (self.local_port, self.remote_port)
     cmd = [
         "-f",
-        "-S",
-        socket_path,
         "-L",
         connection,
         self.server,
@@ -111,7 +107,7 @@ def _tunnel_isolated_port(self, machine):
         machine,
     ]
     self.execute(cmd)
-    self._tunnel_wait(socket_path)
+    self._tunnel_wait()
 
 
 # Tunnels to login node
@@ -122,16 +118,11 @@ def _tunnel_login(self):
     Create a simple tunnel to the login node (assumes not isolated nodes)
     """
     socket_file = self._get_socket_path()
-    cmd = [
-        "-K",
-        "-f",
-        "-M",
-        "-S",
-        socket_file,
-        "-L",
-        "%s:%s:%s" % (self.local_port, self.server, self.remote_port),
-        "-N",
-    ]
+    cmd = ["-K", "-f", "-M"]
+
+    # Add the socket file
+    cmd += ["-S", socket_file, "-L"]
+    cmd += ["%s:%s:%s" % (self.local_port, self.server, self.remote_port), "-N"]
     self.execute(cmd)
     self._tunnel_wait(socket_file)
 
@@ -145,6 +136,23 @@ def _tunnel_login_node_socket(self, socket):
         "-NT",
         "-L",
         "%s:%s" % (self.local_port, socket),
+        "%s@%s" % (self.username, self.server),
+    ]
+    cmd = "%s" % " ".join(cmd)
+    logger.info(cmd)
+
+
+def _tunnel_login_node_xserver(self):
+    """
+    Connect to a login node via xserver
+    """
+    cmd = [
+        "ssh",
+        "-o",
+        "ForwardX11=yes",
+        "-X",
+        "-NT",
+        "-L",
         "%s@%s" % (self.username, self.server),
     ]
     cmd = "%s" % " ".join(cmd)

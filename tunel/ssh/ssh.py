@@ -55,16 +55,20 @@ class Tunnel:
     def __str__(self):
         return "[tunel-ssh]"
 
-    def execute(self, cmd, login_shell=False, quiet=False, stream=False):
+    def execute(self, cmd, login_shell=False, quiet=False, stream=False, xserver=False):
         """
         Execute a command via ssh and a known, named connection.
         """
         if not isinstance(cmd, list):
             cmd = shlex.split(cmd)
         if stream:
-            cmd = ["ssh", "-t", self.server] + cmd
+            command = ["ssh", "-t", self.server]
+        elif xserver:
+            command = ["ssh", "-XY", "-o", "ForwardX11=yes", self.server]
         else:
-            cmd = ["ssh", self.server] + cmd
+            command = ["ssh", self.server]
+
+        cmd = command + cmd
         return tunel.utils.run_command(cmd, quiet=quiet, stream=stream)
 
     def scp_to(self, src, dest):
@@ -105,10 +109,14 @@ class Tunnel:
         Create a tunnel directly to the login node (e.g., a Singularity app)
         """
         # The app requires a socket
-        if app.needs.get("socket", False) is True:
+        if app.needs and app.needs.get("socket", False) is True:
             if not socket:
                 logger.exit("A socket path is required.")
             return self._tunnel_login_node_socket(socket)
+
+        # The app uses an xserver
+        elif app.needs and app.needs.get("xserver", False) is True:
+            return self._tunnel_login_node_xserver()
 
         port = port or self.local_port
         remote_port = remote_port or self.remote_port
@@ -117,17 +125,24 @@ class Tunnel:
         )
         return self._tunnel_login_node_port()
 
-    def tunnel(self, machine=None, port=None, remote_port=None, socket=None, app=None):
+    def tunnel(
+        self,
+        machine=None,
+        port=None,
+        remote_port=None,
+        socket=None,
+        app=None,
+    ):
         """
         Given a remote and local port, open a tunnel. If an isolated node ssh is
         done, the name of the machine is required too.
         """
-        # If no machine, we have to do a login
+        # If no machine, we have to do a login node
         if not machine:
             return self._tunnel_login()
 
         # The app requires a socket
-        if app.needs.get("socket", False) is True:
+        if app.needs.get("socket", False):
             if not socket:
                 logger.exit("A socket path is required.")
             return self._tunnel_isolated_socket(machine, socket=socket)
@@ -183,3 +198,4 @@ Tunnel._tunnel_isolated_port = commands._tunnel_isolated_port
 Tunnel._tunnel_login = commands._tunnel_login
 Tunnel._tunnel_login_node_port = commands._tunnel_login_node_port
 Tunnel._tunnel_login_node_socket = commands._tunnel_login_node_socket
+Tunnel._tunnel_login_node_xserver = commands._tunnel_login_node_xserver

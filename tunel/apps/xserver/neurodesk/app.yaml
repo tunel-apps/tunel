@@ -1,0 +1,24 @@
+launcher: singularity
+launchers_supported:
+ - singularity
+ - slurm
+script: app.sh
+description: Launch neurodesk (or an associated application)
+needs:
+  xserver: true
+examples: |
+  # Run app on login node with singularity
+  tunel run-app waffles neurodocker
+  # Run app on an interactive node (also with singularity)
+  tunel run-app waffles neurodocker --launcher slurm
+  # Force a new pull
+  tunel run-app waffles neurodocker --pull
+args:
+ - name: workdir
+   description: Working directory for app (and to show file explorer for)
+ - name: container
+   description: "Change the app container used (default is demo ghcr.io/neurodesk/caid/itksnap_3.8.0:20210322)"
+ - name: tag
+   description: "Tag of the container to use (defaults to latest)"
+ - name: pull
+   description: force a new pull (even if the container already exists).

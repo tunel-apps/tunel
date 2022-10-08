@@ -14,6 +14,7 @@ and **Merged pull requests**. Critical items to know are:
 The versions coincide with releases on pip. Only major versions will be released as tags on Github.
 
 ## [0.0.x](https://github.com/tunel-apps/tunel/tree/main) (0.0.x)
+ - support for xserver (singularity and slurm) (0.0.18)
  - bugfix in slurm stop and adding username to proxy (0.0.17)
  - bugfix template generation (0.0.16)
  - support for docker launcher (and intending to test podman) (0.0.15)

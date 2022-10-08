@@ -44,7 +44,7 @@ Launchers include:
 
 
  - **singularity** run a singularity container on the server directly.
- - **docker** run a docker container on the server directly.
+ - **docker** run a docker container on the server directly (experimental support for podman)
  - **slurm**: submit jobs (or applications) via SLURM, either a job or a service on a node to forward back.
  - **condor**: submit jobs (or apps) to an HTCondor cluster.
 
@@ -59,6 +59,48 @@ The exception is docker, which we have a template variable to check for, e.g.,:
     {% else %}
     # do something else
     {% endif %}
+
+
+Needs
+-----
+
+Each app can specify a set of boolean needs to indicate to the launcher how t do setup.
+A specification might look like the following in your ``app.yaml``:
+
+.. code-block:: console
+
+    needs:
+      xserver: true
+      socket: false
+
+If something is false, it's not required to include.
+
+socket
+^^^^^^
+
+If the app uses a socket, any existing *.sock files in the app directory on the remote will be cleaned up.
+In your application primary running script, you can easily create the socket relative to the script directory,
+and a helper include will ensure that we define the `SOCKET` environment variable and clean up any previous one.
+
+.. code-block:: console
+
+    SOCKET_DIR="{{ scriptdir }}"
+    mkdir -p ${SOCKET_DIR}
+
+    echo "Socket directory is ${SOCKET_DIR}"
+
+    # Remove socket if exists
+    {% include "bash/socket/set-socket.sh" %}
+
+It's helper to look at other application scripts.
+
+
+xserver
+^^^^^^^
+
+An xserver doesn't use typical ssh tunnel strategies like using a socket, but instead forwards with `-X`.
+This means we have support primarily for Singularity (running the container on the head node) and
+slurm (the same from a job node).
 
 
 Args

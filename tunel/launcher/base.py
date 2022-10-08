@@ -6,6 +6,7 @@ import os
 
 import tunel.ssh
 import tunel.utils as utils
+from tunel.logger import logger
 
 here = os.path.dirname(os.path.abspath(__file__))
 
@@ -217,3 +218,52 @@ class Launcher:
         return self.ssh.execute(
             "chmod u+x %s; /bin/bash -l %s" % (remote_script, remote_script)
         )
+
+
+class ContainerLauncher(Launcher):
+    """
+    A container launcher has shared functions for launching a head node container.
+    """
+
+    def run_app(self, app):
+        """
+        A Singularity app means running a container directly with some arguments, etc.
+        """
+        # Make sure we set the username to the ssh
+        self.username
+
+        # Add any paths from the config
+        paths = self.settings.get("paths", [])
+
+        # Prepare dictionary with content to render into recipes
+        render = self.prepare_render(app, paths)
+
+        # Clean up previous sockets
+        self.ssh.execute(["rm", "-rf", "%s/*.sock" % render["scriptdir"]])
+
+        # Load the app template
+        template = app.load_template()
+        result = template.render(**render)
+
+        # Write script to temporary file
+        tmpfile = utils.get_tmpfile()
+        utils.write_file(tmpfile, result)
+
+        # Copy over to server
+        remote_script = os.path.join(self.remote_assets_dir, app.name, app.script)
+        self.ssh.scp_to(tmpfile, remote_script)
+
+        # Instead of a Singularity command, we run the script
+        command = "%s %s %s %s" % (
+            self.path,
+            self.environ,
+            self.ssh.settings.shell,
+            remote_script,
+        )
+
+        # An xserver launches the app directly
+        if not app.has_xserver:
+            logger.c.print()
+            logger.c.print("== INSTRUCTIONS WILL BE PRINTED with a delay ==")
+            self.print_tunnel_instructions(app, render["socket"])
+        self.ssh.execute(command, stream=True, xserver=app.has_xserver)
