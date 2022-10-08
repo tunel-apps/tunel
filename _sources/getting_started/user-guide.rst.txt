@@ -392,6 +392,7 @@ Our launchers include:
 Each launcher can be run via an app, meaning you do a ``run-app`` on an app.yaml that specifies the launcher,
 and we also provide courtesy functions (e.g., ``run-singularity``). These might be removed at some point, not decided yet.
 
+
 singularity
 ^^^^^^^^^^^
 

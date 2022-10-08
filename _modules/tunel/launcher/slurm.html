@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tunel.launcher.slurm &mdash; Tunel 0.0.17 documentation</title>
+  <title>tunel.launcher.slurm &mdash; Tunel 0.0.18 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/sphinx-argparse.css" type="text/css" />
@@ -17,6 +17,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -30,7 +31,7 @@
             <a href="../../../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.17
+                0.0.18
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -186,13 +187,22 @@
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">)</span>
 
         <span class="c1"># Assemble the command</span>
-        <span class="n">command</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;sbatch&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--job-name=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">app</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span>
-            <span class="s2">&quot;--output=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_output&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;--error=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_error&quot;</span><span class="p">],</span>
-            <span class="n">remote_script</span><span class="p">,</span>
-        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">has_xserver</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;srun&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;--job-name=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">app</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span>
+                <span class="s2">&quot;--pty&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;/bin/bash&quot;</span><span class="p">,</span>
+                <span class="n">remote_script</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;sbatch&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;--job-name=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">app</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span>
+                <span class="s2">&quot;--output=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_output&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;--error=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">render</span><span class="p">[</span><span class="s2">&quot;log_error&quot;</span><span class="p">],</span>
+                <span class="n">remote_script</span><span class="p">,</span>
+            <span class="p">]</span>
 
         <span class="c1"># Launch with command</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_job_exists</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">job_name</span><span class="p">):</span>
@@ -318,13 +328,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">shell</span><span class="p">(</span><span class="s2">&quot;srun --pty bash&quot;</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;sbatch&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">:</span>
-                <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sbatch&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">cmd</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">),</span> <span class="n">xserver</span><span class="o">=</span><span class="n">app</span><span class="o">.</span><span class="n">has_xserver</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">print_output</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 
             <span class="c1"># A successful submission should:</span>
-            <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;return_code&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;return_code&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">app</span><span class="o">.</span><span class="n">has_xserver</span><span class="p">:</span>
 
                 <span class="c1"># 1. Show the user how to quickly get logs (if logs_prefix provided)</span>
                 <span class="k">if</span> <span class="n">logs_prefix</span><span class="p">:</span>
@@ -333,25 +341,29 @@
                 <span class="n">machine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_machine</span><span class="p">(</span><span class="n">job_name</span><span class="p">)</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is running on </span><span class="si">%s</span><span class="s2">!&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">job_name</span><span class="p">,</span> <span class="n">machine</span><span class="p">))</span>
 
-                <span class="c1"># Setup port forwarding</span>
+                <span class="c1"># An xserver launches the app directly</span>
                 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;== Connecting to </span><span class="si">%s</span><span class="s2"> ==&quot;</span> <span class="o">%</span> <span class="n">job_name</span><span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;== Instructions ==&quot;</span><span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
-                    <span class="s2">&quot;1. Password, output, and error will print to this - [bold]make sure application is ready before interaction.&quot;</span>
-                <span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
-                    <span class="s2">&quot;2. Browser: http://</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/ -&gt; http://localhost:</span><span class="si">%s</span><span class="s2">/...&quot;</span>
-                    <span class="o">%</span> <span class="p">(</span><span class="n">machine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">remote_port</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">local_port</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
-                    <span class="s2">&quot;3. To end session: tunel stop-slurm </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span>
-                    <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">job_name</span><span class="p">)</span>
-                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">print_session_instructions</span><span class="p">(</span><span class="n">job_name</span><span class="p">)</span>
+
                 <span class="c1"># Create another process to check logs?</span>
                 <span class="k">if</span> <span class="n">logs_prefix</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">print_updated_logs</span><span class="p">(</span><span class="n">logs_prefix</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">tunnel</span><span class="p">(</span><span class="n">machine</span><span class="p">,</span> <span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span></div></div>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">tunnel</span><span class="p">(</span><span class="n">machine</span><span class="p">,</span> <span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Slurm.print_session_instructions"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.Slurm.print_session_instructions">[docs]</a>    <span class="k">def</span> <span class="nf">print_session_instructions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print extra sessions with forward instructions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Setup port forwarding</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;== Connecting to </span><span class="si">%s</span><span class="s2"> ==&quot;</span> <span class="o">%</span> <span class="n">job_name</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;== Instructions ==&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+            <span class="s2">&quot;1. Password, output, and error will print to this - [bold]make sure application is ready before interaction.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+            <span class="s2">&quot;3. To end session: tunel stop-slurm </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">job_name</span><span class="p">)</span>
+        <span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="post_commands"><a class="viewcode-back" href="../../../api_reference/tunel.launcher.html#tunel.launcher.slurm.post_commands">[docs]</a><span class="k">def</span> <span class="nf">post_commands</span><span class="p">(</span><span class="n">ssh</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">logs_prefix</span><span class="p">,</span> <span class="n">socket</span><span class="p">):</span>

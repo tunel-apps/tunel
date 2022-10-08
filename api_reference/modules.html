@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tunel API &mdash; Tunel 0.0.17 documentation</title>
+  <title>Tunel API &mdash; Tunel 0.0.18 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sphinx-argparse.css" type="text/css" />
@@ -18,6 +18,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -33,7 +34,7 @@
             <a href="../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.17
+                0.0.18
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -128,12 +129,98 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tunel.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel.apps">tunel.apps module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel.apps">tunel.apps module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#tunel.apps.App"><code class="docutils literal notranslate"><span class="pre">App</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.add_args"><code class="docutils literal notranslate"><span class="pre">App.add_args()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.app_dir"><code class="docutils literal notranslate"><span class="pre">App.app_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.docgen"><code class="docutils literal notranslate"><span class="pre">App.docgen()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.get"><code class="docutils literal notranslate"><span class="pre">App.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.get_script"><code class="docutils literal notranslate"><span class="pre">App.get_script()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.has_xserver"><code class="docutils literal notranslate"><span class="pre">App.has_xserver</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.job_name"><code class="docutils literal notranslate"><span class="pre">App.job_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.launchers"><code class="docutils literal notranslate"><span class="pre">App.launchers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.load"><code class="docutils literal notranslate"><span class="pre">App.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.load_template"><code class="docutils literal notranslate"><span class="pre">App.load_template()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.name"><code class="docutils literal notranslate"><span class="pre">App.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.post_command"><code class="docutils literal notranslate"><span class="pre">App.post_command</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.print_pretty"><code class="docutils literal notranslate"><span class="pre">App.print_pretty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.relative_dir"><code class="docutils literal notranslate"><span class="pre">App.relative_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.relative_path"><code class="docutils literal notranslate"><span class="pre">App.relative_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.apps.App.validate"><code class="docutils literal notranslate"><span class="pre">App.validate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#tunel.apps.get_app"><code class="docutils literal notranslate"><span class="pre">get_app()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#tunel.apps.list_apps"><code class="docutils literal notranslate"><span class="pre">list_apps()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel.defaults">tunel.defaults module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel.logger">tunel.logger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel.logger">tunel.logger module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.BLACK"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.BLACK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.BLUE"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.BLUE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.BOLD_SEQ"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.BOLD_SEQ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.COLOR_SEQ"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.COLOR_SEQ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.CYAN"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.CYAN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.GREEN"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.GREEN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.MAGENTA"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.MAGENTA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.RED"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.RED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.RESET_SEQ"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.RESET_SEQ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.WHITE"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.WHITE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.YELLOW"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.YELLOW</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.can_color_tty"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.can_color_tty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.colors"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.colors</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.decorate"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.decorate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.emit"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.emit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.ColorizingStreamHandler.is_tty"><code class="docutils literal notranslate"><span class="pre">ColorizingStreamHandler.is_tty</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#tunel.logger.Logger"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.cleanup"><code class="docutils literal notranslate"><span class="pre">Logger.cleanup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.cyan"><code class="docutils literal notranslate"><span class="pre">Logger.cyan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.debug"><code class="docutils literal notranslate"><span class="pre">Logger.debug()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.error"><code class="docutils literal notranslate"><span class="pre">Logger.error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.exit"><code class="docutils literal notranslate"><span class="pre">Logger.exit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.handler"><code class="docutils literal notranslate"><span class="pre">Logger.handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.info"><code class="docutils literal notranslate"><span class="pre">Logger.info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.location"><code class="docutils literal notranslate"><span class="pre">Logger.location()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.panel_group"><code class="docutils literal notranslate"><span class="pre">Logger.panel_group()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.print_pretty"><code class="docutils literal notranslate"><span class="pre">Logger.print_pretty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.progress"><code class="docutils literal notranslate"><span class="pre">Logger.progress()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.purple"><code class="docutils literal notranslate"><span class="pre">Logger.purple()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.set_level"><code class="docutils literal notranslate"><span class="pre">Logger.set_level()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.set_stream_handler"><code class="docutils literal notranslate"><span class="pre">Logger.set_stream_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.shellcmd"><code class="docutils literal notranslate"><span class="pre">Logger.shellcmd()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.text_handler"><code class="docutils literal notranslate"><span class="pre">Logger.text_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.logger.Logger.warning"><code class="docutils literal notranslate"><span class="pre">Logger.warning()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#tunel.logger.setup_logger"><code class="docutils literal notranslate"><span class="pre">setup_logger()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel.schemas">tunel.schemas module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel.settings">tunel.settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel.template">tunel.template module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel.settings">tunel.settings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#tunel.settings.Settings"><code class="docutils literal notranslate"><span class="pre">Settings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#tunel.settings.SettingsBase"><code class="docutils literal notranslate"><span class="pre">SettingsBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.settings.SettingsBase.change_validate"><code class="docutils literal notranslate"><span class="pre">SettingsBase.change_validate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.settings.SettingsBase.delete"><code class="docutils literal notranslate"><span class="pre">SettingsBase.delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.settings.SettingsBase.edit"><code class="docutils literal notranslate"><span class="pre">SettingsBase.edit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.settings.SettingsBase.get"><code class="docutils literal notranslate"><span class="pre">SettingsBase.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.settings.SettingsBase.get_settings_file"><code class="docutils literal notranslate"><span class="pre">SettingsBase.get_settings_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.settings.SettingsBase.load"><code class="docutils literal notranslate"><span class="pre">SettingsBase.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.settings.SettingsBase.save"><code class="docutils literal notranslate"><span class="pre">SettingsBase.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.settings.SettingsBase.validate"><code class="docutils literal notranslate"><span class="pre">SettingsBase.validate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel.template">tunel.template module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tunel.html#tunel.template.Template"><code class="docutils literal notranslate"><span class="pre">Template</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.template.Template.get"><code class="docutils literal notranslate"><span class="pre">Template.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tunel.html#tunel.template.Template.load"><code class="docutils literal notranslate"><span class="pre">Template.load()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel.version">tunel.version module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tunel.html#module-tunel">Module contents</a></li>
 </ul>

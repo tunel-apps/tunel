@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tunel.ssh.ssh &mdash; Tunel 0.0.17 documentation</title>
+  <title>tunel.ssh.ssh &mdash; Tunel 0.0.18 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/sphinx-argparse.css" type="text/css" />
@@ -17,6 +17,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -30,7 +31,7 @@
             <a href="../../../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.17
+                0.0.18
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -133,16 +134,20 @@
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;[tunel-ssh]&quot;</span>
 
-<div class="viewcode-block" id="Tunnel.execute"><a class="viewcode-back" href="../../../api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">login_shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Tunnel.execute"><a class="viewcode-back" href="../../../api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">login_shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xserver</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute a command via ssh and a known, named connection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">stream</span><span class="p">:</span>
-            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="s2">&quot;-t&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="p">]</span> <span class="o">+</span> <span class="n">cmd</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="s2">&quot;-t&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">xserver</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="s2">&quot;-XY&quot;</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="s2">&quot;ForwardX11=yes&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="p">]</span> <span class="o">+</span> <span class="n">cmd</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="p">]</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">command</span> <span class="o">+</span> <span class="n">cmd</span>
         <span class="k">return</span> <span class="n">tunel</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Tunnel.scp_to"><a class="viewcode-back" href="../../../api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.scp_to">[docs]</a>    <span class="k">def</span> <span class="nf">scp_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
@@ -183,10 +188,14 @@
 <span class="sd">        Create a tunnel directly to the login node (e.g., a Singularity app)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># The app requires a socket</span>
-        <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">needs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;socket&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">needs</span> <span class="ow">and</span> <span class="n">app</span><span class="o">.</span><span class="n">needs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;socket&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">socket</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;A socket path is required.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tunnel_login_node_socket</span><span class="p">(</span><span class="n">socket</span><span class="p">)</span>
+
+        <span class="c1"># The app uses an xserver</span>
+        <span class="k">elif</span> <span class="n">app</span><span class="o">.</span><span class="n">needs</span> <span class="ow">and</span> <span class="n">app</span><span class="o">.</span><span class="n">needs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xserver&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tunnel_login_node_xserver</span><span class="p">()</span>
 
         <span class="n">port</span> <span class="o">=</span> <span class="n">port</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_port</span>
         <span class="n">remote_port</span> <span class="o">=</span> <span class="n">remote_port</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_port</span>
@@ -195,17 +204,24 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tunnel_login_node_port</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Tunnel.tunnel"><a class="viewcode-back" href="../../../api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.tunnel">[docs]</a>    <span class="k">def</span> <span class="nf">tunnel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">remote_port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">socket</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Tunnel.tunnel"><a class="viewcode-back" href="../../../api_reference/tunel.ssh.html#tunel.ssh.ssh.Tunnel.tunnel">[docs]</a>    <span class="k">def</span> <span class="nf">tunnel</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">machine</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">remote_port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">socket</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">app</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given a remote and local port, open a tunnel. If an isolated node ssh is</span>
 <span class="sd">        done, the name of the machine is required too.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># If no machine, we have to do a login</span>
+        <span class="c1"># If no machine, we have to do a login node</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">machine</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tunnel_login</span><span class="p">()</span>
 
         <span class="c1"># The app requires a socket</span>
-        <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">needs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;socket&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">needs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;socket&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">socket</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;A socket path is required.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tunnel_isolated_socket</span><span class="p">(</span><span class="n">machine</span><span class="p">,</span> <span class="n">socket</span><span class="o">=</span><span class="n">socket</span><span class="p">)</span>
@@ -261,6 +277,7 @@
 <span class="n">Tunnel</span><span class="o">.</span><span class="n">_tunnel_login</span> <span class="o">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">_tunnel_login</span>
 <span class="n">Tunnel</span><span class="o">.</span><span class="n">_tunnel_login_node_port</span> <span class="o">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">_tunnel_login_node_port</span>
 <span class="n">Tunnel</span><span class="o">.</span><span class="n">_tunnel_login_node_socket</span> <span class="o">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">_tunnel_login_node_socket</span>
+<span class="n">Tunnel</span><span class="o">.</span><span class="n">_tunnel_login_node_xserver</span> <span class="o">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">_tunnel_login_node_xserver</span>
 </pre></div>
 
            </div>

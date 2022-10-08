@@ -17,8 +17,8 @@
     <link href="/tunel/_static/apps/css/syntax.css" rel="stylesheet" />
     <meta name="description" content="Tunel Apps">
     <meta name="thumbnail" content="https://tunel-apps.github.io/tunel/img/logo.png">
-    <meta name="name" content="socket/tunel-django">
-    <meta name="repository" content="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/socket/tunel-django/app.yaml">
+    <meta name="name" content="xserver/neurodesk">
+    <meta name="repository" content="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/xserver/neurodesk/app.yaml">
     <meta name="pagetype" content="experiment">
 </head>
 
@@ -48,13 +48,13 @@
         </div>
         <div class="col-lg-4 col-lg-offset-1">
             <div class="spacing"></div>
-            <h4>socket/tunel-django</h4>
+            <h4>xserver/neurodesk</h4>
             <div style="padding-bottom:20px" class="hline"></div>
             <p><b>Launcher</b>: singularity</p>
-            <p>An example Django application run via a Singularity container.</p>
-            <p style="padding-top:15px"><a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/socket/tunel-django/app.yaml" target="_blank">
+            <p>Launch neurodesk (or an associated application)</p>
+            <p style="padding-top:15px"><a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/xserver/neurodesk/app.yaml" target="_blank">
                            <button class="btn btn-sm btn-primary">GITHUB</button></a>
-            <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/socket/tunel-django/app.sh" target="_blank"><button class="btn btn-sm btn-primary">SCRIPT</button></a>            
+            <a href="https://github.com/tunel-apps/tunel/blob/main/tunel/apps/xserver/neurodesk/app.sh" target="_blank"><button class="btn btn-sm btn-primary">SCRIPT</button></a>            
             </p>
         </div>
     </div>
@@ -70,7 +70,7 @@
             <div style="margin:0px 80px 50px">
             <h3 id="usage">Usage</h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tunel run-app &lt;server&gt; socket/tunel-django
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tunel run-app &lt;server&gt; xserver/neurodesk
 </code></pre></div></div>
 
 <h4 id="arguments">Arguments</h4>
@@ -84,23 +84,13 @@
 </thead>
 <tbody>
 <tr>
-   <td>user</td>
-   <td>username for logging into Django app (NOT your cluster username), defaults to tunel-user</td>
-   <td>NA</td>
-</tr>
-<tr>
-   <td>pass</td>
-   <td>password for logging in to Django app (NOT your cluster password), defaults to tunel-pass</td>
-   <td>NA</td>
-</tr>
-<tr>
    <td>workdir</td>
    <td>Working directory for app (and to show file explorer for)</td>
    <td>NA</td>
 </tr>
 <tr>
    <td>container</td>
-   <td>Change the app container used (default is demo ghcr.io/tunel-apps/tunel-django). Must start with container URI to pull (e.g., docker://)</td>
+   <td>Change the app container used (default is demo ghcr.io/neurodesk/caid/itksnap_3.8.0:20210322)</td>
    <td>NA</td>
 </tr>
 <tr>
@@ -123,17 +113,17 @@
 <h4 id="needs">Needs</h4>
 
 <ul>
-  <li>socket</li>
+  <li>xserver</li>
 </ul>
 
 <h3 id="examples">Examples</h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Run app on login node with singularity, custom tag dev</span>
-tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</span><span class="o">=</span>dev
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Run app on login node with singularity</span>
+tunel run-app waffles neurodocker
+<span class="c"># Run app on an interactive node (also with singularity)</span>
+tunel run-app waffles neurodocker <span class="nt">--launcher</span> slurm
 <span class="c"># Force a new pull</span>
-tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</span><span class="o">=</span>dev <span class="nt">--pull</span>
-<span class="c"># Set a custom user/password (note that the UI is only available to you so this is not for security)</span>
-tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</span><span class="o">=</span>dev <span class="nt">--user</span><span class="o">=</span>hello <span class="nt">--pass</span><span class="o">=</span>moto  
+tunel run-app waffles neurodocker <span class="nt">--pull</span>
 </code></pre></div></div>
 
 <h3 id="scripts">Scripts</h3>
@@ -146,16 +136,17 @@ tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</sp
 
 <ul>
   <li>slurm</li>
-  <li>docker</li>
-  <li>podman</li>
   <li>singularity</li>
 </ul>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 
 <span class="nv">JOB_NAME</span><span class="o">=</span><span class="s2">"{{ jobname }}"</span>
-<span class="nv">SOCKET_DIR</span><span class="o">=</span><span class="s2">"{{ scriptdir }}"</span>
-<span class="nb">mkdir</span> <span class="nt">-p</span> <span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span>
+<span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="s2">"{{ scriptdir }}"</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> <span class="k">${</span><span class="nv">SCRIPT_DIR</span><span class="k">}</span>
+
+<span class="c"># Sets $PORT envar from args.port then port</span>
+<span class="o">{</span>% include <span class="s2">"bash/network/set-port.sh"</span> %<span class="o">}</span>
 
 <span class="c"># Include Singularity cachedir if not set</span>
 <span class="o">{</span>% include <span class="s2">"bash/singularity/set-cache-tmp.sh"</span> %<span class="o">}</span>
@@ -163,23 +154,17 @@ tunel run-app waffles singularity/socket/tunel-django <span class="nt">--tag</sp
 <span class="c"># Source ~/bash_profile or ~/.profile</span>
 <span class="o">{</span>% include <span class="s2">"bash/source-profile.sh"</span> %<span class="o">}</span>
 
-<span class="c"># Set WORKDIR, first to args.workdir, then settings.yml workdir, then $HOME</span>
+<span class="c"># Working Directory</span>
 <span class="o">{</span>% include <span class="s2">"bash/set-workdir.sh"</span> %<span class="o">}</span>
 <span class="nb">cd</span> <span class="nv">$WORKDIR</span>
 
 <span class="nb">echo</span> <span class="s2">"Job is </span><span class="k">${</span><span class="nv">JOB_NAME</span><span class="k">}</span><span class="s2">"</span>
-<span class="nb">echo</span> <span class="s2">"Socket directory is </span><span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span><span class="s2">"</span>
-<span class="nb">echo</span> <span class="s2">"App working directory is </span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"Port is </span><span class="k">${</span><span class="nv">PORT</span><span class="k">}</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"Working directory is </span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"Script directory is </span><span class="k">${</span><span class="nv">SCRIPT_DIR</span><span class="k">}</span><span class="s2">"</span>
 
 <span class="c"># Create .local folder for default modules, if doesn't exist</span>
 <span class="o">{</span>% include <span class="s2">"bash/python/create-local.sh"</span> %<span class="o">}</span>
-
-<span class="c"># Remove socket if exists</span>
-<span class="o">{</span>% include <span class="s2">"bash/socket/set-socket.sh"</span> %<span class="o">}</span>
-
-<span class="c"># Bind the database</span>
-<span class="nv">DB_DIR</span><span class="o">=</span><span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span>/db
-<span class="nv">STATIC_DIR</span><span class="o">=</span><span class="k">${</span><span class="nv">SOCKET_DIR</span><span class="k">}</span>/static
 
 <span class="c"># username and password for django to create</span>
 <span class="o">{</span>% include <span class="s2">"bash/set-user-pass.sh"</span> %<span class="o">}</span>

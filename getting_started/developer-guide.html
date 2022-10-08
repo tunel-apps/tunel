@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Developer Guide &mdash; Tunel 0.0.17 documentation</title>
+  <title>Developer Guide &mdash; Tunel 0.0.18 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sphinx-argparse.css" type="text/css" />
@@ -18,6 +18,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -33,7 +34,7 @@
             <a href="../index.html" class="icon icon-home"> Tunel
           </a>
               <div class="version">
-                0.0.17
+                0.0.18
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -50,6 +51,11 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Developer Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#tunel-apps">Tunel Apps</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#launchers">Launchers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#needs">Needs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#socket">socket</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#xserver">xserver</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#args">Args</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commands">Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#includes">Includes</a></li>
@@ -126,7 +132,7 @@ described next.</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><strong>singularity</strong> run a singularity container on the server directly.</p></li>
-<li><p><strong>docker</strong> run a docker container on the server directly.</p></li>
+<li><p><strong>docker</strong> run a docker container on the server directly (experimental support for podman)</p></li>
 <li><p><strong>slurm</strong>: submit jobs (or applications) via SLURM, either a job or a service on a node to forward back.</p></li>
 <li><p><strong>condor</strong>: submit jobs (or apps) to an HTCondor cluster.</p></li>
 </ul>
@@ -141,6 +147,39 @@ The exception is docker, which we have a template variable to check for, e.g.,:<
 <span class="go">{% endif %}</span>
 </pre></div>
 </div>
+</section>
+<section id="needs">
+<h3>Needs<a class="headerlink" href="#needs" title="Permalink to this heading"></a></h3>
+<p>Each app can specify a set of boolean needs to indicate to the launcher how t do setup.
+A specification might look like the following in your <code class="docutils literal notranslate"><span class="pre">app.yaml</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">needs:</span>
+<span class="go">  xserver: true</span>
+<span class="go">  socket: false</span>
+</pre></div>
+</div>
+<p>If something is false, it’s not required to include.</p>
+<section id="socket">
+<h4>socket<a class="headerlink" href="#socket" title="Permalink to this heading"></a></h4>
+<p>If the app uses a socket, any existing <a href="#id1"><span class="problematic" id="id2">*</span></a>.sock files in the app directory on the remote will be cleaned up.
+In your application primary running script, you can easily create the socket relative to the script directory,
+and a helper include will ensure that we define the <cite>SOCKET</cite> environment variable and clean up any previous one.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">SOCKET_DIR=&quot;{{ scriptdir }}&quot;</span>
+<span class="go">mkdir -p ${SOCKET_DIR}</span>
+
+<span class="go">echo &quot;Socket directory is ${SOCKET_DIR}&quot;</span>
+
+<span class="gp"># </span>Remove socket <span class="k">if</span> exists
+<span class="go">{% include &quot;bash/socket/set-socket.sh&quot; %}</span>
+</pre></div>
+</div>
+<p>It’s helper to look at other application scripts.</p>
+</section>
+<section id="xserver">
+<h4>xserver<a class="headerlink" href="#xserver" title="Permalink to this heading"></a></h4>
+<p>An xserver doesn’t use typical ssh tunnel strategies like using a socket, but instead forwards with <cite>-X</cite>.
+This means we have support primarily for Singularity (running the container on the head node) and
+slurm (the same from a job node).</p>
+</section>
 </section>
 <section id="args">
 <h3>Args<a class="headerlink" href="#args" title="Permalink to this heading"></a></h3>
@@ -194,8 +233,8 @@ logically (e.g., by language or other relevant context).</p>
 <p>If you write a job file or template, in addition to arguments that the user might
 provide on the command line (and you should always set a default for) the following
 variables are always available:</p>
-<table class="docutils align-default" id="id7">
-<caption><span class="caption-text">Template Variables</span><a class="headerlink" href="#id7" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id9">
+<caption><span class="caption-text">Template Variables</span><a class="headerlink" href="#id9" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 25.0%" />
 <col style="width: 65.0%" />
@@ -245,11 +284,11 @@ variables are always available:</p>
 <td><p>As an example, <code class="docutils literal notranslate"><span class="pre">jupyter.sbatch</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>log_output</p></td>
-<td><p>log output file (<a href="#id1"><span class="problematic" id="id2">*</span></a>.out) in the scriptdir</p></td>
+<td><p>log output file (<a href="#id3"><span class="problematic" id="id4">*</span></a>.out) in the scriptdir</p></td>
 <td><p>As an example, <code class="docutils literal notranslate"><span class="pre">jupyter.sbatch.out</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>log_error</p></td>
-<td><p>log error file (<a href="#id3"><span class="problematic" id="id4">*</span></a>.err) in the scriptdir</p></td>
+<td><p>log error file (<a href="#id5"><span class="problematic" id="id6">*</span></a>.err) in the scriptdir</p></td>
 <td><p>As an example, <code class="docutils literal notranslate"><span class="pre">jupyter.sbatch.err</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>log_file</p></td>
@@ -264,7 +303,7 @@ variables are always available:</p>
 </table>
 <p>Finally, you can use the set of included templates under <code class="docutils literal notranslate"><span class="pre">tunel/templates</span></code> to include common functionality like
 sourcing the user bash profile. You can also add any template file (or subfolder) in your app directory
-and it can be discovered and included. E.g., <code class="docutils literal notranslate"><span class="pre">templates/run_docker.sh</span></code> can be included like <a href="#id5"><span class="problematic" id="id6">``</span></a>{% include “templates/run_docker.sh” %}.</p>
+and it can be discovered and included. E.g., <code class="docutils literal notranslate"><span class="pre">templates/run_docker.sh</span></code> can be included like <a href="#id7"><span class="problematic" id="id8">``</span></a>{% include “templates/run_docker.sh” %}.</p>
 </section>
 <section id="documentation">
 <h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>
